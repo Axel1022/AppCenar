@@ -64,9 +64,10 @@ Al igual que con las ramas, utiliza las dos primeras letras de tu nombre y apell
 
 ## Buenas Prácticas
 
-1. **Commit frecuentes**: Realiza commits con frecuencia para evitar grandes cambios de una sola vez.
+1. **Commits frecuentes**: Realiza commits con frecuencia para evitar grandes cambios de una sola vez.
 2. **Commits claros y concisos**: Los mensajes deben ser claros y describir el cambio realizado de manera concisa.
 3. **Ramas descriptivas**: Los nombres de las ramas deben describir claramente el propósito de la rama.
 4. **Sin códigos ambiguos**: Evita el uso de códigos ambiguos o acrónimos no estándar en los nombres de ramas y mensajes de commits.
+5. **Uso de camelCase**: En todo el programa utilizamos camelCase para nombrar variables, funciones, y otros identificadores. Ejemplo: `homeControllers`, `userLogin`, `fetchData`.
 
 Siguiendo estos estándares, aseguramos que el proyecto sea mantenible y comprensible para todos.
