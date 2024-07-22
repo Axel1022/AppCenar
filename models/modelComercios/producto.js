@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("/contexts/appContext");
 
 const Comercio = require("../modelComercios/comercio");
+
 const Producto = sequelize.define("producto", {
     id:{
         type: Sequelize.INTEGER,
@@ -31,6 +32,9 @@ const Producto = sequelize.define("producto", {
             key: "id"
         },
     }
-})
+});
+
+Producto.belongsTo(Comercio, {foreingKey: "tradeId"});
+Comercio.hasMany(Producto, {foreingKey: "tradeId"});
 
 module.exports = Producto;

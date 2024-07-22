@@ -24,6 +24,9 @@ const Favorito = sequelize.define("favorito", {
             key: "id"
         },
     } 
-})
+});
+
+Favorito.belongsTo(Cliente, {foreingKey: "clienteId"});
+Cliente.hasMany(Favorito, {foreingKey: "clienteId"});
 
 module.exports = Favorito;

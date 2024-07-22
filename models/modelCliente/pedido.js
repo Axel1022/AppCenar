@@ -53,6 +53,9 @@ const Pedido = sequelize.define("pedido", {
         type: Sequelize.STRING,
         allowNull: false,
     }
-})
+});
+
+Pedido.belongsTo(Cliente, {foreingKey: "clienteId"});
+Cliente.hasMany(Pedido, {foreingKey: "clienteId"});
 
 module.exports = Pedido;

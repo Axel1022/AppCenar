@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require("/contexts/appContext");
 
+const Cliente = require("./cliente");
+
 const Direccion = sequelize.define("direccion", {
     id:{
         type: Sequelize.INTEGER,
@@ -23,8 +25,9 @@ const Direccion = sequelize.define("direccion", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    
-   
-})
+});
+
+Direccion.belongsTo(Cliente, {foreingKey: "clienteId"});
+Cliente.hasMany(Direccion, {foreingKey: "clienteId"});
 
 module.exports = Direccion;
