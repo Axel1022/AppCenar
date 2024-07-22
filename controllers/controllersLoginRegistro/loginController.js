@@ -17,5 +17,7 @@ exports.PostLogin = (req, res, next) =>{
   const email = rqq.body.email;
   const password = req.body.password;
 
-  
+  Promise.all([
+    Cliente.findOne({where: {email: email}})
+  ])
 }
