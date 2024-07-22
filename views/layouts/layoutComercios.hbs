@@ -1,0 +1,82 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{pageTitle}}</title>
+    <link rel="icon" href="/public/assets/img/iconAppCenar.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/public/assets/css/bootstrap/bootstrap.min.css" />
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <a class="navbar-brand m-2" href="/homeComercios">
+                <img src="/public/assets/img/iconAppCenar.png" width="40" height="40" alt="Online icons8 libro" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active m-2">
+                        <a class="nav-link" href="/homeComercios">
+                            <img src="/public/assets/img/iconHome.png" width="25" height="25" alt="icon de cliente" />
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item m-2">
+                        <a class="nav-link" href="/perfilComercio">
+                            <img src="/public/assets/img/avatar-de-usuario.png" width="25" height="25"
+                                alt="icon de cliente" />
+                            Mi perfil
+                        </a>
+                    </li>
+                    <li class="nav-item m-2">
+                        <a class="nav-link" href="/MantenimientoCategorias">
+                            <img src="/public/assets/img/mantenimiento.png" width="25" height="25"
+                                alt="icon de cliente" />
+                            Mantenimiento de categorías
+                        </a>
+                    </li>
+                    <li class="nav-item m-2">
+                        <a class="nav-link" href="/MantenimientoProductos">
+                            <img src="/public/assets/img/mantenimiento.png" width="25" height="25"
+                                alt="icon de cliente" />
+                            Mantenimiento de productos
+                        </a>
+                    </li>
+                    <li class="nav-item m-2">
+                        <a class="nav-link" href="/cerrarSesionCLiente">
+                            <img src="/public/assets/img/salida.png" width="25" height="25" alt="icon de cliente" />
+                            Cerrar sesion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-grow-1">
+        <div class="m-2">
+            {{{body}}}
+        </div>
+    </main>
+    <footer class="py-3 mt-4">
+        <div class="container">
+            <p class="text-center mb-0">&copy; 2024 AppCenar. Todos los derechos
+                reservados. <a href="https://www.flaticon.es/iconos-gratis/instalacion" title="instalación iconos">Instalación
+                    iconos
+                    creados por
+                    Freepik - Flaticon</a>
+            </p>
+
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/public/assets/js/bootstrap/bootstrap.min.js"></script>
+</body>
+
+</html>
