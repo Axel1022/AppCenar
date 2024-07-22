@@ -1,4 +1,5 @@
 exports.getHome = (req, res, next) => {
+  //TODO: Mostrar todos los comercios
   res.render("viewsCliente/home", {
     pageTitle: "App Cenar | Cliente",
     layout: "layoutCliente",
