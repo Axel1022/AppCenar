@@ -22,11 +22,13 @@ const errorController = require("./controllers/404Controller");
 const loginController = require("./routers/routersLoginRegistro/routerLogin");
 const registrarController = require("./routers/routersLoginRegistro/routerRegistrar");
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
+const clienteController = require("./routers/routersCliente/routerCliente");
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
 app.use(homeController);
+app.use(clienteController);
 app.use(errorController.get404);
 
 
