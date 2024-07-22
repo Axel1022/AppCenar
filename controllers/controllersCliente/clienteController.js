@@ -1,8 +1,13 @@
-exports.getHome = (req, res, next) => {
+const categoriaModel = require("../../models/modelComercios/comercio");
+
+exports.getHome = async (req, res, next) => {
   //TODO: Mostrar todos los comercios
+  const comercios = await categoriaModel.findAll();
   res.render("viewsCliente/home", {
     pageTitle: "App Cenar | Cliente",
     layout: "layoutCliente",
+    Comercios: comercios.dataValues,
+    HasComercios: comercios.length > 0,
   });
 };
 exports.getDirecciones = (req, res, next) => {
