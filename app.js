@@ -7,6 +7,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const multer = require("multer");
 const {v4: uuidv4} = require("uuid");
+const connection = require("./contexts/appContext");
 
 // Configuración del motor de vistas
 app.engine(
@@ -34,8 +35,16 @@ app.use(homeController);
 app.use(errorController.get404);
 
 
+//? --------------------------- Conexion para sincronizar con la base de datos ---------------------------
 
-
+connection
+  .sync()
+  .then((result) => {
+    app.listen(5500);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 
 app.listen(puerto);

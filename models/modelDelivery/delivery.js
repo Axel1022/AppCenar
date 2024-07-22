@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("/contexts/appContext");
+const sequelize = require("../../contexts/appContext");
 
 const Delivery = sequelize.define("delivery", {
     id:{

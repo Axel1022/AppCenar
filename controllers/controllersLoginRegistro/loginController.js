@@ -1,7 +1,7 @@
-const Cliente = require("/models/modelCliente/cliente");
-const Comercio = require("/models/modelComercios/comercio");
-const Delivery = require("/models/modelDelivery/delivery");
-const Admin = require("/models/modelAdmin/administrador");
+const Cliente = require("../../models/modelCliente/cliente");
+const Comercio = require("../../models/modelComercios/comercio");
+const Delivery = require("../../models/modelDelivery/delivery");
+const Admin = require("../../models/modelAdmin/administrador");
 
 exports.getLogin = (req, res, next) => {
   res.render("viewsLoginRegisto/viewLogin", {
