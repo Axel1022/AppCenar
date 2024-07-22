@@ -25,6 +25,10 @@ const Administrador = sequelize.define("administrador", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    role:{
+        type: Sequelize.STRING,
+        defaultValue: "Administrador",
+    },
     user:{
         type: Sequelize.STRING,
         allowNull: false,
