@@ -139,48 +139,5 @@ exports.PostClienteSingUp = (req, res, next) =>{
   
 };
 
-exports.PostSignup = (req, res, next) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
-
-  if(password != confirmPassword){
-       req.flash(
-          "errors",
-          "Password and confirm password no equals"
-        );
-        return res.redirect("/signup");
-  }
-
-  User.findOne({ where: { email: email } })
-    .then((user) => {
-      if (user) {
-        req.flash(
-          "errors",
-          "email exits already, please pick a different one "
-        );
-        return res.redirect("/signup");
-      }
-
-      bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          User.create({name: name, email: email, password: hashedPassword })
-            .then((user) => {
-              res.redirect("/login");
-            })            
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
 
 

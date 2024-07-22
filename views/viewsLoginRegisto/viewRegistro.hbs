@@ -7,7 +7,7 @@
   />
   <h1 class="h3 mb-3 font-weight-normal">Registrarse</h1>
 </div>
-<form>
+<form class="needs-validation">
   <div class="form-group">
     <label for="nombre">Nombre</label>
     <input
@@ -17,6 +17,8 @@
       placeholder="Ingresa tu nombre"
       required
     />
+    <div class="valid-feedback">Good!</div>
+    <div class="invalid-feedback">Please enter a name.</div>
   </div>
   <div class="form-group">
     <label for="email">Correo Electrónico</label>
@@ -27,6 +29,8 @@
       placeholder="Ingresa tu correo"
       required
     />
+    <div class="valid-feedback">Good!</div>
+    <div class="invalid-feedback">Please enter an email.</div>
   </div>
   <div class="form-group">
     <label for="password">Contraseña</label>
@@ -37,6 +41,8 @@
       placeholder="Crea una contraseña"
       required
     />
+    <div class="valid-feedback">Good!</div>
+    <div class="invalid-feedback">Please enter a password.</div>
   </div>
   <div class="form-group">
     <label for="password">Confirmar contraseña</label>
@@ -47,6 +53,8 @@
       placeholder="Confirmar contraseña"
       required
     />
+    <div class="valid-feedback">Good!</div>
+    <div class="invalid-feedback">Please enter an password again.</div>
   </div>
   <button type="submit" class="btn btn-primary btn-block mt-2">Registrarse</button>
 </form>
