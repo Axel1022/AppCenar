@@ -6,7 +6,8 @@ const app = express();
 const session = require("express-session");
 const flash = require("connect-flash");
 const multer = require("multer");
-const {v4: uuidv4} = require("uuid");
+const { v4: uuidv4 } = require("uuid");
+const conecctiondb = require("./contexts/appContext");
 
 // Configuración del motor de vistas
 app.engine(
@@ -35,9 +36,11 @@ app.use(homeController);
 app.use(clienteController);
 app.use(errorController.get404);
 
-
-
-
-
-
-app.listen(puerto);
+conecctiondb
+  .sync({})
+  .then((items) => {
+    app.listen(puerto);
+  })
+  .catch((error) => {
+    console.error("Error al sincronizar la base de datos:", error);
+  });
