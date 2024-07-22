@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("/contexts/appContext");
+const sequelize = require("../../contexts/appContext");
 
 const Usuario = sequelize.define("usuario", {
     id:{
@@ -54,7 +54,7 @@ const Usuario = sequelize.define("usuario", {
     cantidad: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, 
+        defaultValue: 0,
     },
 })
 

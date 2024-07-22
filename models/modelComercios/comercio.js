@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("/contexts/appContext");
+const sequelize = require("../../contexts/appContext");
 
 const Comercio = sequelize.define("comercio", {
     id:{
@@ -23,7 +23,7 @@ const Comercio = sequelize.define("comercio", {
     role:{
         type: Sequelize.STRING,
         defaultValue: "Comercio",
-    }, 
+    },
     logo:{
         type: Sequelize.STRING,
         allowNull: false,
@@ -54,7 +54,7 @@ const Comercio = sequelize.define("comercio", {
     cantidad: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, 
+        defaultValue: 0,
     },
 })
 

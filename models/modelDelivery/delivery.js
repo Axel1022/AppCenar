@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("/contexts/appContext");
+const sequelize = require("../../contexts/appContext");
 
 const Delivery = sequelize.define("delivery", {
     id:{
@@ -54,7 +54,7 @@ const Delivery = sequelize.define("delivery", {
     cantidad: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, 
+        defaultValue: 0,
     },
 })
 

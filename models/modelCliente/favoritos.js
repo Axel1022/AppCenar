@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const sequelize = require("/contexts/appContext");
+const sequelize = require("../../contexts/appContext");
 
 const Cliente = require("../modelCliente/cliente");
 const Comercio = require("../modelComercios/comercio");
@@ -23,7 +23,7 @@ const Favorito = sequelize.define("favorito", {
             model: Comercio,
             key: "id"
         },
-    } 
+    }
 });
 
 Favorito.belongsTo(Cliente, {foreingKey: "clienteId"});
