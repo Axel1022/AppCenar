@@ -36,7 +36,7 @@ const Usuario = sequelize.define("usuario", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    rol:{
+    role:{
         type: Sequelize.STRING,
         allowNull: false,
     },

@@ -20,6 +20,10 @@ const Comercio = sequelize.define("comercio", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    role:{
+        type: Sequelize.STRING,
+        allowNull: false,
+    }, 
     logo:{
         type: Sequelize.STRING,
         allowNull: false,

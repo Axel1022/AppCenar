@@ -36,7 +36,7 @@ const Delivery = sequelize.define("delivery", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    rol:{
+    role:{
         type: Sequelize.STRING,
         allowNull: false,
     },
