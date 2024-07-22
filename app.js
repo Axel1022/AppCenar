@@ -3,6 +3,10 @@ const path = require("path");
 const { engine } = require("express-handlebars");
 const puerto = 8080;
 const app = express();
+const session = require("express-session");
+const flash = require("connect-flash");
+const multer = require("multer");
+const {v4: uuidv4} = require("uuid");
 
 // Configuración del motor de vistas
 app.engine(
