@@ -40,11 +40,10 @@ app.use(errorController.get404);
 connection
   .sync()
   .then((result) => {
-    app.listen(5500);
+    app.listen(puerto);
   })
   .catch((err) => {
     console.log(err);
   });
 
 
-app.listen(puerto);
