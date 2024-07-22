@@ -42,14 +42,14 @@ const Delivery = sequelize.define("delivery", {
     },
     active:{
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        defaultValue: false
     },
     token:{
         type: Sequelize.STRING,
     },
     status:{
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: "Ocupado"
     },
     cantidad: {
         type: Sequelize.INTEGER,

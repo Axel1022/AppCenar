@@ -42,14 +42,10 @@ const Usuario = sequelize.define("usuario", {
     },
     active:{
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        defaultValue: false
     },
     token:{
         type: Sequelize.STRING,
-    },
-    status:{
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
     },
     cantidad: {
         type: Sequelize.INTEGER,

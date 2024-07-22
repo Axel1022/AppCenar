@@ -46,7 +46,7 @@ const Comercio = sequelize.define("comercio", {
     },
     active:{
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        defaultValue: false
     },
     token:{
         type: Sequelize.STRING,
