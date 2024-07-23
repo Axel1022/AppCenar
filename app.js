@@ -20,11 +20,10 @@ app.engine(
 );
 app.set("view engine", "hbs");
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-
 
 // --------------------------- Config de multer ---------------------------
 app.use("/images", express.static(path.join(__dirname, "images")));
@@ -34,21 +33,18 @@ const imageStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, `${uuidv4()}-${file.originalname}`);
-  }
-})
+  },
+});
 
-app.use(multer({storage: imageStorage}).single("image"));
-
-
-
+app.use(multer({ storage: imageStorage }).single("image"));
 
 // --------------------------- Config de la session ---------------------------
-app.use(session({secret: "appCenar4", resave: true, saveUnitialized: false}));
+app.use(session({ secret: "appCenar4", resave: true, saveUnitialized: false }));
 
 app.use(flash());
 
 app.use((req, res, next) => {
-  if(!req.session || !req.session.user){
+  if (!req.session || !req.session.user) {
     return next();
   }
   const user = req.session.user;
@@ -62,7 +58,7 @@ app.use((req, res, next) => {
     case "Delivery":
       model = Delivery;
       break;
-    
+
     case "Comercio":
       model = Comercio;
       break;
@@ -71,27 +67,27 @@ app.use((req, res, next) => {
       model = Admin;
       break;
 
-    default: return next();
-  
+    default:
+      return next();
   }
-  model.findByPk(user.id)
-  .then((foundUser) => {
-    req.user = foundUser;
-    next();
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  model
+    .findByPk(user.id)
+    .then((foundUser) => {
+      req.user = foundUser;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.use((req, res, next) => {
-  const errors = req.flash("errors");  
+  const errors = req.flash("errors");
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.errorMessages = errors;
   res.locals.hasErrorMessages = errors.length > 0;
   next();
 });
-
 
 //* --------------------------- Rutas ---------------------------
 const errorController = require("./controllers/404Controller");
@@ -100,15 +96,11 @@ const registrarController = require("./routers/routersLoginRegistro/routerRegist
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
 
-
-
 //* --------------------------- Rutas de los roles ---------------------------
 const Cliente = require("./models/modelCliente/cliente");
 const Delivery = require("./models/modelDelivery/delivery");
 const Admin = require("./models/modelAdmin/administrador");
 const Comercio = require("./models/modelComercios/comercio");
-
-
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
@@ -117,12 +109,10 @@ app.use(homeController);
 app.use(clienteController);
 app.use(errorController.get404);
 
-
-
 conecctiondb
   .sync()
   .then((items) => {
-    app.listen(puerto); 
+    app.listen(puerto);
   })
   .catch((error) => {
     console.error("Error al sincronizar la base de datos:", error);

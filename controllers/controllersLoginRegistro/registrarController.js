@@ -16,7 +16,7 @@ exports.getClienteSingUp = (req, res, next) => {
   });
 };
 
-exports.PostClienteSingUp = (req, res, next) => {
+exports.PostClienteSingUp = (req, res, next) =>{
   const name = req.body.name;
   const lastName = req.body.lastName;
   const phone = req.body.phone;
@@ -50,7 +50,7 @@ exports.PostClienteSingUp = (req, res, next) => {
       console.log("This email already exist, please select other one")
       return res.redirect("/registroCliente");
     }
-    
+
     const tokenCliente = uuid4()
     console.log("token:" , tokenCliente);
 
@@ -79,7 +79,7 @@ exports.PostClienteSingUp = (req, res, next) => {
             para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
             <a href="${req.protocol}://${req.get("host")}/activate/${tokenCliente}">Activar cuenta</a> `
           }
-          
+
           transporter.sendMail(mailOption, (err, info) =>{
             if (err) {
               console.error("Error al enviar el correo:", err);
@@ -119,7 +119,7 @@ exports.PostClienteSingUp = (req, res, next) => {
       console.log("This email already exist, please select other one")
       return res.redirect("/registroCliente");
     }
-    
+
     const tokenDelivery = uuid4()
     console.log("token:" , tokenCliente);
 
@@ -147,7 +147,7 @@ exports.PostClienteSingUp = (req, res, next) => {
             para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
             <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a> `
           }
-          
+
           transporter.sendMail(mailOption, (err, info) =>{
             if (err) {
               console.error("Error al enviar el correo:", err);
@@ -171,14 +171,14 @@ exports.PostClienteSingUp = (req, res, next) => {
     console.log(err);
   });
   }
-  
+
 
 };
 
 
 //registro para el comercio
 exports.getComercioSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/registroComercio", { 
+  res.render("viewsLoginRegisto/registroComercio", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
     singUpActive:  true
@@ -187,20 +187,22 @@ exports.getComercioSingUp = (req, res, next) => {
 
 exports.PostComercioSingUp = (req, res, next) =>{
   const tokenComercio = uuid4()
-  console.log("token:" , tokenCliente);
+  console.log("token:" , tokenComercio);
 
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
   const role = req.body.role;
   const logo = req.file;
-  const openTime = req.file.openTime;
-  const closeTime = req.file.closeTime;
+  const openTime = req.body.openTime;
+  const closeTime = req.body.closeTime;
   const typeTrade = req.body.typeTrade;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  
 
+  console.log(req.body);
+
+  console.log(password , confirmPassword);
   if(password != confirmPassword){
     req.flash("errors", "Passwords do not match");
     console.log("Passwords do not match")
@@ -229,7 +231,7 @@ exports.PostComercioSingUp = (req, res, next) =>{
         typeTrade: typeTrade,
         password: hashedPassword,
         token: tokenComercio,
-        
+
       })
         .then((user) => {
           console.log("Registro correcto");
@@ -242,7 +244,7 @@ exports.PostComercioSingUp = (req, res, next) =>{
             para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
             <a href="${req.protocol}://${req.get("host")}/activate/${tokenComercio}">Activar cuenta</a> `
           }
-          
+
           transporter.sendMail(mailOption, (err, info) =>{
             if (err) {
               console.error("Error al enviar el correo:", err);
@@ -271,7 +273,7 @@ exports.PostComercioSingUp = (req, res, next) =>{
 
 //registro para el administrador
 exports.getAdminSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/registroAdmin", { 
+  res.render("viewsLoginRegisto/registroAdmin", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
     singUpActive:  true
@@ -287,7 +289,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
   const user = req.body.user;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
-  
+
 
   if(password != confirmPassword){
     req.flash("errors", "Passwords do not match");
@@ -310,7 +312,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
       console.log("This email already exist, please select other one")
       return res.redirect("/registroAdmin");
     }
-    
+
 
     bcrypt
     .hash(password, 12)
@@ -324,7 +326,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
         user: user,
         password: hashedPassword,
         token: tokenAdmin
-        
+
       })
         .then((user) => {
           console.log("Registro correcto");
