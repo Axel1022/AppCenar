@@ -12,7 +12,7 @@ exports.getSingUp = (req, res, next) => {
   });
 };
 
-exports.PostClienteSingUp = (req, res, next) =>{
+exports.PostClienteSingUp = (req, res, next) => {
   const name = req.body.name;
   const lastName = req.body.lastName;
   const phone = req.body.phone;
