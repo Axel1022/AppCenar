@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../contexts/appContext");
 
-const Usuario = sequelize.define("usuario", {
+const Cliente = sequelize.define("cliente", {
     id:{
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -54,4 +54,4 @@ const Usuario = sequelize.define("usuario", {
     },
 })
 
-module.exports = Usuario;
+module.exports = Cliente;
