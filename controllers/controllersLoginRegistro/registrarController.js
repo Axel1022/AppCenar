@@ -187,20 +187,22 @@ exports.getComercioSingUp = (req, res, next) => {
 
 exports.PostComercioSingUp = (req, res, next) =>{
   const tokenComercio = uuid4()
-  console.log("token:" , tokenCliente);
+  console.log("token:" , tokenComercio);
 
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
   const role = req.body.role;
   const logo = req.file;
-  const openTime = req.file.openTime;
-  const closeTime = req.file.closeTime;
+  const openTime = req.body.openTime;
+  const closeTime = req.body.closeTime;
   const typeTrade = req.body.typeTrade;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
   
+  console.log(req.body);
 
+  console.log(password , confirmPassword);
   if(password != confirmPassword){
     req.flash("errors", "Passwords do not match");
     console.log("Passwords do not match")
