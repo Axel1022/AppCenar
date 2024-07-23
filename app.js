@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 conecctiondb
   .sync({ force: true })
   .then((items) => {
-    app.listen(puerto);
+    app.listen(puerto); 
   })
   .catch((error) => {
     console.error("Error al sincronizar la base de datos:", error);
