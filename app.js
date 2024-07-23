@@ -29,6 +29,16 @@ const registrarController = require("./routers/routersLoginRegistro/routerRegist
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
 
+
+
+//* --------------------------- Rutas de los roles ---------------------------
+const Cliente = require("./models/modelCliente/cliente");
+const Delivery = require("./models/modelDelivery/delivery");
+const Admin = require("./models/modelAdmin/administrador");
+const Comercio = require("./models/modelComercios/comercio");
+
+
+
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
@@ -36,8 +46,47 @@ app.use(homeController);
 app.use(clienteController);
 app.use(errorController.get404);
 
+
+// --------------------------- Config de multer ---------------------------
+app.use("/images", express.static(path.join(__dirname, "images")));
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "iamges");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uuidv4()}-${file.originalname}`);
+  }
+})
+
+app.use(multer({storage: imageStorage}).single("image"));
+
+
+// --------------------------- Config de la session ---------------------------
+// app.use(session({secret: "appCenar4", resave: true, saveUnitialized: false}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  if(!req.session){
+    return next();
+  }
+  if(!req.session.user){
+    return next();
+  }
+  
+  Cliente.findByPk(req.session.cliente.id)
+  .then((user) => {
+    req.user = user;
+    next();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+});
+
+
 conecctiondb
-  .sync({})
+  .sync({ force: true })
   .then((items) => {
     app.listen(puerto);
   })

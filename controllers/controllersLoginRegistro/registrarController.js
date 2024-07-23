@@ -17,7 +17,7 @@ exports.PostClienteSingUp = (req, res, next) =>{
   const lastName = req.body.lastName;
   const phone = req.body.phone;
   const email = req.body.email;
-  const imageProfile = req.body.imageProfile;
+  const imageProfile = req.file;
   const user = req.body.user;
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
@@ -26,7 +26,7 @@ exports.PostClienteSingUp = (req, res, next) =>{
 
   if(password != confirmPassword){
     req.flash("errors", "Passwords do not match");
-    return res.redirect("/viewsLoginRegistro/viewRegistro");
+    return res.redirect("/viewsLoginRegistro/registroCliente");
   }
 
   Cliente.findOne({where: {email: email}})
@@ -34,7 +34,7 @@ exports.PostClienteSingUp = (req, res, next) =>{
     if(cliente){
       req.flash("errors", "This email already exist, please select other");
     }
-    res.redirect("/viewsLoginRegistro/viewRegistro");
+    res.redirect("/viewsLoginRegistro/registroCliente");
 
     bcrypt
     .hash(password, 12)
@@ -44,13 +44,13 @@ exports.PostClienteSingUp = (req, res, next) =>{
         lastName: lastName,
         phone: phone,
         email: email,
-        imageProfile: imageProfile,
+        imageProfile: "/" + imageProfile.path,
         user: user,
         password: hashedPassword,
         role: role
       })
         .then((user) => {
-          res.redirect("/login");
+          res.redirect("/viewLogin");
         })
         .catch((err) => {
           console.log(err);
