@@ -39,19 +39,19 @@ exports.PostLogin = (req, res, next) =>{
         req.session.user = user;
 
         switch(role){
-          case "Cliente": 
+          case "Cliente":
            return res.redirect("/viewsCliente/home"); //ruta al home del cliente
 
           case "Delivery":
             return res.redirect("/viewsDelivery/home"); //ruta al home del delivery
 
-          case "Comercio": 
+          case "Comercio":
            return res.redirect("/viewsComercios/home"); //ruta al home del comercio
 
           case "Administrador":
             return res.redirect("/viewsAdmin/home"); //ruta al home del administrador
 
-          default: 
+          default:
           req.flash("errors", "You need create an account");
           return res.redirect("/viewsLoginRegistro/viewLogin"); //ruta al mismo login
 

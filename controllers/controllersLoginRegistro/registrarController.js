@@ -5,7 +5,7 @@ const Admin = require("../../models/modelAdmin/administrador");
 
 
 exports.getSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/viewRegistro", {
+  res.render("viewsLoginRegisto/registroCliente", { //Tambien para delivery
     pageTitle: "App Cenar | Registrar",
     layout: "layoutRegistroLogin",
     singUpActive:  true
@@ -40,10 +40,10 @@ exports.PostClienteSingUp = (req, res, next) =>{
     .hash(password, 12)
     .then((hashedPassword) => {
       Cliente.create({
-        name: name, 
+        name: name,
         lastName: lastName,
         phone: phone,
-        email: email, 
+        email: email,
         imageProfile: imageProfile,
         user: user,
         password: hashedPassword,
@@ -51,7 +51,7 @@ exports.PostClienteSingUp = (req, res, next) =>{
       })
         .then((user) => {
           res.redirect("/login");
-        })            
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -59,10 +59,10 @@ exports.PostClienteSingUp = (req, res, next) =>{
     .catch((err) => {
       console.log(err);
     });
-    
+
   })
   .catch((err) => {
     console.log(err);
   });
-  
+
 };

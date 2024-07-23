@@ -54,7 +54,7 @@ const Delivery = sequelize.define("delivery", {
     cantidad: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, 
+        defaultValue: 0,
     },
 })
 

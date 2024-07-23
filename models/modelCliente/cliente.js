@@ -50,7 +50,7 @@ const Usuario = sequelize.define("usuario", {
     cantidad: {
         type: Sequelize.INTEGER,
         allowNull: true,
-        defaultValue: 0, 
+        defaultValue: 0,
     },
 })
 

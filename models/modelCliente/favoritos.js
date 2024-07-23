@@ -23,7 +23,7 @@ const Favorito = sequelize.define("favorito", {
             model: Comercio,
             key: "id"
         },
-    } 
+    }
 });
 
 Favorito.belongsTo(Cliente, {foreingKey: "clienteId"});

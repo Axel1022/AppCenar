@@ -1,12 +1,11 @@
-const Sequelize = require("sequelize");
-const path = require("path");
+const { Sequelize } = require("sequelize");
+const config = require("./config");
 
-const sequelize = new Sequelize("sqlite::memory:", {
-    dialect: "sqlite",
-    storage: path.join
-    (path.dirname(require.main.filename),
-    "database", 
-    "bookApp.sqlite"),
-});
+const connection = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config.params
+);
 
-module.exports = sequelize;
+module.exports = connection;

@@ -3,6 +3,6 @@ const router = express.Router();
 const registrarController = require("../../controllers/controllersLoginRegistro/registrarController");
 
 router.get("/registrar", registrarController.getSingUp);
-router.post("/viewRegistro", registrarController.PostClienteSingUp);
+router.post("/registrar", registrarController.PostClienteSingUp);
 
 module.exports = router;
