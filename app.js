@@ -19,8 +19,79 @@ app.engine(
   })
 );
 app.set("view engine", "hbs");
+
+app.use(express.urlencoded({extended: false}));
+
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
+
+
+// --------------------------- Config de multer ---------------------------
+app.use("/images", express.static(path.join(__dirname, "images")));
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uuidv4()}-${file.originalname}`);
+  }
+})
+
+app.use(multer({storage: imageStorage}).single("image"));
+
+
+
+
+// --------------------------- Config de la session ---------------------------
+app.use(session({secret: "appCenar4", resave: true, saveUnitialized: false}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  if(!req.session || !req.session.user){
+    return next();
+  }
+  const user = req.session.user;
+
+  let model;
+  switch (user.role) {
+    case "Cliente":
+      model = Cliente;
+      break;
+
+    case "Delivery":
+      model = Delivery;
+      break;
+    
+    case "Comercio":
+      model = Comercio;
+      break;
+
+    case "Administrador":
+      model = Admin;
+      break;
+
+    default: return next();
+  
+  }
+  model.findByPk(user.id)
+  .then((foundUser) => {
+    req.user = foundUser;
+    next();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+});
+
+app.use((req, res, next) => {
+  const errors = req.flash("errors");  
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.errorMessages = errors;
+  res.locals.hasErrorMessages = errors.length > 0;
+  next();
+});
+
 
 //* --------------------------- Rutas ---------------------------
 const errorController = require("./controllers/404Controller");
@@ -47,46 +118,9 @@ app.use(clienteController);
 app.use(errorController.get404);
 
 
-// --------------------------- Config de multer ---------------------------
-app.use("/images", express.static(path.join(__dirname, "images")));
-const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "iamges");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${uuidv4()}-${file.originalname}`);
-  }
-})
-
-app.use(multer({storage: imageStorage}).single("image"));
-
-
-// --------------------------- Config de la session ---------------------------
-// app.use(session({secret: "appCenar4", resave: true, saveUnitialized: false}));
-
-app.use(flash());
-
-app.use((req, res, next) => {
-  if(!req.session){
-    return next();
-  }
-  if(!req.session.user){
-    return next();
-  }
-  
-  Cliente.findByPk(req.session.cliente.id)
-  .then((user) => {
-    req.user = user;
-    next();
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-});
-
 
 conecctiondb
-  .sync({force: true})
+  .sync()
   .then((items) => {
     app.listen(puerto); 
   })
