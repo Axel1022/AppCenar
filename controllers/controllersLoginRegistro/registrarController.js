@@ -34,6 +34,14 @@ exports.PostClienteSingUp = (req, res, next) =>{
     return res.redirect("/registroCliente");
   }
 
+  Cliente.findOne({where: {user : user}})
+    .then((cliente) => {
+    if(cliente){
+      req.flash("errors", "This user already exist, please select other one");
+      return res.redirect("/registroCliente");
+    }
+  })
+
   if (role === "cliente") {
     Cliente.findOne({where: {email: email}})
    .then((cliente) => {
@@ -95,6 +103,14 @@ exports.PostClienteSingUp = (req, res, next) =>{
     console.log(err);
   });
   } else if(role ==="delivery"){
+
+    Delivery.findOne({where: {user : user}})
+      .then((cliente) => {
+      if(cliente){
+        req.flash("errors", "This user already exist, please select other one");
+        return res.redirect("/registroCliente");
+      }
+   })
 
     Delivery.findOne({where: {email: email}})
    .then((cliente) => {
@@ -198,7 +214,6 @@ exports.PostComercioSingUp = (req, res, next) =>{
       console.log("This email already exist, please select other one")
       return res.redirect("/registroCliente");
     }
-    
 
     bcrypt
     .hash(password, 12)
@@ -279,6 +294,14 @@ exports.PostAdminSingUp = (req, res, next) =>{
     console.log("Passwords do not match")
     return res.redirect("/registroAdmin");
   }
+
+  Admin.findOne({where: {user : user}})
+    .then((cliente) => {
+    if(cliente){
+      req.flash("errors", "This user already exist, please select other one");
+      return res.redirect("/registroCliente");
+    }
+ })
 
   Admin.findOne({where: {email: email}})
   .then((comercio) => {
