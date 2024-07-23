@@ -310,7 +310,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
     bcrypt
     .hash(password, 12)
     .then((hashedPassword) => {
-      Comercio.create({
+      Admin.create({
         name: name,
         lastName: lastName,
         identification: identification,
@@ -318,7 +318,6 @@ exports.PostAdminSingUp = (req, res, next) =>{
         role: role,
         user: user,
         password: hashedPassword,
-        token: tokenAdmin
         
       })
         .then((user) => {

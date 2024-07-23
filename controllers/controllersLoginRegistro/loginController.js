@@ -32,13 +32,13 @@ exports.PostLogin = (req, res, next) =>{
       return res.redirect("/lLogin");
     }
 
-    if(!user.active){
+    const role = user.role;
+    console.log(role);
+
+    if(role != "administrador" && !user.active){
       req.flash("errors", "Your account is not activate. Please check your email for activate your account. ");
       return res.redirect("/login");
     }
-
-    const role = user.role;
-    console.log(role);
 
     bcrypt.compare(password, user.password)
     .then(result => {
