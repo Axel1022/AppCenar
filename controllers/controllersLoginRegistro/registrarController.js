@@ -110,7 +110,6 @@ exports.PostClienteSingUp = (req, res, next) =>{
         return res.redirect("/registroCliente");
       }
 
-<<<<<<< HEAD
       return Delivery.findOne({ where: { email: email } });
     })
     .then((deliveryEmail) => {
@@ -119,18 +118,6 @@ exports.PostClienteSingUp = (req, res, next) =>{
         console.log("This email already exists, please select another one");
         return res.redirect("/registroCliente");
       }
-=======
-    Delivery.findOne({where: {email: email}})
-   .then((cliente) => {
-    if(cliente){
-      req.flash("errors", "This email already exist, please select other one");
-      console.log("This email already exist, please select other one")
-      return res.redirect("/registroCliente");
-    }
-
-    const tokenDelivery = uuid4()
-    console.log("token:" , tokenCliente);
->>>>>>> 5fb000ee1a43833e7498af42fc2507010db91273
 
       const tokenDelivery = uuid4();
       console.log("token:", tokenDelivery);
@@ -148,32 +135,10 @@ exports.PostClienteSingUp = (req, res, next) =>{
         password: hashedPassword,
         role: role,
         token: tokenDelivery,
-<<<<<<< HEAD
       });
     })
     .then((user) => {
       console.log("Registro correcto");
-=======
-      })
-        .then((user) => {
-          console.log("Registro correcto");
-          const mailOption = {
-            from: "foodrushya@gmail.com",
-            to: email,
-            subject: "Bienvenido a Food Rush",
-            html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-            para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
-            <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a> `
-          }
-
-          transporter.sendMail(mailOption, (err, info) =>{
-            if (err) {
-              console.error("Error al enviar el correo:", err);
-            } else {
-              console.log("Correo enviado exitosamente:", info.response);
-            }
-          })
->>>>>>> 5fb000ee1a43833e7498af42fc2507010db91273
 
       const mailOption = {
         from: "foodrushya@gmail.com",
@@ -199,17 +164,7 @@ exports.PostClienteSingUp = (req, res, next) =>{
       req.flash("errors", "Something went wrong, please try again later");
       res.redirect("/registroCliente");
     });
-<<<<<<< HEAD
 }
-=======
-
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-  }
-
->>>>>>> 5fb000ee1a43833e7498af42fc2507010db91273
 
 };
 
@@ -363,12 +318,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
         role: role,
         user: user,
         password: hashedPassword,
-<<<<<<< HEAD
         
-=======
-        token: tokenAdmin
-
->>>>>>> 5fb000ee1a43833e7498af42fc2507010db91273
       })
         .then((user) => {
           console.log("Registro correcto");
