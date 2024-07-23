@@ -86,7 +86,7 @@ app.use((req, res, next) => {
 
 
 conecctiondb
-  .sync({ force: true })
+  .sync({force: true})
   .then((items) => {
     app.listen(puerto); 
   })
