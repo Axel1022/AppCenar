@@ -12,7 +12,7 @@ exports.getSingUp = (req, res, next) => {
   });
 };
 
-exports.PostClienteSingUp = (req, res, next) => {
+exports.PostClienteSingUp = (req, res, next) =>{
   const name = req.body.name;
   const lastName = req.body.lastName;
   const phone = req.body.phone;
@@ -50,7 +50,7 @@ exports.PostClienteSingUp = (req, res, next) => {
         role: role
       })
         .then((user) => {
-          res.redirect("/viewLogin");
+          res.redirect("/viewLogin");//Hay que crear una vista para decirle al usaurio que debe activar su cuenta
         })
         .catch((err) => {
           console.log(err);

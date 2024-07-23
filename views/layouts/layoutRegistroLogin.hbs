@@ -15,7 +15,19 @@
           <div class="col-md-6">
             <div class="card mt-4">
               <div class="card-body">
-                {{{body}}}
+              {{#if hasErrorMessages}} 
+
+              <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                  <ul>
+                    {{#each errorMessages}}
+                      <li>{{this}}</li>
+                    {{/each}}
+                  </ul>  
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>   
+              
+              {{/if}}
+              {{{body}}}
               </div>
             </div>
           </div>
@@ -42,14 +54,20 @@
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 
     <script>
-      (function () { 'use strict' // Obtener todos los formularios a los que
-      queremos aplicar estilos de validación de Bootstrap personalizados var
-      forms = document.querySelectorAll('.needs-validation') // Bucle sobre
-      ellos y evitar el envío Array.prototype.slice.call(forms)
-      .forEach(function (form) { form.addEventListener('submit', function
-      (event) { if (!form.checkValidity()) { event.preventDefault()
-      event.stopPropagation() } form.classList.add('was-validated') }, false) })
-      })()
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
     </script>
   </body>
 

@@ -7,12 +7,13 @@
   />
   <h1 class="h3 mb-3 font-weight-normal">Iniciar Sesión</h1>
 </div>
-<form class="needs-validation mb-4" novalidate>
+<form class="needs-validation mb-4"  method="POST" action="/login" novalidate >
   <div class="form-group mb-4">
     <label for="email">Correo Electrónico</label>
     <input
       type="email"
       class="form-control"
+      name="email"
       id="email"
       placeholder="Ingresa tu correo"
       required
@@ -25,6 +26,7 @@
     <input
       type="password"
       class="form-control"
+      name="password"
       id="password"
       placeholder="Ingresa tu contraseña"
       required
@@ -40,6 +42,6 @@
 <div class="text-center mt-3">
   <p>¿Olvidaste tu contraseña? <a href="#">Recuperar contraseña</a></p>
   <p>Si no tienes una cuenta, puedes registrarte como: </p>
-  <a type="button" href="/registrar" class="btn btn-secondary btn-block" >Cliente/Delivery</a>
+  <a type="button" href="/registroCliente" class="btn btn-secondary btn-block" >Cliente/Delivery</a>
   <a type="button" href="#" class="btn btn-secondary btn-block " >Comercio</a>
 </div>

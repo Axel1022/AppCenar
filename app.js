@@ -9,7 +9,7 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const conecctiondb = require("./contexts/appContext");
 
-// Configuración del motor de vistas
+//* Configuración del motor de vistas
 app.engine(
   "hbs",
   engine({
@@ -47,7 +47,7 @@ app.use(clienteController);
 app.use(errorController.get404);
 
 
-// --------------------------- Config de multer ---------------------------
+//* --------------------------- Config de multer ---------------------------
 app.use("/images", express.static(path.join(__dirname, "images")));
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -73,7 +73,7 @@ app.use((req, res, next) => {
   if(!req.session.user){
     return next();
   }
-  
+
   Cliente.findByPk(req.session.cliente.id)
   .then((user) => {
     req.user = user;
@@ -88,7 +88,7 @@ app.use((req, res, next) => {
 conecctiondb
   .sync({ force: true })
   .then((items) => {
-    app.listen(puerto); 
+    app.listen(puerto);
   })
   .catch((error) => {
     console.error("Error al sincronizar la base de datos:", error);
