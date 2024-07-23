@@ -6,7 +6,7 @@ const Admin = require("../../models/modelAdmin/administrador");
 
 exports.getSingUp = (req, res, next) => {
   res.render("viewsLoginRegisto/registroCliente", { //Tambien para delivery
-    pageTitle: "App Cenar | Registrar",
+    pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
     singUpActive:  true
   });

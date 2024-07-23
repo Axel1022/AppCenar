@@ -5,7 +5,7 @@ const Admin = require("../../models/modelAdmin/administrador");
 
 exports.getLogin = (req, res, next) => {
   res.render("viewsLoginRegisto/viewLogin", {
-    pageTitle: "App Cenar | Iniciar Session",
+    pageTitle: "Food Rush | Iniciar Session",
     layout: "layoutRegistroLogin",
     loginCSS: true,
     loginActive: true

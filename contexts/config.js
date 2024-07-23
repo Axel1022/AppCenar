@@ -1,12 +1,12 @@
 const path = require("path");
 
 module.exports = {
-  database: "AppCenar",
+  database: "FoodRush",
   username: null, // Correo
   password: null, //Contraseña
   params: {
     dialect: "sqlite",
-    storage: path.join(__dirname, "../database", "AppCenar-db.sqlite"),
+    storage: path.join(__dirname, "../database", "FoodRush-db.sqlite"),
     define: {
       underscored: true,
     },

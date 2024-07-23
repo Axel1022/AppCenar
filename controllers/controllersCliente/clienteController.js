@@ -4,7 +4,7 @@ exports.getHome = async (req, res, next) => {
   //TODO: Mostrar todos los comercios
   const comercios = await categoriaModel.findAll();
   res.render("viewsCliente/home", {
-    pageTitle: "App Cenar | Cliente",
+    pageTitle: "Food Rush | Cliente",
     layout: "layoutCliente",
     Comercios: comercios.dataValues,
     HasComercios: comercios.length > 0,
@@ -12,25 +12,25 @@ exports.getHome = async (req, res, next) => {
 };
 exports.getDirecciones = (req, res, next) => {
   res.render("viewsCliente/viewDirecciones", {
-    pageTitle: "App Cenar | Direcciones",
+    pageTitle: "Food Rush | Direcciones",
     layout: "layoutCliente",
   });
 };
 exports.getFavoritos = (req, res, next) => {
   res.render("viewsCliente/viewFavoritos", {
-    pageTitle: "App Cenar | Favoritos",
+    pageTitle: "Food Rush | Favoritos",
     layout: "layoutCliente",
   });
 };
 exports.getPerfil = (req, res, next) => {
   res.render("viewsCliente/viewPerfil", {
-    pageTitle: "App Cenar | Perfil",
+    pageTitle: "Food Rush | Perfil",
     layout: "layoutCliente",
   });
 };
 exports.getPedidos = (req, res, next) => {
   res.render("viewsCliente/viewPedidos", {
-    pageTitle: "App Cenar | Pedidos",
+    pageTitle: "Food Rush | Pedidos",
     layout: "layoutCliente",
   });
 };
