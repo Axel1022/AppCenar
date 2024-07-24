@@ -4,6 +4,7 @@ const loginController = require("../../controllers/controllersLoginRegistro/logi
 
 router.get("/activate/:token", loginController.getActivation);
 router.get("/login", loginController.getLogin);
+router.get("/logOut", loginController.LogOut);
 router.post("/login", loginController.PostLogin);
 
 module.exports = router;
