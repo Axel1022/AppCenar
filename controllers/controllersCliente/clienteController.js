@@ -1,13 +1,7 @@
-const categoriaModel = require("../../models/modelComercios/comercio");
-
 exports.getHome = async (req, res, next) => {
-  //TODO: Mostrar todos los comercios
-  const comercios = await categoriaModel.findAll();
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
     layout: "layoutCliente",
-    Comercios: comercios.dataValues,
-    HasComercios: comercios.length > 0,
   });
 };
 exports.getDirecciones = (req, res, next) => {
