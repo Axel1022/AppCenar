@@ -1,3 +1,9 @@
+exports.getHome = async (req, res, next) => {
+  res.render("viewsComercios/home", {
+    pageTitle: "Food Rush | Bebidas",
+    layout: "layoutCliente",
+  });
+};
 exports.getViewBebidas = async (req, res, next) => {
   res.render("viewsComercios/viewBebidas", {
     pageTitle: "Food Rush | Bebidas",
