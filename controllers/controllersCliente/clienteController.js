@@ -1,5 +1,5 @@
-const { where } = require("sequelize");
 const modelCliente = require("../../models/modelCliente/cliente");
+const modelDirecciones = require("../../models/modelCliente/direccion");
 exports.getHome = async (req, res, next) => {
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
@@ -7,10 +7,18 @@ exports.getHome = async (req, res, next) => {
 
   });
 };
-exports.getDirecciones = (req, res, next) => {
+exports.getDirecciones = async (req, res, next) => {
+  //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
+  //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
+
+  const direcciones = await modelDirecciones.findAll({
+    where: { clientId: 1 },
+  });
+
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
     layout: "layoutCliente",
+    Direcciones: direcciones
   });
 };
 exports.getFavoritos = (req, res, next) => {
