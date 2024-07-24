@@ -105,6 +105,7 @@ const Favorito = require("./models/modelCliente/favoritos");
 const Pedido = require("./models/modelCliente/pedido");
 const Comercio = require("./models/modelComercios/comercio");
 const Producto = require("./models/modelComercios/producto");
+const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
 
 Cliente.hasMany(Direccion, { foreignKey: "clientId" });
@@ -127,6 +128,10 @@ Pedido.belongsTo(Comercio, { foreignKey: "tradeId" });
 
 Comercio.hasMany(Producto, { foreignKey: "tradeId" });
 Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
+
+Comercio.hasMany(Categoria, {foreignKey: "tradeId"});
+Categoria.belongsTo(Comercio, {foreignKey: "tradeId"});
+
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);

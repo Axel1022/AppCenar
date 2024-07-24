@@ -4,13 +4,13 @@
     <button class="btn btn-primary mb-3">+ Dirección</button>
     <div class="list-group">
         {{#each Direcciones as |direccion|}}
-        <div class="list-group-item mb-1 shadow">
+        <div class="list-group-item mb-1 shadow mt-3">
             <h5 class="display-7 mb-1">{{direccion.identifier}}</h5>
             <div class="d-flex align-items-center">
                 <p class="lead text-secondary mb-1 me-3">{{direccion.direction}}</p>
-                <button class="lead text-white btn btn-warning btn-sm me-2">Editar</button>
-                <button class="lead text-white btn btn-danger btn-sm">Eliminar</button>
             </div>
+            <button class="lead text-white btn btn-warning float-end btn-sm me-3 mt-3">Editar</button>
+            <button class="lead text-white btn btn-danger float-end btn-sm me-3 mt-3">Eliminar</button>
         </div>
         {{/each}}
     </div>
