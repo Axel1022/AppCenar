@@ -11,9 +11,11 @@ exports.getDirecciones = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const direcciones = await modelDirecciones.findAll({
+  const result = await modelDirecciones.findAll({
     where: { clientId: 1 },
   });
+  const direcciones = result.map((result) => result.dataValues);
+  // console.log(direcciones);
 
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
