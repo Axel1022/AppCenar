@@ -63,15 +63,15 @@ app.use((req, res, next) => {
       model = Comercio;
       break;
 
-    case "Administrador":
-      model = Admin;
-      break;
+      case "Administrador":
+        model = Admin;
+        break;
 
-    default:
-      return next();
-  }
+        default:
+          return next();
+        }
   model
-    .findByPk(user.id)
+  .findByPk(user.id)
     .then((foundUser) => {
       req.user = foundUser;
       next();
@@ -95,6 +95,7 @@ const loginController = require("./routers/routersLoginRegistro/routerLogin");
 const registrarController = require("./routers/routersLoginRegistro/routerRegistrar");
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
+const comerciosController = require("./routers/routersComercios/routerComercios");
 
 //* --------------------------- Rutas de los roles y asociaciones ---------------------------
 const Cliente = require('./models/modelCliente/cliente');
@@ -131,13 +132,14 @@ app.use(loginController);
 app.use(registrarController);
 app.use(homeController);
 app.use(clienteController);
+app.use(comerciosController);
 app.use(errorController.get404);
 
 conecctiondb
-  .sync()
-  .then((items) => {
-    app.listen(puerto);
-  })
-  .catch((error) => {
-    console.error("Error al sincronizar la base de datos:", error);
-  });
+.sync()
+.then((items) => {
+  app.listen(puerto);
+})
+.catch((error) => {
+  console.error("Error al sincronizar la base de datos:", error);
+});
