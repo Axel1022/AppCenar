@@ -18,7 +18,8 @@ exports.getDirecciones = async (req, res, next) => {
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
     layout: "layoutCliente",
-    Direcciones: direcciones
+    Direcciones: direcciones,
+    hasDireccions: direcciones.length > 0
   });
 };
 exports.getFavoritos = (req, res, next) => {
