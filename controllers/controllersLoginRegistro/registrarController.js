@@ -318,7 +318,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
         role: role,
         user: user,
         password: hashedPassword,
-        
+
       })
         .then((user) => {
           console.log("Registro correcto");
