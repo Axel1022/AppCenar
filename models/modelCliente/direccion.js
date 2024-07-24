@@ -10,7 +10,7 @@ const Direccion = sequelize.define("direccion", {
         allowNull: false,
         primaryKey: true,
     },
-    clienteId:{
+    clientId:{
         type: Sequelize.INTEGER,
         references: {
             model: Cliente,
@@ -26,8 +26,5 @@ const Direccion = sequelize.define("direccion", {
         allowNull: false,
     },
 });
-
-Direccion.belongsTo(Cliente, {foreingKey: "clienteId"});
-Cliente.hasMany(Direccion, {foreingKey: "clienteId"});
 
 module.exports = Direccion;

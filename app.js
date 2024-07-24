@@ -96,11 +96,32 @@ const registrarController = require("./routers/routersLoginRegistro/routerRegist
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
 
-//* --------------------------- Rutas de los roles ---------------------------
-const Cliente = require("./models/modelCliente/cliente");
-const Delivery = require("./models/modelDelivery/delivery");
-const Admin = require("./models/modelAdmin/administrador");
-const Comercio = require("./models/modelComercios/comercio");
+//* --------------------------- Rutas de los roles y asociaciones ---------------------------
+const Cliente = require('./models/modelCliente/cliente');
+const Direccion = require('./models/modelCliente/direccion');
+const Favorito = require('./models/modelCliente/favoritos');
+const Pedido = require('./models/modelCliente/pedido');
+const Comercio = require('./models/modelComercios/comercio');
+const Producto = require("./models/modelComercios/producto");
+const Admin = require("./models/modelAdmin/administrador")
+
+Cliente.hasMany(Direccion, { foreignKey: 'clientId' });
+Direccion.belongsTo(Cliente, { foreignKey: 'clientId' });
+
+Cliente.hasMany(Favorito, { foreignKey: 'clientId' });
+Favorito.belongsTo(Cliente, { foreignKey: 'clientId' });
+
+Comercio.hasMany(Favorito, { foreignKey: 'tradeId' });
+Favorito.belongsTo(Comercio, { foreignKey: 'tradeId' });
+
+Cliente.hasMany(Pedido, { foreignKey: 'clientId' });
+Pedido.belongsTo(Cliente, { foreignKey: 'clientId' });
+
+Direccion.hasMany(Pedido, { foreignKey: 'directionId' });
+Pedido.belongsTo(Direccion, { foreignKey: 'directionId' });
+
+Comercio.hasMany(Pedido, { foreignKey: 'tradeId' });
+Pedido.belongsTo(Comercio, { foreignKey: 'tradeId' });
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
