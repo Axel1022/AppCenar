@@ -123,6 +123,9 @@ Pedido.belongsTo(Direccion, { foreignKey: 'directionId' });
 Comercio.hasMany(Pedido, { foreignKey: 'tradeId' });
 Pedido.belongsTo(Comercio, { foreignKey: 'tradeId' });
 
+Comercio.hasMany(Producto, { foreignKey: 'tradeId' });
+Producto.belongsTo(Comercio, { foreignKey: 'tradeId' });
+
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
