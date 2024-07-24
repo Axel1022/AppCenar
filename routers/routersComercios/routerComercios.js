@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const comerciosController = require("../../controllers/controllersComercios/comerciosController");
+router.get("/comercios/home", comerciosController.getHome);
 router.get("/comercios/bebidas", comerciosController.getViewBebidas);
 router.get("/comercios/mercados", comerciosController.getViewMercados);
 router.get("/comercios/postres_cafe", comerciosController.getViewPostres_Cafe);
