@@ -95,18 +95,46 @@ const loginController = require("./routers/routersLoginRegistro/routerLogin");
 const registrarController = require("./routers/routersLoginRegistro/routerRegistrar");
 const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
+const comerciosController = require("./routers/routersComercios/routerComercios");
+const deliveryController = require("./routers/routersDelivery/routerDelivery");
 
-//* --------------------------- Rutas de los roles ---------------------------
+//* --------------------------- Rutas de los roles y asociaciones ---------------------------
 const Cliente = require("./models/modelCliente/cliente");
-const Delivery = require("./models/modelDelivery/delivery");
-const Admin = require("./models/modelAdmin/administrador");
+const Direccion = require("./models/modelCliente/direccion");
+const Favorito = require("./models/modelCliente/favoritos");
+const Pedido = require("./models/modelCliente/pedido");
 const Comercio = require("./models/modelComercios/comercio");
+const Producto = require("./models/modelComercios/producto");
+const Admin = require("./models/modelAdmin/administrador");
+
+Cliente.hasMany(Direccion, { foreignKey: "clientId" });
+Direccion.belongsTo(Cliente, { foreignKey: "clientId" });
+
+Cliente.hasMany(Favorito, { foreignKey: "clientId" });
+Favorito.belongsTo(Cliente, { foreignKey: "clientId" });
+
+Comercio.hasMany(Favorito, { foreignKey: "tradeId" });
+Favorito.belongsTo(Comercio, { foreignKey: "tradeId" });
+
+Cliente.hasMany(Pedido, { foreignKey: "clientId" });
+Pedido.belongsTo(Cliente, { foreignKey: "clientId" });
+
+Direccion.hasMany(Pedido, { foreignKey: "directionId" });
+Pedido.belongsTo(Direccion, { foreignKey: "directionId" });
+
+Comercio.hasMany(Pedido, { foreignKey: "tradeId" });
+Pedido.belongsTo(Comercio, { foreignKey: "tradeId" });
+
+Comercio.hasMany(Producto, { foreignKey: "tradeId" });
+Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
 app.use(homeController);
 app.use(clienteController);
+app.use(comerciosController);
+app.use(deliveryController);
 app.use(errorController.get404);
 
 conecctiondb

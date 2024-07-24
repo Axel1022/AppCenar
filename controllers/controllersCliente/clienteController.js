@@ -1,19 +1,27 @@
-const categoriaModel = require("../../models/modelComercios/comercio");
-
+const modelCliente = require("../../models/modelCliente/cliente");
+const modelDirecciones = require("../../models/modelCliente/direccion");
 exports.getHome = async (req, res, next) => {
-  //TODO: Mostrar todos los comercios
-  const comercios = await categoriaModel.findAll();
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
     layout: "layoutCliente",
-    Comercios: comercios.dataValues,
-    HasComercios: comercios.length > 0,
+
   });
 };
-exports.getDirecciones = (req, res, next) => {
+exports.getDirecciones = async (req, res, next) => {
+  //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
+  //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
+
+  const result = await modelDirecciones.findAll({
+    where: { clientId: 1 },
+  });
+  const direcciones = result.map((result) => result.dataValues);
+  // console.log(direcciones);
+
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
     layout: "layoutCliente",
+    Direcciones: direcciones,
+    hasDireccions: direcciones.length > 0
   });
 };
 exports.getFavoritos = (req, res, next) => {
@@ -22,10 +30,17 @@ exports.getFavoritos = (req, res, next) => {
     layout: "layoutCliente",
   });
 };
-exports.getPerfil = (req, res, next) => {
+exports.getPerfil = async (req, res, next) => {
+  //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en el perfil, etc...
+  //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
+
+  const cliente = await modelCliente.findOne({ where: { id: 1 } });
+  console.log(cliente.dataValues);
+
   res.render("viewsCliente/viewPerfil", {
     pageTitle: "Food Rush | Perfil",
     layout: "layoutCliente",
+    Cliente: cliente.dataValues,
   });
 };
 exports.getPedidos = (req, res, next) => {

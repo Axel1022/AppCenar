@@ -49,7 +49,7 @@ const Delivery = sequelize.define("delivery", {
     },
     status:{
         type: Sequelize.STRING,
-        defaultValue: "Ocupado"
+        defaultValue: "Desocupado"
     },
     cantidad: {
         type: Sequelize.INTEGER,

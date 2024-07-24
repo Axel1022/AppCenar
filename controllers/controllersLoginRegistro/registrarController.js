@@ -102,31 +102,30 @@ exports.PostClienteSingUp = (req, res, next) =>{
   .catch((err) => {
     console.log(err);
   });
-  } else if(role ==="delivery"){
-
-    Delivery.findOne({where: {user : user}})
-      .then((cliente) => {
-      if(cliente){
-        req.flash("errors", "This user already exist, please select other one");
+} else if (role === "delivery") {
+  Delivery.findOne({ where: { user: user } })
+    .then((deliveryUser) => {
+      if (deliveryUser) {
+        req.flash("errors", "This user already exists, please select another one");
         return res.redirect("/registroCliente");
       }
-   })
 
-    Delivery.findOne({where: {email: email}})
-   .then((cliente) => {
-    if(cliente){
-      req.flash("errors", "This email already exist, please select other one");
-      console.log("This email already exist, please select other one")
-      return res.redirect("/registroCliente");
-    }
+      return Delivery.findOne({ where: { email: email } });
+    })
+    .then((deliveryEmail) => {
+      if (deliveryEmail) {
+        req.flash("errors", "This email already exists, please select another one");
+        console.log("This email already exists, please select another one");
+        return res.redirect("/registroCliente");
+      }
 
-    const tokenDelivery = uuid4()
-    console.log("token:" , tokenCliente);
+      const tokenDelivery = uuid4();
+      console.log("token:", tokenDelivery);
 
-    bcrypt
-    .hash(password, 12)
+      return bcrypt.hash(password, 12);
+    })
     .then((hashedPassword) => {
-      Delivery.create({
+      return Delivery.create({
         name: name,
         lastName: lastName,
         phone: phone,
@@ -136,42 +135,36 @@ exports.PostClienteSingUp = (req, res, next) =>{
         password: hashedPassword,
         role: role,
         token: tokenDelivery,
-      })
-        .then((user) => {
-          console.log("Registro correcto");
-          const mailOption = {
-            from: "foodrushya@gmail.com",
-            to: email,
-            subject: "Bienvenido a Food Rush",
-            html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-            para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
-            <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a> `
-          }
+      });
+    })
+    .then((user) => {
+      console.log("Registro correcto");
 
-          transporter.sendMail(mailOption, (err, info) =>{
-            if (err) {
-              console.error("Error al enviar el correo:", err);
-            } else {
-              console.log("Correo enviado exitosamente:", info.response);
-            }
-          })
+      const mailOption = {
+        from: "foodrushya@gmail.com",
+        to: email,
+        subject: "Bienvenido a Food Rush",
+        html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
+          para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
+          <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a> `,
+      };
 
-          res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      transporter.sendMail(mailOption, (err, info) => {
+        if (err) {
+          console.error("Error al enviar el correo:", err);
+        } else {
+          console.log("Correo enviado exitosamente:", info.response);
+        }
+      });
+
+      res.redirect("/login");
     })
     .catch((err) => {
       console.log(err);
+      req.flash("errors", "Something went wrong, please try again later");
+      res.redirect("/registroCliente");
     });
-
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-  }
-
+}
 
 };
 
@@ -317,7 +310,7 @@ exports.PostAdminSingUp = (req, res, next) =>{
     bcrypt
     .hash(password, 12)
     .then((hashedPassword) => {
-      Comercio.create({
+      Admin.create({
         name: name,
         lastName: lastName,
         identification: identification,
@@ -325,7 +318,6 @@ exports.PostAdminSingUp = (req, res, next) =>{
         role: role,
         user: user,
         password: hashedPassword,
-        token: tokenAdmin
 
       })
         .then((user) => {

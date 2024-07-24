@@ -15,7 +15,7 @@ exports.getLogin = (req, res, next) => {
 exports.PostLogin = (req, res, next) =>{
   const email = req.body.email;
   const password = req.body.password;
-  
+
 
   Promise.all([
     Cliente.findOne({where: {email: email}}),
@@ -32,13 +32,13 @@ exports.PostLogin = (req, res, next) =>{
       return res.redirect("/lLogin");
     }
 
-    if(!user.active){
+    const role = user.role;
+    console.log(role);
+
+    if(role != "administrador" && !user.active){
       req.flash("errors", "Your account is not activate. Please check your email for activate your account. ");
       return res.redirect("/login");
     }
-
-    const role = user.role;
-    console.log(role);
 
     bcrypt.compare(password, user.password)
     .then(result => {
@@ -51,16 +51,16 @@ exports.PostLogin = (req, res, next) =>{
 
         switch(role){
           case "cliente":
-           return res.redirect("/Cliente/home"); //ruta al home del cliente
+           return res.redirect("/cliente/home"); //ruta al home del cliente
 
           case "delivery":
-            return res.redirect("/Delivery/home"); //ruta al home del delivery
+            return res.redirect("/delivery/home"); //ruta al home del delivery
 
           case "comercio":
-           return res.redirect("/Comercios/home"); //ruta al home del comercio
+           return res.redirect("/comercios/home"); //ruta al home del comercio
 
           case "administrador":
-            return res.redirect("/Admin/home"); //ruta al home del administrador
+            return res.redirect("/admin/home"); //ruta al home del administrador
 
           default:
           req.flash("errors", "You need create an account");
@@ -112,7 +112,7 @@ exports.getActivation = (req, res, next) => {
       req.flash("errors", "Invalid activation token");
       console.log("No user found with the given activation token")
       return res.redirect("/login");
-    }    
+    }
 
     console.log("User before activation:" , user);
 

@@ -19,14 +19,12 @@ const Favorito = sequelize.define("favorito", {
         }
     },
     tradeId:{
+        type: Sequelize.INTEGER,
         references: {
             model: Comercio,
             key: "id"
         },
     }
 });
-
-Favorito.belongsTo(Cliente, {foreingKey: "clienteId"});
-Cliente.hasMany(Favorito, {foreingKey: "clienteId"});
 
 module.exports = Favorito;

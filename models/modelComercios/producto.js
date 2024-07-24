@@ -27,6 +27,7 @@ const Producto = sequelize.define("producto", {
         allowNull: false,
     },
     tradeId:{
+        type: Sequelize.INTEGER,
         references: {
             model: Comercio,
             key: "id"
@@ -34,7 +35,5 @@ const Producto = sequelize.define("producto", {
     }
 });
 
-Producto.belongsTo(Comercio, {foreingKey: "tradeId"});
-Comercio.hasMany(Producto, {foreingKey: "tradeId"});
 
 module.exports = Producto;

@@ -1,1 +1,37 @@
-<h1>Vista del perfil</h1>
+<div class="container">
+  <div class="card profile-card mx-auto">
+    <div class="card-header text-center">
+      <h2>Perfil de {{Cliente.user}}</h2>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <img
+          src="{{Cliente.imageProfile}}"
+          alt="Imagen de perfil"
+          class="rounded-circle mb-3"
+          width="150"
+          height="150"
+        />
+        </div>
+      <ul class="list-unstyled profile-info text-left">
+        <li><strong>Nombres:</strong> {{Cliente.name}}</li>
+        <li><strong>Apellidos:</strong> {{Cliente.lastName}}</li>
+        <li><strong>Email:</strong> {{Cliente.email}}</li>
+        <li><strong>Teléfono:</strong> {{Cliente.phone}}</li>
+        <li><strong>Rol:</strong> {{Cliente.role}}</li>
+      </ul>
+      <div class="mt-4 text-center">
+        <a href="/cliente/home" class="btn btn-secondary mr-2">Volver</a>
+        <a href="/cliente/editar/{{Cliente.id}}" class="btn btn-primary">Editar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-card { max-width: 400px; border: 1px solid #ddd; border-radius: 10px;
+  background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); } .profile-info
+  li { padding: 10px 0; border-bottom: 1px solid #ddd; } .profile-info
+  li:last-child { border-bottom: none; } .profile-card img { border: 2px solid
+  #ddd; padding: 5px; background-color: #fff; }
+</style>
