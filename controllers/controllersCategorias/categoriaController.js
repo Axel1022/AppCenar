@@ -30,8 +30,13 @@ exports.GetCategoria = async (req, res, next) => {
 }
 
 exports.GetAddCategoria =  (req, res, next) => {
-
    const comercioId = req.session.user.id;
+   const comercio = Comercio.findByPk(comercioId);
+
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
 
    Categorias.findAll({
         where: {tradeId: comercioId},
@@ -55,9 +60,19 @@ exports.GetAddCategoria =  (req, res, next) => {
 
 exports.GetEditCategoria = (req, res, next) => {
     const comercioId = req.session.user.id;
+    const comercio = Comercio.findByPk(comercioId);
 
-   Categorias.findAll({
-        where: {tradeId: comercioId},
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
+    const id = req.params.id;
+
+   Categorias.findOne({
+        where: {
+            id: id,
+            tradeId: comercioId
+        },
         include: [{model: Comercio}]
    })
    .then((result) => {
@@ -78,6 +93,12 @@ exports.GetEditCategoria = (req, res, next) => {
 
 exports.GetDeleteCategoria = (req, res, next) => {
     const comercioId = req.session.user.id;
+    const comercio = Comercio.findByPk(comercioId);
+
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
 
     const categoriaId = req.params.categoriaId;
 
@@ -107,6 +128,12 @@ exports.GetDeleteCategoria = (req, res, next) => {
 
 exports.PostAddCategorias = (req, res, next) => {
     const comercioId = req.session.user.id;
+    const comercio = Comercio.findByPk(comercioId);
+
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
 
     const name = req.body.name;
     const description = req.body.description;
@@ -126,6 +153,12 @@ exports.PostAddCategorias = (req, res, next) => {
 
 exports.PostEditCategoria = (req, res, next) => {
  const comercioId = req.session.user.id;
+ const comercio = Comercio.findByPk(comercioId);
+
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
 
  const id = req.body.categoriaId;
  const name = req.body.name;
@@ -162,6 +195,12 @@ exports.PostEditCategoria = (req, res, next) => {
 
 exports.PostDeleteCategoria = (req, res, next) => {
   const comercioId = req.session.user.id;
+  const comercio = Comercio.findByPk(comercioId);
+
+    if(comercio.role !=="comercio"){
+        req.flash("errors", "You dont have access to this area");
+        return res.redirect("/viewsLoginRegistro/login");
+    }
 
   const categoriaId = req.params.categoriaId;
 

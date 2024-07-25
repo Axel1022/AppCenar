@@ -122,7 +122,7 @@ exports.getActivation = (req, res, next) => {
     return user.save()
     .then(() => {
       console.log("Cuenta activada");
-      req.flash("errors", "Account activated succesfully, you can log in now");
+      req.flash("success", "Account activated succesfully, you can log in now");
       return res.redirect("/login");
     });
   })
