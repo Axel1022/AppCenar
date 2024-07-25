@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const categoriaController = require("../../controllers/controllersComercios/categoriaController");
+const categoriaController = require("../../controllers/controllersCategorias/categoriaController");
 
 router.get("/comercios/Categorias", categoriaController.GetCategoria);
 router.get("/comercios/AgregarCategoria", categoriaController.GetAddCategoria);
