@@ -25,7 +25,7 @@ exports.GetProducts = async (req, res, nex) => {
         }
     })
   
-    res.render("viewsComercios/viewCategoria", {
+    res.render("viewsComercios/viewProducto", {
         pageTitle: "Food Rush | Productos",
         hasProducto: productos.length > 0,
         productos: mapeoProducto
@@ -157,7 +157,7 @@ exports.PostAddProducts = (req, res, next) => {
     })
 };
 
-exports.PostEditCategoria = (req, res, next) => {
+exports.PostEditProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
 
     const comercio = Comercio.findByPk(comercioId);
@@ -207,7 +207,7 @@ exports.PostEditCategoria = (req, res, next) => {
     })
 };
    
-exports.PostDeleteCategoria = (req, res, next) => {
+exports.PostDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
     const comercio = Comercio.findByPk(comercioId);
 
