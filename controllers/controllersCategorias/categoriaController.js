@@ -55,9 +55,13 @@ exports.GetAddCategoria =  (req, res, next) => {
 
 exports.GetEditCategoria = (req, res, next) => {
     const comercioId = req.session.user.id;
+    const id = req.params.id;
 
-   Categorias.findAll({
-        where: {tradeId: comercioId},
+   Categorias.findOne({
+        where: {
+            id: id,
+            tradeId: comercioId
+        },
         include: [{model: Comercio}]
    })
    .then((result) => {

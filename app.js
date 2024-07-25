@@ -84,9 +84,12 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   const errors = req.flash("errors");
+  const success = req.flash("success");
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.errorMessages = errors;
   res.locals.hasErrorMessages = errors.length > 0;
+  res.locals.successMessages = success;
+  res.locals.hasSuccessMessages = success.length > 0;
   next();
 });
 
@@ -135,6 +138,10 @@ Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
 
 Comercio.hasMany(Categoria, { foreignKey: "tradeId" });
 Categoria.belongsTo(Comercio, { foreignKey: "tradeId" });
+
+Producto.belongsTo(Categoria, {foreignKey: "categoryId", as: "categoria"});
+
+Categoria.hasMany(Producto, {foreignKey: "categoryId", as: "producto"});
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
