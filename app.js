@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const conecctiondb = require("./contexts/appContext");
+const setLayout = require("./midelwares/setLayout");
 
 // Configuración del motor de vistas
 app.engine(
@@ -88,6 +89,8 @@ app.use((req, res, next) => {
   res.locals.hasErrorMessages = errors.length > 0;
   next();
 });
+
+app.use(setLayout);
 
 //* --------------------------- Rutas ---------------------------
 const errorController = require("./controllers/404Controller");

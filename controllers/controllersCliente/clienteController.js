@@ -3,7 +3,7 @@ const modelDirecciones = require("../../models/modelCliente/direccion");
 exports.getHome = async (req, res, next) => {
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
-    layout: "layoutCliente",
+    //layout: "layoutCliente",
 
   });
 };
@@ -19,7 +19,7 @@ exports.getDirecciones = async (req, res, next) => {
 
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
-    layout: "layoutCliente",
+    //layout: "layoutCliente",
     Direcciones: direcciones,
     hasDireccions: direcciones.length > 0
   });
@@ -27,7 +27,7 @@ exports.getDirecciones = async (req, res, next) => {
 exports.getFavoritos = (req, res, next) => {
   res.render("viewsCliente/viewFavoritos", {
     pageTitle: "Food Rush | Favoritos",
-    layout: "layoutCliente",
+   // layout: "layoutCliente",
   });
 };
 exports.getPerfil = async (req, res, next) => {
@@ -39,13 +39,13 @@ exports.getPerfil = async (req, res, next) => {
 
   res.render("viewsCliente/viewPerfil", {
     pageTitle: "Food Rush | Perfil",
-    layout: "layoutCliente",
+   // layout: "layoutCliente",
     Cliente: cliente.dataValues,
   });
 };
 exports.getPedidos = (req, res, next) => {
   res.render("viewsCliente/viewPedidos", {
     pageTitle: "Food Rush | Pedidos",
-    layout: "layoutCliente",
+    //layout: "layoutCliente",
   });
 };
