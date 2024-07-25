@@ -1,5 +1,5 @@
 <div class="col-12 col-sm-6 offset-3 d-flex align-items-center justify-content-center">
-    <form action="/viewCategoria/{{#if editMode}}editCategoria{{else}}addCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
+    <form action="/viewCategoria/{{#if editMode}}viewEditCategoria{{else}}viewAddCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
       
       <h3>Agregar Categoria</h3>
        {{#if editMode}}
