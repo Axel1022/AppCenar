@@ -1,0 +1,38 @@
+<div class="row" style="margin-top:50px;">
+    <div class="col-md-3">
+
+      <div class="btn-add-prod mb-3">
+         <a href="/viewComercio/viewAddProducto" class="btn btn-add"> + Agregar Producto</a>
+      </div>
+
+
+        {{#if hasProducto}}
+         {{#each producto}}
+        <div class="card-sl">
+            <div class="card-image-prod">
+                <img
+                    src="{{producto.image}}" />
+            </div>
+
+            <div class="card-heading-prod">
+                {{producto.name}}
+            </div>
+            <div class="card-text-prod">
+                {{producto.description}}
+            </div>
+            <div class="card-text-prod">
+               {{producto.price}}
+            </div>
+            <div class="card-button-container">
+                <a href="#" class="card-button-edit"> Edit</a>
+                <a href="#" class="card-button-delete"> Delete</a>
+            </div>
+
+        </div>
+        {{/each}}
+        {{else}}
+
+        <h3>No hay productos creados</h3>
+        {{/if}}
+    </div>
+</div>

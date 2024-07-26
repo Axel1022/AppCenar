@@ -1,10 +1,9 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../contexts/appContext");
+const Comercio = require("./comercio");
 
-const Comercio = require("../modelComercios/comercio");
-const Categoria = require("../modelComercios/categoria");
+const Categoria = sequelize.define("categoria", {
 
-const Producto = sequelize.define("producto", {
     id:{
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -15,17 +14,14 @@ const Producto = sequelize.define("producto", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    image:{
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     description:{
         type: Sequelize.STRING,
         allowNull: false,
     },
-    price:{
-        type: Sequelize.STRING,
-        allowNull: false,
+    quantity:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0, 
     },
     tradeId:{
         type: Sequelize.INTEGER,
@@ -33,17 +29,7 @@ const Producto = sequelize.define("producto", {
             model: Comercio,
             key: "id"
         },
-        allowNull: false
-    },
-    categoryId:{
-        type: Sequelize.INTEGER,
-        references: {
-            model: Categoria,
-            key: "id"
-        },
-        allowNull: false
     }
 });
 
-
-module.exports = Producto;
+module.exports = Categoria;

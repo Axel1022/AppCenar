@@ -1,16 +1,16 @@
 {{#if hasDireccions}}
 <div class="container">
     <h1 class="mb-4 display-4 text-muted">Mis direcciones</h1>
-    <button class="btn btn-primary mb-3">+ Dirección</button>
+    <a class="btn btn-primary mb-3" href="/cliente/direcciones/add">+ Dirección</a>
     <div class="list-group">
         {{#each Direcciones as |direccion|}}
-        <div class="list-group-item mb-1 shadow">
+        <div class="list-group-item mb-1 shadow mt-3">
             <h5 class="display-7 mb-1">{{direccion.identifier}}</h5>
             <div class="d-flex align-items-center">
                 <p class="lead text-secondary mb-1 me-3">{{direccion.direction}}</p>
-                <button class="lead text-white btn btn-warning btn-sm me-2">Editar</button>
-                <button class="lead text-white btn btn-danger btn-sm">Eliminar</button>
             </div>
+            <button class="lead text-white btn btn-warning float-end btn-sm me-3 mt-3">Editar</button>
+            <button class="lead text-white btn btn-danger float-end btn-sm me-3 mt-3">Eliminar</button>
         </div>
         {{/each}}
     </div>
@@ -20,6 +20,6 @@
     <div class="text-center mt-5">
         <h1 class="display-4 text-muted">No tienes direcciones guardadas.</h1>
         <p class="lead text-secondary">Parece que aún no has agregado ninguna dirección a tu cuenta.</p>
-        <button class="btn btn-primary btn-lg mt-4">+ Añadir Dirección</button>
+        <a class="btn btn-primary btn-lg mt-4" href="/cliente/direcciones/add">+ Añadir Dirección</a>
     </div>
 {{/if}}

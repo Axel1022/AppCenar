@@ -1,0 +1,144 @@
+.badge span {
+    background-color: #fffbec;
+    width: 60px;
+    height: 25px;
+    margin-top: 4px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    display: flex;
+    color: #fed85d;
+    justify-content: center;
+    align-items: center
+}
+
+.text1 {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.text2 {
+    color: #a5aec0
+}
+
+.icon-categoria{
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 39px
+}
+
+.img-categoria-icon{
+    width: 30px;
+}
+
+.btn-save{
+    background-color: #053F5C;
+    border-color: #053F5C;
+}
+
+.btn-home{
+    background-color: #F27F0C;
+    border-color: #F27F0C;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Card Styles */
+
+.card-sl {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card-image-prod img {
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: 8px 8px 0px 0;
+}
+
+.card-action-prod {
+    position: relative;
+    float: right;
+    margin-top: -25px;
+    margin-right: 20px;
+    z-index: 2;
+    color: #E26D5C;
+    background: #fff;
+    border-radius: 100%;
+    padding: 15px;
+    font-size: 15px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+}
+
+.card-action-prod:hover {
+    color: #fff;
+    background: #E26D5C;
+    -webkit-animation: pulse 1.5s infinite;
+}
+
+.card-heading-prod {
+    font-size: 18px;
+    font-weight: bold;
+    background: #fff;
+    padding: 10px 15px;
+}
+
+.card-text-prod {
+    padding: 10px 15px;
+    background: #fff;
+    font-size: 14px;
+    color: #636262;
+}
+
+.card-button-container{
+    display: flex;
+    gap: 10px;
+}
+
+.card-button-edit, .card-button-delete {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    width: 50%;
+    color: #fff;
+    margin: 3px;
+    border-radius: 4px;
+}
+
+.card-button-edit{
+    background-color: #9FE7F5;
+}
+
+.card-button-delete{
+    background-color: #F7AD19;
+}
+
+.btn-add-prod{
+    background-color: #429EBD;
+    text-decoration: none;    
+    border-radius: 3px;
+    width: 200px;
+    height: 40px;
+}
+
+.btn-add{
+    color: #fff;
+}
+
+.card-button-edit:hover {
+    text-decoration: none;
+    background-color: #17caed;
+    color: #fff;
+}
+
+.card-button-delete:hover {
+    text-decoration: none;
+    background-color: #d18d05;
+    color: #fff;
+}
+
