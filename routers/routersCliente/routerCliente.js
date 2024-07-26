@@ -7,5 +7,7 @@ router.get("/cliente/home", clienteController.getHome);
 router.get("/cliente/direcciones", clienteController.getDirecciones);
 router.get("/cliente/favoritos", clienteController.getFavoritos);
 router.get("/cliente/perfil", clienteController.getPerfil);
+router.get("/cliente/perfil/editar", clienteController.getEditPerfil);
+router.post("/cliente/perfil/editar/post", clienteController.postEditPerfil);
 router.get("/cliente/pedidos", clienteController.getPedidos);
 module.exports = router;
