@@ -38,7 +38,7 @@ exports.GetAddCategoria =  (req, res, next) => {
 
    Categorias.findAll({
         where: {tradeId: comercioId},
-        include: [{model: Comercio}]
+        include: [{model: Comercio, as: "comercio"}]
    })
    .then((result) => {
         const categorias  = result.map((result) => result.dataValues);
@@ -69,7 +69,7 @@ exports.GetEditCategoria = (req, res, next) => {
             id: id,
             tradeId: comercioId
         },
-        include: [{model: Comercio}]
+        include: [{model: Comercio, as: "comercio"}]
    })
    .then((result) => {
         const categorias  = result.map((result) => result.dataValues);

@@ -9,6 +9,8 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const conecctiondb = require("./contexts/appContext");
 const setLayout = require("./midelwares/setLayout");
+const compare = require("./helpers/compare");
+
 
 // Configuración del motor de vistas
 app.engine(
@@ -17,6 +19,9 @@ app.engine(
     layoutsDir: "views/layouts",
     //Ya quite el main por dejeto
     extname: "hbs",
+    helpers:{
+      compare: compare
+    }
   })
 );
 app.set("view engine", "hbs");
@@ -116,33 +121,33 @@ const Producto = require("./models/modelComercios/producto");
 const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
 
-Cliente.hasMany(Direccion, { foreignKey: "clientId" });
-Direccion.belongsTo(Cliente, { foreignKey: "clientId" });
+Cliente.hasMany(Direccion, { foreignKey: "clientId", as: "direccion" });
+Direccion.belongsTo(Cliente, { foreignKey: "clientId", as: "cliente" });
 
-Cliente.hasMany(Favorito, { foreignKey: "clientId" });
-Favorito.belongsTo(Cliente, { foreignKey: "clientId" });
+Cliente.hasMany(Favorito, { foreignKey: "clientId", as: "favorito" });
+Favorito.belongsTo(Cliente, { foreignKey: "clientId", as: "cliente" });
 
-Comercio.hasMany(Favorito, { foreignKey: "tradeId" });
-Favorito.belongsTo(Comercio, { foreignKey: "tradeId" });
+Comercio.hasMany(Favorito, { foreignKey: "tradeId", as: "favorito" });
+Favorito.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 
-Cliente.hasMany(Pedido, { foreignKey: "clientId" });
-Pedido.belongsTo(Cliente, { foreignKey: "clientId" });
+Cliente.hasMany(Pedido, { foreignKey: "clientId", as: "pedido" });
+Pedido.belongsTo(Cliente, { foreignKey: "clientId", as: "cliente" });
 
-Direccion.hasMany(Pedido, { foreignKey: "directionId" });
-Pedido.belongsTo(Direccion, { foreignKey: "directionId" });
+Direccion.hasMany(Pedido, { foreignKey: "directionId", as: "pedido" });
+Pedido.belongsTo(Direccion, { foreignKey: "directionId", as: "direccion" });
 
-Comercio.hasMany(Pedido, { foreignKey: "tradeId" });
-Pedido.belongsTo(Comercio, { foreignKey: "tradeId" });
+Comercio.hasMany(Pedido, { foreignKey: "tradeId", as: "pedido" });
+Pedido.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 
-Comercio.hasMany(Producto, { foreignKey: "tradeId" });
-Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
+Comercio.hasMany(Producto, { foreignKey: "tradeId", as: "producto" });
+Producto.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 
-Comercio.hasMany(Categoria, { foreignKey: "tradeId" });
-Categoria.belongsTo(Comercio, { foreignKey: "tradeId" });
+Comercio.hasMany(Categoria, { foreignKey: "tradeId", as: "categoria" });
+Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 
-Producto.belongsTo(Categoria, { foreignKey: "categoryId" });
+Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
+Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
 
-Categoria.hasMany(Producto, { foreignKey: "categoryId" });
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
