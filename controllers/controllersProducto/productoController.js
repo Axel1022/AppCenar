@@ -40,11 +40,13 @@ exports.GetProducts = async (req, res, next) => {
 
 exports.GetAddProducts =  (req, res, next) => {
     const comercioId = req.session.user.id;
-    const comercio = Comercio.findByPk(comercioId);
+    const usuario = req.session.user.role;
 
-    if(comercio.role !=="comercio"){
+    console.log("Este es el rol del usuario actual:", usuario)
+
+    if(usuario !== "comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
  
     Productos.findAll({
