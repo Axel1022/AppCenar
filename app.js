@@ -8,6 +8,7 @@ const flash = require("connect-flash");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const conecctiondb = require("./contexts/appContext");
+const setLayout = require("./midelwares/setLayout");
 
 // Configuración del motor de vistas
 app.engine(
@@ -83,11 +84,16 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   const errors = req.flash("errors");
+  const success = req.flash("success");
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.errorMessages = errors;
   res.locals.hasErrorMessages = errors.length > 0;
+  res.locals.successMessages = success;
+  res.locals.hasSuccessMessages = success.length > 0;
   next();
 });
+
+app.use(setLayout);
 
 //* --------------------------- Rutas ---------------------------
 const errorController = require("./controllers/404Controller");
@@ -97,6 +103,8 @@ const homeController = require("./routers/routersAdmin/routerHomeAdmin");
 const clienteController = require("./routers/routersCliente/routerCliente");
 const comerciosController = require("./routers/routersComercios/routerComercios");
 const deliveryController = require("./routers/routersDelivery/routerDelivery");
+const categoriaController = require("./routers/routersComercios/routerCategoria");
+const productosController = require("./routers/routersComercios/routerProductos");
 
 //* --------------------------- Rutas de los roles y asociaciones ---------------------------
 const Cliente = require("./models/modelCliente/cliente");
@@ -105,6 +113,7 @@ const Favorito = require("./models/modelCliente/favoritos");
 const Pedido = require("./models/modelCliente/pedido");
 const Comercio = require("./models/modelComercios/comercio");
 const Producto = require("./models/modelComercios/producto");
+const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
 
 Cliente.hasMany(Direccion, { foreignKey: "clientId" });
@@ -128,6 +137,13 @@ Pedido.belongsTo(Comercio, { foreignKey: "tradeId" });
 Comercio.hasMany(Producto, { foreignKey: "tradeId" });
 Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
 
+Comercio.hasMany(Categoria, { foreignKey: "tradeId" });
+Categoria.belongsTo(Comercio, { foreignKey: "tradeId" });
+
+Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
+
+Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
+
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
@@ -135,6 +151,8 @@ app.use(homeController);
 app.use(clienteController);
 app.use(comerciosController);
 app.use(deliveryController);
+app.use(categoriaController);
+app.use(productosController);
 app.use(errorController.get404);
 
 conecctiondb

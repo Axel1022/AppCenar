@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-12">
+        <h1>Confirmar eliminacion</h1>
+        <p>Estas seguro de eliminar {{categoria.name}}?</p>
+
+        <form method="post" action="/comercios/deleteCategoria" class="form-delete">
+            <input type="hidden" name="id" value="{{categoria.id}}">
+            <button type="submit" class="btn btn-danger delete-pokemon">Delete</button>
+            <a href="./viewCategoria" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
