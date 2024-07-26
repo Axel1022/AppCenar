@@ -44,11 +44,6 @@
     border-color: #F27F0C;
 }
 
-.btn-add{
-    background-color: #429EBD;
-    border-color: #429EBD;
-}
-
 a {
     text-decoration: none;
 }
@@ -100,19 +95,50 @@ a {
     color: #636262;
 }
 
-.card-button-prod {
+.card-button-container{
+    display: flex;
+    gap: 10px;
+}
+
+.card-button-edit, .card-button-delete {
     display: flex;
     justify-content: center;
     padding: 10px 0;
-    width: 100%;
-    background-color: #1F487E;
+    width: 50%;
     color: #fff;
-    border-radius: 0 0 8px 8px;
+    margin: 3px;
+    border-radius: 4px;
 }
 
-.card-button-prod:hover {
+.card-button-edit{
+    background-color: #9FE7F5;
+}
+
+.card-button-delete{
+    background-color: #F7AD19;
+}
+
+.btn-add-prod{
+    background-color: #429EBD;
+    text-decoration: none;    
+    border-radius: 3px;
+    width: 200px;
+    height: 40px;
+}
+
+.btn-add{
+    color: #fff;
+}
+
+.card-button-edit:hover {
     text-decoration: none;
-    background-color: #1D3461;
+    background-color: #17caed;
     color: #fff;
-
 }
+
+.card-button-delete:hover {
+    text-decoration: none;
+    background-color: #d18d05;
+    color: #fff;
+}
+

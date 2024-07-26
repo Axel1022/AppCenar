@@ -140,9 +140,9 @@ Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
 Comercio.hasMany(Categoria, { foreignKey: "tradeId" });
 Categoria.belongsTo(Comercio, { foreignKey: "tradeId" });
 
-Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
+Producto.belongsTo(Categoria, { foreignKey: "categoryId"});
 
-Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
+Categoria.hasMany(Producto, { foreignKey: "categoryId" });
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);

@@ -2,15 +2,21 @@ const Categoria = require("../../models/modelComercios/categoria");
 const Productos = require("../../models/modelComercios/producto");
 const Comercio = require("../../models/modelComercios/comercio")
 
-exports.GetProducts = async (req, res, nex) => {
+exports.GetProducts = async (req, res, next) => {
+    if (!req.session.isLoggedIn || !req.session.user) {
+        req.flash("errors", "You need to log in to access this area.");
+        res.redirect('/login');
+    }
 
+    
     const comercioId = req.session.user.id;
+    console.log("Usuario logeado:", comercioId);
 
     const productos = await Productos.findAll({
         where: {tradeId: comercioId},
         include:[
-            {model: Comercio,  as: "comercio"},
-            {model: Categoria, as: "categoria"}
+            {model: Comercio},
+            {model: Categoria}
         ]
     });
 
@@ -25,7 +31,7 @@ exports.GetProducts = async (req, res, nex) => {
         }
     })
   
-    res.render("viewsComercios/viewProducto", {
+    res.render("viewsComercios/viewProductos", {
         pageTitle: "Food Rush | Productos",
         hasProducto: productos.length > 0,
         productos: mapeoProducto

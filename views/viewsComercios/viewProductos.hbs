@@ -1,22 +1,38 @@
 <div class="row" style="margin-top:50px;">
     <div class="col-md-3">
+
+      <div class="btn-add-prod mb-3">
+         <a href="/viewComercio/viewAddProducto" class="btn btn-add"> + Agregar Producto</a>
+      </div>
+
+
+        {{#if hasProducto}}
+         {{#each producto}}
         <div class="card-sl">
             <div class="card-image-prod">
                 <img
-                    src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" />
+                    src="{{producto.image}}" />
             </div>
 
-            <a class="card-action-prod" href="#"><i class="fa fa-heart"></i></a>
             <div class="card-heading-prod">
-                Audi Q8
+                {{producto.name}}
             </div>
             <div class="card-text-prod">
-                Audi Q8 is a full-size luxury crossover SUV coupé made by Audi that was launched in 2018.
+                {{producto.description}}
             </div>
             <div class="card-text-prod">
-                $67,400
+               {{producto.price}}
             </div>
-            <a href="#" class="card-button-prod"> Purchase</a>
+            <div class="card-button-container">
+                <a href="#" class="card-button-edit"> Edit</a>
+                <a href="#" class="card-button-delete"> Delete</a>
+            </div>
+
         </div>
+        {{/each}}
+        {{else}}
+
+        <h3>No hay productos creados</h3>
+        {{/if}}
     </div>
 </div>
