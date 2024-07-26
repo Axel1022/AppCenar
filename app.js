@@ -104,6 +104,7 @@ const clienteController = require("./routers/routersCliente/routerCliente");
 const comerciosController = require("./routers/routersComercios/routerComercios");
 const deliveryController = require("./routers/routersDelivery/routerDelivery");
 const categoriaController = require("./routers/routersComercios/routerCategoria");
+const productosController = require("./routers/routersComercios/routerProductos");
 
 //* --------------------------- Rutas de los roles y asociaciones ---------------------------
 const Cliente = require("./models/modelCliente/cliente");
@@ -139,9 +140,9 @@ Producto.belongsTo(Comercio, { foreignKey: "tradeId" });
 Comercio.hasMany(Categoria, { foreignKey: "tradeId" });
 Categoria.belongsTo(Comercio, { foreignKey: "tradeId" });
 
-Producto.belongsTo(Categoria, {foreignKey: "categoryId", as: "categoria"});
+Producto.belongsTo(Categoria, { foreignKey: "categoryId" });
 
-Categoria.hasMany(Producto, {foreignKey: "categoryId", as: "producto"});
+Categoria.hasMany(Producto, { foreignKey: "categoryId" });
 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
@@ -151,6 +152,7 @@ app.use(clienteController);
 app.use(comerciosController);
 app.use(deliveryController);
 app.use(categoriaController);
+app.use(productosController);
 app.use(errorController.get404);
 
 conecctiondb

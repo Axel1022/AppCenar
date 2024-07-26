@@ -1,11 +1,11 @@
 <div class="col-12 col-sm-6 offset-3 d-flex align-items-center justify-content-center">
-    <form action="/viewCategoria/{{#if editMode}}editCategoria{{else}}addCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
-      
+    <form action="/comercios/{{#if editMode}}EditarCategoria{{else}}AgregarCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+
       <h3>Agregar Categoria</h3>
        {{#if editMode}}
          <input type="hidden" value="{{categoria.id}}" name="id">
        {{/if}}
-       
+
         <div class="form-group mt-3">
             <label for="name">Nombre:</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{#if editMode}}{{categoria.name}}{{/if}}" required>
@@ -19,4 +19,3 @@
    </form>
 </div>
 
-  

@@ -29,7 +29,7 @@ exports.PostLogin = (req, res, next) =>{
     if(!user) {
       req.flash("errors", "Email is invalid");
       console.log("email invalido");
-      return res.redirect("/lLogin");
+      return res.redirect("/Login");
     }
 
     const role = user.role;
@@ -48,26 +48,32 @@ exports.PostLogin = (req, res, next) =>{
           id: user.id,
           role: role
         };
+  
+        req.session.save(err => {
+          if(err) {
+            console.log(err);
+            res.redirect("/login");
+          }
 
-        switch(role){
-          case "cliente":
-           return res.redirect("/cliente/home"); //ruta al home del cliente
-
-          case "delivery":
-            return res.redirect("/delivery/home"); //ruta al home del delivery
-
-          case "comercio":
-           return res.redirect("/comercios/home"); //ruta al home del comercio
-
-          case "administrador":
-            return res.redirect("/admin/home"); //ruta al home del administrador
-
-          default:
-          req.flash("errors", "You need create an account");
-          console.log("La cuenta no existe")
-          return res.redirect("/viewsLoginRegistro/viewLogin"); //ruta al mismo login
-
-        }
+          switch(role){
+            case "cliente":
+             return res.redirect("/cliente/home"); //ruta al home del cliente
+  
+            case "delivery":
+              return res.redirect("/delivery/home"); //ruta al home del delivery
+  
+            case "comercio":
+             return res.redirect("/comercios/home"); //ruta al home del comercio
+  
+            case "administrador":
+              return res.redirect("/admin/home"); //ruta al home del administrador
+  
+            default:
+            req.flash("errors", "You need create an account");
+            console.log("La cuenta no existe")
+            return res.redirect("/viewsLoginRegistro/viewLogin"); //ruta al mismo login
+          }
+        });
       }
       else{
         req.flash("errors", "Password is invalid");

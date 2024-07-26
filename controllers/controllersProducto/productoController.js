@@ -2,15 +2,21 @@ const Categoria = require("../../models/modelComercios/categoria");
 const Productos = require("../../models/modelComercios/producto");
 const Comercio = require("../../models/modelComercios/comercio")
 
-exports.GetProducts = async (req, res, nex) => {
+exports.GetProducts = async (req, res, next) => {
+    if (!req.session.isLoggedIn || !req.session.user) {
+        req.flash("errors", "You need to log in to access this area.");
+        res.redirect('/login');
+    }
 
+    
     const comercioId = req.session.user.id;
+    console.log("Usuario logeado:", comercioId);
 
     const productos = await Productos.findAll({
         where: {tradeId: comercioId},
         include:[
-            {model: Comercio,  as: "comercio"},
-            {model: Categoria, as: "categoria"}
+            {model: Comercio},
+            {model: Categoria}
         ]
     });
 
@@ -25,7 +31,7 @@ exports.GetProducts = async (req, res, nex) => {
         }
     })
   
-    res.render("viewsComercios/viewCategoria", {
+    res.render("viewsComercios/viewProductos", {
         pageTitle: "Food Rush | Productos",
         hasProducto: productos.length > 0,
         productos: mapeoProducto
@@ -34,11 +40,13 @@ exports.GetProducts = async (req, res, nex) => {
 
 exports.GetAddProducts =  (req, res, next) => {
     const comercioId = req.session.user.id;
-    const comercio = Comercio.findByPk(comercioId);
+    const usuario = req.session.user.role;
 
-    if(comercio.role !=="comercio"){
+    console.log("Este es el rol del usuario actual:", usuario)
+
+    if(usuario !== "comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
  
     Productos.findAll({
@@ -67,7 +75,7 @@ exports.GetEditProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
    Productos.findOne({
@@ -78,7 +86,7 @@ exports.GetEditProducts = (req, res, next) => {
    })
    .then((result) => {
         if (!result) {
-            return res.redirect("/viewsComercios/viewProducto")
+            return res.redirect("/comercios/Productos")
         }
 
         res.render("viewsComercios/viewAddProducto", {
@@ -99,7 +107,7 @@ exports.GetDeleteProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     Productos.findOne({
@@ -110,7 +118,7 @@ exports.GetDeleteProducts = (req, res, next) => {
     })
     .then((productos) => {
         if(!productos){
-            return res.redirect("/viewComercio/viewProducto");
+            return res.redirect("/comercios/Productos");
         }
 
         res.render("viewsComercios/viewDeleteProducto", {
@@ -130,7 +138,7 @@ exports.PostAddProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     const name = req.body.name;
@@ -150,21 +158,21 @@ exports.PostAddProducts = (req, res, next) => {
 
     })
     .then(() =>{
-        res.redirect("/viewsCategoria/viewProducto");
+        res.redirect("/comercios/Producto");
     })
     .catch(err => {
         console.error("Error al crear el producto:", err);
     })
 };
 
-exports.PostEditCategoria = (req, res, next) => {
+exports.PostEditProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
 
     const comercio = Comercio.findByPk(comercioId);
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
    
     const id = req.body.productoId;
@@ -184,7 +192,7 @@ exports.PostEditCategoria = (req, res, next) => {
        const categoria = result.dataValues;
    
        if(!categoria){
-           return res.redirect("/viewComercio/viewProducto");
+           return res.redirect("/comercios/Producto");
        }
    
        Productos.update({
@@ -196,7 +204,7 @@ exports.PostEditCategoria = (req, res, next) => {
            categoryId: categoriaId
        })
        .then((result) => {
-           return res.redirect("/viewComercios/viewProducto");
+           return res.redirect("/comercios/Producto");
        })
        .catch((error) => {
            console.log(error);
@@ -207,13 +215,13 @@ exports.PostEditCategoria = (req, res, next) => {
     })
 };
    
-exports.PostDeleteCategoria = (req, res, next) => {
+exports.PostDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
     const comercio = Comercio.findByPk(comercioId);
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     const productId = req.params.productId;
@@ -227,7 +235,7 @@ exports.PostDeleteCategoria = (req, res, next) => {
     .then((result) => {
     if(result === 0){
         req.flash("errors", "Producto no encontrado");
-        return res.redirect("/viewComercio/viewProducto");
+        return res.redirect("/comercios/Producto");
     }
     res.redirect("/viewsComercio/viewProducto");
     })

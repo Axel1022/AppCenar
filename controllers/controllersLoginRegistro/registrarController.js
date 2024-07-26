@@ -8,15 +8,25 @@ const { v4: uuid4 } = require("uuid");
 
 // Registro para el cliente y delivery
 exports.getClienteSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/registroCliente", { // También para delivery
+  res.render("viewsLoginRegisto/registroCliente", {
+    // También para delivery
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive: true
+    singUpActive: true,
   });
 };
 
 exports.PostClienteSingUp = async (req, res, next) => {
-  const { name, lastName, phone, email, user, password, confirmPassword, role } = req.body;
+  const {
+    name,
+    lastName,
+    phone,
+    email,
+    user,
+    password,
+    confirmPassword,
+    role,
+  } = req.body;
   const imageProfile = req.file;
 
   if (password !== confirmPassword) {
@@ -31,13 +41,27 @@ exports.PostClienteSingUp = async (req, res, next) => {
     if (role === "cliente") {
       existingUser = await Cliente.findOne({ where: { user } });
       if (existingUser) {
-        req.flash("errors", "This user already exists, please select another one");
+        req.flash(
+          "errors",
+          "This user already exists, please select another one"
+        );
+        req.flash(
+          "errors",
+          "This user already exists, please select another one"
+        );
         return res.redirect("/registroCliente");
       }
 
       existingUser = await Cliente.findOne({ where: { email } });
       if (existingUser) {
-        req.flash("errors", "This email already exists, please select another one");
+        req.flash(
+          "errors",
+          "This email already exists, please select another one"
+        );
+        req.flash(
+          "errors",
+          "This email already exists, please select another one"
+        );
         console.log("This email already exists, please select another one");
         return res.redirect("/registroCliente");
       }
@@ -56,21 +80,29 @@ exports.PostClienteSingUp = async (req, res, next) => {
         user,
         password: hashedPassword,
         role,
-        token: tokenCliente
+        token: tokenCliente,
       });
 
       console.log("Registro correcto");
-
-      const mailOption = {
-        from: "foodrushya@gmail.com",
+      const mailOptionCliente = {
+        from: "Food Rush Company <no-reply@foodrushya.com>",
         to: email,
-        subject: "Bienvenido a Food Rush",
-        html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-               para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
-               <a href="${req.protocol}://${req.get("host")}/activate/${tokenCliente}">Activar cuenta</a>`
-      };
+        subject: "Bienvenido a Food Rush - Activación de Cuenta",
+        html: `
+                  <p>Estimado/a ${name} ${lastName},</p>
+                  <p>Nos complace darle la bienvenida a <strong>Food Rush</strong>. Su registro ha sido exitoso, y estamos emocionados de que se una a nuestra comunidad.</p>
+                  <p>Para activar su cuenta y comenzar a disfrutar de nuestros servicios, le solicitamos que haga clic en el siguiente enlace:</p>
+                  <p>
+                      <a href="${req.protocol}://${req.get(
+          "host"
+        )}/activate/${tokenCliente}">Activar mi cuenta</a>
+                  </p>
+                  <p>Una vez activada su cuenta, podrá explorar una amplia variedad de opciones gastronómicas y realizar pedidos de manera rápida y sencilla.</p>
 
-      transporter.sendMail(mailOption, (err, info) => {
+                  <p>Si tiene alguna pregunta o requiere asistencia adicional, no dude en comunicarse con nuestro equipo de atención al cliente. Estamos aquí para ayudarle.</p>
+                  <p>Atentamente,<br>El equipo de Food Rush</p>`,
+      };
+      transporter.sendMail(mailOptionCliente, (err, info) => {
         if (err) {
           console.error("Error al enviar el correo:", err);
         } else {
@@ -79,17 +111,22 @@ exports.PostClienteSingUp = async (req, res, next) => {
       });
 
       return res.redirect("/login");
-
     } else if (role === "delivery") {
       existingUser = await Delivery.findOne({ where: { user } });
       if (existingUser) {
-        req.flash("errors", "This user already exists, please select another one");
+        req.flash(
+          "errors",
+          "This user already exists, please select another one"
+        );
         return res.redirect("/registroCliente");
       }
 
       existingUser = await Delivery.findOne({ where: { email } });
       if (existingUser) {
-        req.flash("errors", "This email already exists, please select another one");
+        req.flash(
+          "errors",
+          "This email already exists, please select another one"
+        );
         console.log("This email already exists, please select another one");
         return res.redirect("/registroCliente");
       }
@@ -108,21 +145,32 @@ exports.PostClienteSingUp = async (req, res, next) => {
         user,
         password: hashedPassword,
         role,
-        token: tokenDelivery
+        token: tokenDelivery,
       });
 
       console.log("Registro correcto");
 
-      const mailOption = {
-        from: "foodrushya@gmail.com",
+      const mailOptionDelivery = {
+        from: "Food Rush Company <no-reply@foodrushya.com>",
         to: email,
-        subject: "Bienvenido a Food Rush",
-        html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-               para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
-               <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a>`
+        subject: "Bienvenido a Food Rush - Activación de Cuenta de Delivery",
+        html: `
+                    <p>Estimado/a ${name} ${lastName},</p>
+                    <p>Le damos la bienvenida a <strong>Food Rush</strong>. Su registro como repartidor ha sido exitoso, y estamos emocionados de tenerlo en nuestro equipo.</p>
+                    <p>Para activar su cuenta y comenzar a realizar entregas, por favor haga clic en el siguiente enlace:</p>
+                    <p>
+                        <a href="${req.protocol}://${req.get(
+          "host"
+        )}/activate/${tokenDelivery}">Activar mi cuenta</a>
+                    </p>
+                    <p>Una vez activada, podrá aceptar pedidos y ofrecer un servicio de entrega eficiente y profesional a nuestros clientes, contribuyendo a su satisfacción y fidelización.</p>
+                    <p>Le recomendamos revisar nuestras pautas y recursos para repartidores, que le ayudarán a maximizar su rendimiento y asegurar una experiencia excepcional para nuestros clientes.</p>
+                    <p>Si tiene alguna duda o necesita asistencia, no dude en contactarnos. Estamos aquí para ayudarle en su nueva aventura con Food Rush.</p>
+                    <p>Atentamente,<br>El equipo de Food Rush</p>
+                `,
       };
 
-      transporter.sendMail(mailOption, (err, info) => {
+      transporter.sendMail(mailOptionDelivery, (err, info) => {
         if (err) {
           console.error("Error al enviar el correo:", err);
         } else {
@@ -144,7 +192,7 @@ exports.getComercioSingUp = (req, res, next) => {
   res.render("viewsLoginRegisto/registroComercio", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive: true
+    singUpActive: true,
   });
 };
 
@@ -152,7 +200,17 @@ exports.PostComercioSingUp = async (req, res, next) => {
   const tokenComercio = uuid4();
   console.log("token:", tokenComercio);
 
-  const { name, phone, email, role, openTime, closeTime, typeTrade, password, confirmPassword } = req.body;
+  const {
+    name,
+    phone,
+    email,
+    role,
+    openTime,
+    closeTime,
+    typeTrade,
+    password,
+    confirmPassword,
+  } = req.body;
   const logo = req.file;
 
   if (password !== confirmPassword) {
@@ -164,7 +222,10 @@ exports.PostComercioSingUp = async (req, res, next) => {
   try {
     const existingComercio = await Comercio.findOne({ where: { email } });
     if (existingComercio) {
-      req.flash("errors", "This email already exists, please select another one");
+      req.flash(
+        "errors",
+        "This email already exists, please select another one"
+      );
       console.log("This email already exists, please select another one");
       return res.redirect("/registroComercio");
     }
@@ -181,21 +242,32 @@ exports.PostComercioSingUp = async (req, res, next) => {
       closeTime,
       typeTrade,
       password: hashedPassword,
-      token: tokenComercio
+      token: tokenComercio,
     });
 
     console.log("Registro correcto");
 
-    const mailOption = {
-      from: "foodrushya@gmail.com",
+    const mailOptionComercio = {
+      from: "Food Rush Company <no-reply@foodrushya.com>",
       to: email,
-      subject: "Bienvenido a Food Rush",
-      html: `<p>Estimado ${role}, ${name}, te registraste en <strong>Food Rush</strong></p>
-             para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
-             <a href="${req.protocol}://${req.get("host")}/activate/${tokenComercio}">Activar cuenta</a>`
+      subject: "Bienvenido a Food Rush - Activación de Comercio",
+      html: `
+                    <p>Estimado/a ${name},</p>
+                    <p>Es un placer darle la bienvenida a <strong>Food Rush</strong>. Su registro como comercio ha sido exitoso, y estamos entusiasmados de contar con usted en nuestra plataforma.</p>
+                    <p>Para activar su cuenta y comenzar a ofrecer sus productos a nuestros clientes, por favor haga clic en el siguiente enlace:</p>
+                    <p>
+                        <a href="${req.protocol}://${req.get(
+        "host"
+      )}/activate/${tokenComercio}">Activar mi cuenta</a>
+                    </p>
+                    <p>Una vez activada, podrá gestionar su menú, recibir pedidos y aumentar su visibilidad en nuestra plataforma, lo que le permitirá llegar a más clientes potenciales.</p>
+
+                    <p>Si tiene preguntas o requiere asistencia, no dude en ponerse en contacto con nuestro equipo de soporte. Estamos aquí para apoyarle en cada paso del camino.</p>
+                    <p>Atentamente,<br>El equipo de Food Rush</p>
+                `,
     };
 
-    transporter.sendMail(mailOption, (err, info) => {
+    transporter.sendMail(mailOptionComercio, (err, info) => {
       if (err) {
         console.error("Error al enviar el correo:", err);
       } else {
@@ -216,12 +288,21 @@ exports.getAdminSingUp = (req, res, next) => {
   res.render("viewsLoginRegisto/registroAdmin", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive: true
+    singUpActive: true,
   });
 };
 
 exports.PostAdminSingUp = async (req, res, next) => {
-  const { name, lastName, identification, email, role, user, password, confirmPassword } = req.body;
+  const {
+    name,
+    lastName,
+    identification,
+    email,
+    role,
+    user,
+    password,
+    confirmPassword,
+  } = req.body;
 
   if (password !== confirmPassword) {
     req.flash("errors", "Passwords do not match");
@@ -232,13 +313,19 @@ exports.PostAdminSingUp = async (req, res, next) => {
   try {
     const existingUser = await Admin.findOne({ where: { user } });
     if (existingUser) {
-      req.flash("errors", "This user already exists, please select another one");
+      req.flash(
+        "errors",
+        "This user already exists, please select another one"
+      );
       return res.redirect("/registroAdmin");
     }
 
     const existingEmail = await Admin.findOne({ where: { email } });
     if (existingEmail) {
-      req.flash("errors", "This email already exists, please select another one");
+      req.flash(
+        "errors",
+        "This email already exists, please select another one"
+      );
       console.log("This email already exists, please select another one");
       return res.redirect("/registroAdmin");
     }
@@ -252,7 +339,7 @@ exports.PostAdminSingUp = async (req, res, next) => {
       email,
       role,
       user,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     console.log("Registro correcto");

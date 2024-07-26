@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center">
+      <h2>Formulario de Direciones</h2>
+    </div>
+    <form
+      class="needs-validation"
+      method="POST"
+      action="/cliente/direcciones/add/post"
+    >
+      <div class="card-body">
+        <div class="form-group mb-3">
+          <label for="nombre">Lugar</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lugar"
+            id="lugar"
+            placeholder="Ejemplo: Oficina"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="lastName">Dirección</label>
+          <input
+            type="text"
+            class="form-control"
+            name="direccion"
+            id="direccion"
+             placeholder="Coloque aqui la dirección"
+            required
+          />
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.history.back();"
+        >Volver</a>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
