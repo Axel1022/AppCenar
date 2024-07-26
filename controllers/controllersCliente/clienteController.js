@@ -18,7 +18,7 @@ exports.getDirecciones = async (req, res, next) => {
     where: { clientId: idCliente },
   });
   const direcciones = result.map((result) => result.dataValues);
-  // console.log(direcciones);
+  console.log(direcciones.length > 0);
 
   res.render("viewsCliente/viewDirecciones", {
     pageTitle: "Food Rush | Direcciones",
@@ -26,6 +26,27 @@ exports.getDirecciones = async (req, res, next) => {
     Direcciones: direcciones,
     hasDireccions: direcciones.length > 0,
   });
+};
+exports.getDireccionesAdd = (req, res, next) => {
+  res.render("viewsCliente/viewDireccionesAdd", {
+    pageTitle: "Food Rush | Direcciones ",
+    layout: "layoutCliente",
+  });
+};
+exports.postDireccionesAdd = (req, res, next) => {
+  const lugar = req.body.lugar;
+  const direccion = req.body.direccion;
+  const idCliente = req.session.user.id;
+  console.log( "El id del cliente" , idCliente);
+
+  modelDirecciones
+    .create({ clientId: idCliente, identifier: lugar, direction: direccion })
+    .then(() => {
+      return res.redirect("/cliente/direcciones");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 exports.getFavoritos = (req, res, next) => {
   res.render("viewsCliente/viewFavoritos", {
