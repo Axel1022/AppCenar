@@ -20,10 +20,8 @@ exports.GetCategoria = async (req, res, next) => {
         }
     })
   
-    res.render("comercios/Categorias", {
+    res.render("viewsComercios/viewCategoria", {
         pageTitle: "Food Rush | Categorias",
-        layout: "layoutComercios",
-        loginActive: true,
         hasCategoria: categorias.length > 0,
         categorias: mapeoCategoria
     });
@@ -45,10 +43,8 @@ exports.GetAddCategoria =  (req, res, next) => {
    .then((result) => {
         const categorias  = result.map((result) => result.dataValues);
 
-        res.render("comercios/AgregarCategoria", {
+        res.render("viewsComercios/viewAddCategoria", {
             pageTitle: "Food Rush | Agregar Categorias",
-            layout: "layoutComercios",
-            loginActive: true,
             hasCategoria: categorias.length > 0,
             categorias: categorias
         });
@@ -78,7 +74,7 @@ exports.GetEditCategoria = (req, res, next) => {
    .then((result) => {
         const categorias  = result.map((result) => result.dataValues);
 
-        res.render("/comercios/EditarCategoria", {
+        res.render("viewsComercios/viewAddCategoria", {
             pageTitle: "Food Rush | Editar Categorias",
             layout: "layoutComercios",
             loginActive: true,
@@ -113,10 +109,8 @@ exports.GetDeleteCategoria = (req, res, next) => {
             return res.redirect("/comercios/DeleteCategoria");
         }
 
-        res.render("/comercios/Categorias", {
+        res.render("viewsComercio/viewDeleteCategoria", {
             pageTitle: "Food Rush | Eliminar Categoria",
-            layout: "layoutComercios",
-            loginActive: true,
             hasCategoria: categoria.length > 0,
             categorias: categoria
         });
@@ -171,7 +165,7 @@ exports.PostEditCategoria = (req, res, next) => {
     const categoria = result.dataValues;
 
     if(!categoria){
-        return res.redirect("/viewComercio/viewCategoria");
+        return res.redirect("/comercios/Categoria");
     }
 
     Categorias.update({
@@ -182,7 +176,7 @@ exports.PostEditCategoria = (req, res, next) => {
    { where: {id : id}}
     )
     .then((result) => {
-        return res.redirect("/viewComercios/viewCategoria");
+        return res.redirect("/comercios/Categoria");
     })
     .catch((error) => {
         console.log(error);

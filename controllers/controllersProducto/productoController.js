@@ -75,7 +75,7 @@ exports.GetEditProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
    Productos.findOne({
@@ -86,7 +86,7 @@ exports.GetEditProducts = (req, res, next) => {
    })
    .then((result) => {
         if (!result) {
-            return res.redirect("/viewsComercios/viewProducto")
+            return res.redirect("/comercios/Productos")
         }
 
         res.render("viewsComercios/viewAddProducto", {
@@ -107,7 +107,7 @@ exports.GetDeleteProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     Productos.findOne({
@@ -118,7 +118,7 @@ exports.GetDeleteProducts = (req, res, next) => {
     })
     .then((productos) => {
         if(!productos){
-            return res.redirect("/viewComercio/viewProducto");
+            return res.redirect("/comercios/Productos");
         }
 
         res.render("viewsComercios/viewDeleteProducto", {
@@ -138,7 +138,7 @@ exports.PostAddProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     const name = req.body.name;
@@ -158,7 +158,7 @@ exports.PostAddProducts = (req, res, next) => {
 
     })
     .then(() =>{
-        res.redirect("/viewsCategoria/viewProducto");
+        res.redirect("/comercios/Producto");
     })
     .catch(err => {
         console.error("Error al crear el producto:", err);
@@ -172,7 +172,7 @@ exports.PostEditProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
    
     const id = req.body.productoId;
@@ -192,7 +192,7 @@ exports.PostEditProducts = (req, res, next) => {
        const categoria = result.dataValues;
    
        if(!categoria){
-           return res.redirect("/viewComercio/viewProducto");
+           return res.redirect("/comercios/Producto");
        }
    
        Productos.update({
@@ -204,7 +204,7 @@ exports.PostEditProducts = (req, res, next) => {
            categoryId: categoriaId
        })
        .then((result) => {
-           return res.redirect("/viewComercios/viewProducto");
+           return res.redirect("/comercios/Producto");
        })
        .catch((error) => {
            console.log(error);
@@ -221,7 +221,7 @@ exports.PostDeleteProducts = (req, res, next) => {
 
     if(comercio.role !=="comercio"){
         req.flash("errors", "You dont have access to this area");
-        return res.redirect("/viewsLoginRegistro/login");
+        return res.redirect("/login");
     }
 
     const productId = req.params.productId;
@@ -235,7 +235,7 @@ exports.PostDeleteProducts = (req, res, next) => {
     .then((result) => {
     if(result === 0){
         req.flash("errors", "Producto no encontrado");
-        return res.redirect("/viewComercio/viewProducto");
+        return res.redirect("/comercios/Producto");
     }
     res.redirect("/viewsComercio/viewProducto");
     })
