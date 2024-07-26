@@ -19,7 +19,7 @@ exports.GetCategoria = async (req, res, next) => {
             quantity: categoria.quantity
         }
     })
-  
+
     res.render("viewsComercios/viewCategoria", {
         pageTitle: "Food Rush | Categorias",
         hasCategoria: categorias.length > 0,
