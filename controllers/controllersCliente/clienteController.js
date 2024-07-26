@@ -61,7 +61,7 @@ exports.getEditPerfil = async (req, res, next) => {
   res.render("viewsCliente/viewEditPerfil", {
     pageTitle: "Food Rush | perfil",
     layout: "layoutCliente",
-    Cliente: cliente,
+    Cliente: cliente.dataValues,
   });
 };
 exports.postEditPerfil = (req, res, next) => {
