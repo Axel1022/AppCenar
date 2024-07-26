@@ -5,7 +5,6 @@ exports.getHome = async (req, res, next) => {
     pageTitle: "Food Rush | Cliente",
     layout: "layoutCliente",
     //layout: "layoutCliente",
-
   });
 };
 exports.getDirecciones = async (req, res, next) => {
@@ -31,7 +30,7 @@ exports.getDirecciones = async (req, res, next) => {
 exports.getFavoritos = (req, res, next) => {
   res.render("viewsCliente/viewFavoritos", {
     pageTitle: "Food Rush | Favoritos",
-   // layout: "layoutCliente",
+    // layout: "layoutCliente",
   });
 };
 exports.getPerfil = async (req, res, next) => {
@@ -45,7 +44,7 @@ exports.getPerfil = async (req, res, next) => {
 
   res.render("viewsCliente/viewPerfil", {
     pageTitle: "Food Rush | Perfil",
-   // layout: "layoutCliente",
+    // layout: "layoutCliente",
     Cliente: cliente.dataValues,
   });
 };
@@ -55,10 +54,14 @@ exports.getPedidos = (req, res, next) => {
     //layout: "layoutCliente",
   });
 };
-exports.getEditPerfil = (req, res, next) => {
+exports.getEditPerfil = async (req, res, next) => {
+  const idCliente = req.session.user.id;
+
+  const cliente = await modelCliente.findOne({ where: { id: idCliente } });
   res.render("viewsCliente/viewEditPerfil", {
     pageTitle: "Food Rush | perfil",
     layout: "layoutCliente",
+    Cliente: cliente,
   });
 };
 exports.postEditPerfil = (req, res, next) => {
