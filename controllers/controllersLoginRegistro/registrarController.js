@@ -4,140 +4,61 @@ const Delivery = require("../../models/modelDelivery/delivery");
 const Admin = require("../../models/modelAdmin/administrador");
 const bcrypt = require("bcryptjs");
 const transporter = require("../../services/EmailServices");
-const {v4: uuid4} = require("uuid");
+const { v4: uuid4 } = require("uuid");
 
-
-//registro para el cliente y delivery
+// Registro para el cliente y delivery
 exports.getClienteSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/registroCliente", { //Tambien para delivery
+  res.render("viewsLoginRegisto/registroCliente", { // También para delivery
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive:  true
+    singUpActive: true
   });
 };
 
-exports.PostClienteSingUp = (req, res, next) =>{
-  const name = req.body.name;
-  const lastName = req.body.lastName;
-  const phone = req.body.phone;
-  const email = req.body.email;
+exports.PostClienteSingUp = async (req, res, next) => {
+  const { name, lastName, phone, email, user, password, confirmPassword, role } = req.body;
   const imageProfile = req.file;
-  const user = req.body.user;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
-  const role = req.body.role;
 
-
-  if(password != confirmPassword){
+  if (password !== confirmPassword) {
     req.flash("errors", "Passwords do not match");
-    console.log("Passwords do not match")
+    console.log("Passwords do not match");
     return res.redirect("/registroCliente");
   }
 
-  Cliente.findOne({where: {user : user}})
-    .then((cliente) => {
-    if(cliente){
-      req.flash("errors", "This user already exist, please select other one");
-      return res.redirect("/registroCliente");
-    }
-  })
+  try {
+    let existingUser;
 
-  if (role === "cliente") {
-    Cliente.findOne({where: {email: email}})
-   .then((cliente) => {
-    if(cliente){
-      req.flash("errors", "This email already exist, please select other one");
-      console.log("This email already exist, please select other one")
-      return res.redirect("/registroCliente");
-    }
-
-    const tokenCliente = uuid4()
-    console.log("token:" , tokenCliente);
-
-    bcrypt
-    .hash(password, 12)
-    .then((hashedPassword) => {
-      Cliente.create({
-        name: name,
-        lastName: lastName,
-        phone: phone,
-        email: email,
-        imageProfile: "/" + imageProfile.path,
-        user: user,
-        password: hashedPassword,
-        role: role,
-        token: tokenCliente,
-      })
-        .then((user) => {
-          console.log("Registro correcto");
-
-          const mailOption = {
-            from: "foodrushya@gmail.com",
-            to: email,
-            subject: "Bienvenido a Food Rush",
-            html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-            para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
-            <a href="${req.protocol}://${req.get("host")}/activate/${tokenCliente}">Activar cuenta</a> `
-          }
-
-          transporter.sendMail(mailOption, (err, info) =>{
-            if (err) {
-              console.error("Error al enviar el correo:", err);
-            } else {
-              console.log("Correo enviado exitosamente:", info.response);
-            }
-          })
-
-          res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-} else if (role === "delivery") {
-  Delivery.findOne({ where: { user: user } })
-    .then((deliveryUser) => {
-      if (deliveryUser) {
+    if (role === "cliente") {
+      existingUser = await Cliente.findOne({ where: { user } });
+      if (existingUser) {
         req.flash("errors", "This user already exists, please select another one");
         return res.redirect("/registroCliente");
       }
 
-      return Delivery.findOne({ where: { email: email } });
-    })
-    .then((deliveryEmail) => {
-      if (deliveryEmail) {
+      existingUser = await Cliente.findOne({ where: { email } });
+      if (existingUser) {
         req.flash("errors", "This email already exists, please select another one");
         console.log("This email already exists, please select another one");
         return res.redirect("/registroCliente");
       }
 
-      const tokenDelivery = uuid4();
-      console.log("token:", tokenDelivery);
+      const tokenCliente = uuid4();
+      console.log("token:", tokenCliente);
 
-      return bcrypt.hash(password, 12);
-    })
-    .then((hashedPassword) => {
-      return Delivery.create({
-        name: name,
-        lastName: lastName,
-        phone: phone,
-        email: email,
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      await Cliente.create({
+        name,
+        lastName,
+        phone,
+        email,
         imageProfile: "/" + imageProfile.path,
-        user: user,
+        user,
         password: hashedPassword,
-        role: role,
-        token: tokenDelivery,
+        role,
+        token: tokenCliente
       });
-    })
-    .then((user) => {
+
       console.log("Registro correcto");
 
       const mailOption = {
@@ -145,8 +66,8 @@ exports.PostClienteSingUp = (req, res, next) =>{
         to: email,
         subject: "Bienvenido a Food Rush",
         html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
-          para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
-          <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a> `,
+               para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
+               <a href="${req.protocol}://${req.get("host")}/activate/${tokenCliente}">Activar cuenta</a>`
       };
 
       transporter.sendMail(mailOption, (err, info) => {
@@ -157,184 +78,188 @@ exports.PostClienteSingUp = (req, res, next) =>{
         }
       });
 
-      res.redirect("/login");
-    })
-    .catch((err) => {
-      console.log(err);
-      req.flash("errors", "Something went wrong, please try again later");
-      res.redirect("/registroCliente");
-    });
-}
+      return res.redirect("/login");
 
+    } else if (role === "delivery") {
+      existingUser = await Delivery.findOne({ where: { user } });
+      if (existingUser) {
+        req.flash("errors", "This user already exists, please select another one");
+        return res.redirect("/registroCliente");
+      }
+
+      existingUser = await Delivery.findOne({ where: { email } });
+      if (existingUser) {
+        req.flash("errors", "This email already exists, please select another one");
+        console.log("This email already exists, please select another one");
+        return res.redirect("/registroCliente");
+      }
+
+      const tokenDelivery = uuid4();
+      console.log("token:", tokenDelivery);
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+
+      await Delivery.create({
+        name,
+        lastName,
+        phone,
+        email,
+        imageProfile: "/" + imageProfile.path,
+        user,
+        password: hashedPassword,
+        role,
+        token: tokenDelivery
+      });
+
+      console.log("Registro correcto");
+
+      const mailOption = {
+        from: "foodrushya@gmail.com",
+        to: email,
+        subject: "Bienvenido a Food Rush",
+        html: `<p>Estimado ${role}, ${name} ${lastName}, te registraste en <strong>Food Rush</strong></p>
+               para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
+               <a href="${req.protocol}://${req.get("host")}/activate/${tokenDelivery}">Activar cuenta</a>`
+      };
+
+      transporter.sendMail(mailOption, (err, info) => {
+        if (err) {
+          console.error("Error al enviar el correo:", err);
+        } else {
+          console.log("Correo enviado exitosamente:", info.response);
+        }
+      });
+
+      return res.redirect("/login");
+    }
+  } catch (err) {
+    console.log(err);
+    req.flash("errors", "Something went wrong, please try again later");
+    return res.redirect("/registroCliente");
+  }
 };
 
-
-//registro para el comercio
+// Registro para el comercio
 exports.getComercioSingUp = (req, res, next) => {
   res.render("viewsLoginRegisto/registroComercio", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive:  true
+    singUpActive: true
   });
 };
 
-exports.PostComercioSingUp = (req, res, next) =>{
-  const tokenComercio = uuid4()
-  console.log("token:" , tokenComercio);
+exports.PostComercioSingUp = async (req, res, next) => {
+  const tokenComercio = uuid4();
+  console.log("token:", tokenComercio);
 
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const email = req.body.email;
-  const role = req.body.role;
+  const { name, phone, email, role, openTime, closeTime, typeTrade, password, confirmPassword } = req.body;
   const logo = req.file;
-  const openTime = req.body.openTime;
-  const closeTime = req.body.closeTime;
-  const typeTrade = req.body.typeTrade;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
 
-  console.log(req.body);
-
-  console.log(password , confirmPassword);
-  if(password != confirmPassword){
+  if (password !== confirmPassword) {
     req.flash("errors", "Passwords do not match");
-    console.log("Passwords do not match")
+    console.log("Passwords do not match");
     return res.redirect("/registroComercio");
   }
 
-  Comercio.findOne({where: {email: email}})
-  .then((comercio) => {
-    if(comercio){
-      req.flash("errors", "This email already exist, please select other one");
-      console.log("This email already exist, please select other one")
-      return res.redirect("/registroCliente");
+  try {
+    const existingComercio = await Comercio.findOne({ where: { email } });
+    if (existingComercio) {
+      req.flash("errors", "This email already exists, please select another one");
+      console.log("This email already exists, please select another one");
+      return res.redirect("/registroComercio");
     }
 
-    bcrypt
-    .hash(password, 12)
-    .then((hashedPassword) => {
-      Comercio.create({
-        name: name,
-        phone: phone,
-        email: email,
-        role: role,
-        logo: "/" + logo.path,
-        openTime: openTime,
-        closeTime: closeTime,
-        typeTrade: typeTrade,
-        password: hashedPassword,
-        token: tokenComercio,
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-      })
-        .then((user) => {
-          console.log("Registro correcto");
-
-          const mailOption = {
-            from: "foodrushya@gmail.com",
-            to: email,
-            subject: "Bienvenido a Food Rush",
-            html: `<p>Estimado ${role}, ${name}, te registraste en <strong>Food Rush</strong></p>
-            para activar tu cuenta y poder acceder a la app presione click en el siguiente enlace:
-            <a href="${req.protocol}://${req.get("host")}/activate/${tokenComercio}">Activar cuenta</a> `
-          }
-
-          transporter.sendMail(mailOption, (err, info) =>{
-            if (err) {
-              console.error("Error al enviar el correo:", err);
-            } else {
-              console.log("Correo enviado exitosamente:", info.response);
-            }
-          })
-
-          res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
+    await Comercio.create({
+      name,
+      phone,
+      email,
+      role,
+      logo: "/" + logo.path,
+      openTime,
+      closeTime,
+      typeTrade,
+      password: hashedPassword,
+      token: tokenComercio
     });
 
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+    console.log("Registro correcto");
 
+    const mailOption = {
+      from: "foodrushya@gmail.com",
+      to: email,
+      subject: "Bienvenido a Food Rush",
+      html: `<p>Estimado ${role}, ${name}, te registraste en <strong>Food Rush</strong></p>
+             para activar tu cuenta y poder acceder a la app presiona click en el siguiente enlace:
+             <a href="${req.protocol}://${req.get("host")}/activate/${tokenComercio}">Activar cuenta</a>`
+    };
+
+    transporter.sendMail(mailOption, (err, info) => {
+      if (err) {
+        console.error("Error al enviar el correo:", err);
+      } else {
+        console.log("Correo enviado exitosamente:", info.response);
+      }
+    });
+
+    return res.redirect("/login");
+  } catch (err) {
+    console.log(err);
+    req.flash("errors", "Something went wrong, please try again later");
+    return res.redirect("/registroComercio");
+  }
 };
 
-
-//registro para el administrador
+// Registro para el administrador
 exports.getAdminSingUp = (req, res, next) => {
   res.render("viewsLoginRegisto/registroAdmin", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
-    singUpActive:  true
+    singUpActive: true
   });
 };
 
-exports.PostAdminSingUp = (req, res, next) =>{
-  const name = req.body.name;
-  const lastName = req.body.lastName;
-  const identification = req.body.identification;
-  const email = req.body.email;
-  const role = req.body.role;
-  const user = req.body.user;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
+exports.PostAdminSingUp = async (req, res, next) => {
+  const { name, lastName, identification, email, role, user, password, confirmPassword } = req.body;
 
-
-  if(password != confirmPassword){
+  if (password !== confirmPassword) {
     req.flash("errors", "Passwords do not match");
-    console.log("Passwords do not match")
+    console.log("Passwords do not match");
     return res.redirect("/registroAdmin");
   }
 
-  Admin.findOne({where: {user : user}})
-    .then((cliente) => {
-    if(cliente){
-      req.flash("errors", "This user already exist, please select other one");
-      return res.redirect("/registroCliente");
-    }
- })
-
-  Admin.findOne({where: {email: email}})
-  .then((comercio) => {
-    if(comercio){
-      req.flash("errors", "This email already exist, please select other one");
-      console.log("This email already exist, please select other one")
+  try {
+    const existingUser = await Admin.findOne({ where: { user } });
+    if (existingUser) {
+      req.flash("errors", "This user already exists, please select another one");
       return res.redirect("/registroAdmin");
     }
 
+    const existingEmail = await Admin.findOne({ where: { email } });
+    if (existingEmail) {
+      req.flash("errors", "This email already exists, please select another one");
+      console.log("This email already exists, please select another one");
+      return res.redirect("/registroAdmin");
+    }
 
-    bcrypt
-    .hash(password, 12)
-    .then((hashedPassword) => {
-      Admin.create({
-        name: name,
-        lastName: lastName,
-        identification: identification,
-        email: email,
-        role: role,
-        user: user,
-        password: hashedPassword,
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-      })
-        .then((user) => {
-          console.log("Registro correcto");
-          res.redirect("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    })
-    .catch((err) => {
-      console.log(err);
+    await Admin.create({
+      name,
+      lastName,
+      identification,
+      email,
+      role,
+      user,
+      password: hashedPassword
     });
 
-  })
-  .catch((err) => {
+    console.log("Registro correcto");
+    return res.redirect("/login");
+  } catch (err) {
     console.log(err);
-  });
-
+    req.flash("errors", "Something went wrong, please try again later");
+    return res.redirect("/registroAdmin");
+  }
 };
