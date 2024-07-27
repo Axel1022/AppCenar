@@ -180,6 +180,7 @@ exports.PostAddProducts = (req, res, next) => {
 
     })
     .then(() =>{
+        Categoria.increment("quantity", {by: 1, where: {id: categoriaId}});
         res.redirect("/comercios/Productos");
     })
     .catch(err => {
@@ -203,7 +204,7 @@ exports.PostEditProducts = (req, res, next) => {
     const image = req.body.image;
     const description = req.body.description;
     const price = req.body.price;
-    const categoriaId = req.body.categoriaId;
+    const categoryId = req.body.categoryId;
    
     Productos.findOne({
         where: {
@@ -219,14 +220,16 @@ exports.PostEditProducts = (req, res, next) => {
            return res.redirect("/comercios/Producto");
        }
    
+       const oldCategoryId = producto.categoryId;
        const imagePath = image? "/" +image.path : producto.image
+       
        Productos.update({
            name: name,
            image: imagePath,
            description: description,
            price: price,
            tradeId: comercioId,
-           categoryId: categoriaId
+           categoryId: categoryId
        },
        {
             where: {
@@ -236,7 +239,13 @@ exports.PostEditProducts = (req, res, next) => {
        },
        )
        .then((result) => {
-           return res.redirect("/comercios/Productos");
+        if (oldCategoryId !== categoryId) {
+            return Promise.all([
+                Categoria.increment("quantity", { by: 1, where: { id: categoryId } }),
+                Categoria.decrement("quantity", { by: 1, where: { id: oldCategoryId } })
+            ]);
+        }
+        res.redirect("/comercios/Productos");
        })
        .catch((error) => {
            console.log(error);
@@ -249,30 +258,26 @@ exports.PostEditProducts = (req, res, next) => {
    
 exports.PostDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const usuario = req.session.user.role;
+    const productId = req.params.id;
 
-    if(usuario !=="comercio"){
-        req.flash("errors", "You dont have access to this area");
-        return res.redirect("/login");
-    }
+    Productos.findOne({ where: { id: productId, tradeId: comercioId } })
+    .then(producto => {
+        if (!producto) {
+            req.flash("errors", "Producto no encontrado");
+            return res.redirect('/comercios/Productos');
+        }
 
-    const productId = req.body.id;
-    console.log("producto id", productId);
+        const categoryId = producto.categoryId;
 
-    Productos.destroy({
-    where: {
-        id: productId,
-        tradeId: comercioId
-    }
+        return producto.destroy()
+        .then(() => {
+            return Categoria.decrement('quantifier', { by: 1, where: { id: categoryId } });
+        });
     })
-    .then((result) => {
-    if(result === 0){
-        req.flash("errors", "Producto no encontrado");
-        return res.redirect("/comercios/Productos");
-    }
-    res.redirect("/comercios/Productos");
+    .then(() => {
+        res.redirect('/comercios/Productos');
     })
     .catch((error) => {
-    console.log("Error al eliminar el producto: " , error);
+        console.error("Error al eliminar el producto: ", error);
     });
 };
