@@ -168,3 +168,8 @@ a {
 .btn-delete:hover {
     background-color: #16345d;
 }
+
+.card-body-prod{
+    width: 350px;
+    height: 600px;
+}

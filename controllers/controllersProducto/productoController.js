@@ -121,7 +121,7 @@ exports.GetEditProducts = (req, res, next) => {
 
 exports.GetDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const productoId = req.params.productoId;
+    const productoId = req.params.id;
 
     const usuario = req.session.user.role;
 
@@ -144,7 +144,7 @@ exports.GetDeleteProducts = (req, res, next) => {
         res.render("viewsComercios/viewDeleteProducto", {
             pageTitle: "Food Rush | Eliminar Producto",
             hasProductos: productos.length > 0,
-            productos: productos
+            productos: productos.dataValues
         });
     })
     .catch((error) => {
@@ -227,9 +227,16 @@ exports.PostEditProducts = (req, res, next) => {
            price: price,
            tradeId: comercioId,
            categoryId: categoriaId
-       })
+       },
+       {
+            where: {
+                id: id,
+                tradeId: comercioId,
+            },
+       },
+       )
        .then((result) => {
-           return res.redirect("/comercios/Producto");
+           return res.redirect("/comercios/Productos");
        })
        .catch((error) => {
            console.log(error);
@@ -249,7 +256,8 @@ exports.PostDeleteProducts = (req, res, next) => {
         return res.redirect("/login");
     }
 
-    const productId = req.params.productId;
+    const productId = req.body.id;
+    console.log("producto id", productId);
 
     Productos.destroy({
     where: {
@@ -260,9 +268,9 @@ exports.PostDeleteProducts = (req, res, next) => {
     .then((result) => {
     if(result === 0){
         req.flash("errors", "Producto no encontrado");
-        return res.redirect("/comercios/Producto");
+        return res.redirect("/comercios/Productos");
     }
-    res.redirect("/viewsComercio/viewProducto");
+    res.redirect("/comercios/Productos");
     })
     .catch((error) => {
     console.log("Error al eliminar el producto: " , error);

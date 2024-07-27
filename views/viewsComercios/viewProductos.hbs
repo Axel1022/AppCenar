@@ -6,7 +6,7 @@
      {{#if hasProducto}}
      {{#each productos}}
 
-    <div class="col-md-3">
+    <div class="col-md-3 card-body-prod">
 
         <div class="card-sl">
             <div class="card-image-prod">
@@ -22,11 +22,10 @@
             </div>
             <div class="card-text-prod">
                {{price}}
-               <p>ID: {{id}}</p> 
             </div>
             <div class="card-button-container">
                 <a href="/comercios/EditarProducto/{{id}}" class="card-button-edit"> Edit</a>
-                <a href="/comercios/DeleteProducto/{{id}}" class="card-button-delete"> Delete</a>
+                <a href="/comercios/EliminarProducto/{{id}}" class="card-button-delete"> Delete</a>
             </div>
 
         </div>
