@@ -96,6 +96,12 @@ exports.getPedidos = async (req, res, next) => {
     hasPedidos: pedidos.length > 0,
   });
 };
+exports.getDetallePedidos = async (req, res, next) => {
+  res.render("viewsCliente/viewDetallePedido", {
+    pageTitle: "Food Rush | Detalle",
+    // layout: "layoutCliente",
+  });
+};
 
 exports.getEditPerfil = async (req, res, next) => {
   const idCliente = req.session.user.id;
