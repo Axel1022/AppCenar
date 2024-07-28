@@ -1,5 +1,6 @@
 const Categorias = require("../../models/modelComercios/categoria");
 const Comercio = require("../../models/modelComercios/comercio");
+const Producto = require("../../models/modelComercios/producto");
 
 exports.GetCategoria = async (req, res, next) => {
 
@@ -14,6 +15,7 @@ exports.GetCategoria = async (req, res, next) => {
 
     const mapeoCategoria = categorias.map(categoria => {
         return {
+            id: categoria.id,
             name: categoria.name,
             description: categoria.description,
             quantity: categoria.quantity
@@ -38,7 +40,7 @@ exports.GetAddCategoria =  (req, res, next) => {
 
    Categorias.findAll({
         where: {tradeId: comercioId},
-        include: [{model: Comercio}]
+        include: [{model: Comercio, as: "comercio"}]
    })
    .then((result) => {
         const categorias  = result.map((result) => result.dataValues);
@@ -64,26 +66,21 @@ exports.GetEditCategoria = (req, res, next) => {
     }
     const id = req.params.id;
 
-   Categorias.findOne({
-        where: {
-            id: id,
+    Categorias.findOne({
+        where: {id: id,
             tradeId: comercioId
         },
-        include: [{model: Comercio}]
-   })
-   .then((result) => {
-        const categorias  = result.map((result) => result.dataValues);
-
+        include: [{model: Comercio, as: "comercio"}]
+    })
+    .then((categorias) => {
         res.render("viewsComercios/viewAddCategoria", {
-            pageTitle: "Food Rush | Editar Categorias",
-            layout: "layoutComercios",
-            loginActive: true,
-            hasCategoria: categorias.length > 0,
-            categorias: categorias
+            pageTitle: "Food Rush | Editar Producto",
+            categorias: categorias.dataValues,
+            editMode: true
         });
     })
     .catch((err) => {
-        console.error("Error al obtener las categorias:", err);
+        console.error("Error al obtener las categorías:", err);
     });
 }
 
@@ -154,18 +151,21 @@ exports.PostEditCategoria = (req, res, next) => {
         return res.redirect("login");
     }
 
- const id = req.body.categoriaId;
+ const id = req.body.id;
  const name = req.body.name;
  const description = req.body.description;
 
  Categorias.findOne({
-     where: {id: id}
+    where: {id: id,
+        tradeId: comercioId
+    },
+    include: [{model: Comercio, as: "comercio"}]
  })
  .then((result) => {
     const categoria = result.dataValues;
 
     if(!categoria){
-        return res.redirect("/comercios/Categoria");
+        return res.redirect("/comercios/Categorias");
     }
 
     Categorias.update({

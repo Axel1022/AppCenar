@@ -3,19 +3,19 @@
 
       <h3>Agregar Categoria</h3>
        {{#if editMode}}
-         <input type="hidden" value="{{categoria.id}}" name="id">
+         <input type="hidden" value="{{categorias.id}}" name="id">
        {{/if}}
 
         <div class="form-group mt-3">
             <label for="name">Nombre:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{#if editMode}}{{categoria.name}}{{/if}}" required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{#if editMode}}{{categorias.name}}{{/if}}" required>
         </div>
         <div class="form-group mt-3">
             <label for="description">Descripcion:</label><br>
-            <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categoria.description}}{{/if}}</textarea>
+            <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}}</textarea>
         </div>
         <button type="submit" class="btn btn-primary float-end mt-3 btn-save">Guardar</button>
-        <a href="#" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
+        <a href="/comercios/Categorias" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
    </form>
 </div>
 

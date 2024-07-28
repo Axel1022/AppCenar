@@ -15,13 +15,14 @@ exports.GetProducts = async (req, res, next) => {
     const productos = await Productos.findAll({
         where: {tradeId: comercioId},
         include:[
-            {model: Comercio},
-            {model: Categoria}
+            {model: Comercio, as: "comercio"},
+            {model: Categoria, as: "categoria"}
         ]
     });
 
     const mapeoProducto = productos.map(producto => {
         return {
+            id: producto.id,
             name: producto.name,
             image: producto.image,
             description: producto.description,
@@ -38,42 +39,51 @@ exports.GetProducts = async (req, res, next) => {
     });
 };
 
-exports.GetAddProducts =  (req, res, next) => {
+exports.GetAddProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
     const usuario = req.session.user.role;
 
-    console.log("Este es el rol del usuario actual:", usuario)
+    console.log("Este es el rol del usuario actual:", usuario);
 
-    if(usuario !== "comercio"){
-        req.flash("errors", "You dont have access to this area");
+    if (usuario !== "comercio") {
+        req.flash("errors", "You don't have access to this area");
         return res.redirect("/login");
     }
- 
+
     Productos.findAll({
-         where: {tradeId: comercioId},
-         include: [{model: Comercio}]
+        where: { tradeId: comercioId },
+        include: [{ model: Comercio, as: "comercio"}]
     })
-    .then((result) => {
-         const productos  = result.map((result) => result.dataValues);
- 
-         res.render("viewsComercios/viewAddProducto", {
-             pageTitle: "Food Rush | Agregar Producto",
-             hasProducto: productos.length > 0,
-             productos: productos 
-         });
-     })
-     .catch((err) => {
-         console.error("Error al obtener los productos:", err);
-     });
+    .then(result => {
+        return Categoria.findAll()
+            .then(categorias => {
+
+                const productos = result.map(r => r.dataValues);
+                const categoriasData = categorias.map(c => c.dataValues);
+
+                res.render("viewsComercios/viewAddProducto", {
+                    pageTitle: "Food Rush | Agregar Producto",
+                    hasProducto: productos.length > 0,
+                    productos: productos,
+                    categorias: categoriasData
+                });
+            });
+    })
+    .catch(err => {
+        console.error("Error al obtener los productos o categorías:", err);
+        res.redirect("/login");
+    });
 };
 
 exports.GetEditProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const productId = req.params.productId;
+    const productId = req.params.id;
 
-    const comercio = Comercio.findByPk(comercioId);
+    console.log(productId);
 
-    if(comercio.role !=="comercio"){
+    const usuario = req.session.user.role;
+
+    if(usuario!== "comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("/login");
     }
@@ -82,30 +92,40 @@ exports.GetEditProducts = (req, res, next) => {
         where: {
             id: productId,
             tradeId: comercioId},
-        include: [{model: Comercio}]
+        include: [{model: Comercio, as: "comercio"}]
    })
    .then((result) => {
         if (!result) {
             return res.redirect("/comercios/Productos")
         }
 
-        res.render("viewsComercios/viewAddProducto", {
-            pageTitle: "Food Rush | Editar Producto",
-            productos: result.dataValues
-        });
+        Categoria.findAll()
+        .then(categoria =>{
+            res.render("viewsComercios/viewAddProducto", {
+                pageTitle: "Food Rush | Editar Producto",
+                productos: result.dataValues,
+                editMode: true,
+                categorias: categoria.map(c => c.dataValues)
+            });
+        })
+        .catch(err => {
+            console.error("Error al obtener el producto:", err);
+            res.redirect("/comercios/Producto");
+        })
+       
     })
     .catch((err) => {
-        console.error("Error al obtener las categorias:", err);
+        console.error("Error al obtener los productos:", err);
     });
 };
 
 exports.GetDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const productoId = req.params.productoId;
+    const productoId = req.params.id;
 
-    const comercio = Comercio.findByPk(comercioId);
+    const usuario = req.session.user.role;
 
-    if(comercio.role !=="comercio"){
+    if(usuario !=="comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("/login");
     }
@@ -124,7 +144,7 @@ exports.GetDeleteProducts = (req, res, next) => {
         res.render("viewsComercios/viewDeleteProducto", {
             pageTitle: "Food Rush | Eliminar Producto",
             hasProductos: productos.length > 0,
-            productos: productos
+            productos: productos.dataValues
         });
     })
     .catch((error) => {
@@ -134,23 +154,25 @@ exports.GetDeleteProducts = (req, res, next) => {
 
 exports.PostAddProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const comercio = Comercio.findByPk(comercioId);
+    const usuario = req.session.user.role;
 
-    if(comercio.role !=="comercio"){
+
+    console.log("Usuario logeado al agregar", usuario);
+    if(usuario !=="comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("/login");
     }
 
     const name = req.body.name;
-    const image = req.body.image;
+    const image = req.file;
     const description = req.body.description;
     const price = req.body.price;
-    const categoriaId = req.body.categoria;
+    const categoriaId = req.body.categoryId;
 
 
     Productos.create({
         name: name,
-        image: image,
+        image: "/" + image.path,
         description: description,
         price: price,
         tradeId: comercioId,
@@ -158,7 +180,8 @@ exports.PostAddProducts = (req, res, next) => {
 
     })
     .then(() =>{
-        res.redirect("/comercios/Producto");
+        Categoria.increment("quantity", {by: 1, where: {id: categoriaId}});
+        res.redirect("/comercios/Productos");
     })
     .catch(err => {
         console.error("Error al crear el producto:", err);
@@ -168,19 +191,20 @@ exports.PostAddProducts = (req, res, next) => {
 exports.PostEditProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
 
-    const comercio = Comercio.findByPk(comercioId);
+    const usuario = req.session.user.role
+    console.log("usuario intentando editar", usuario);
 
-    if(comercio.role !=="comercio"){
+    if(usuario !=="comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("/login");
     }
    
-    const id = req.body.productoId;
+    const id = req.body.id;
     const name = req.body.name;
     const image = req.body.image;
     const description = req.body.description;
     const price = req.body.price;
-    const categoriaId = req.body.categoria;
+    const categoryId = req.body.categoryId;
    
     Productos.findOne({
         where: {
@@ -190,21 +214,38 @@ exports.PostEditProducts = (req, res, next) => {
     })
     .then((result) => {
        const categoria = result.dataValues;
+       const producto = result.dataValues;
    
        if(!categoria){
            return res.redirect("/comercios/Producto");
        }
    
+       const oldCategoryId = producto.categoryId;
+       const imagePath = image? "/" +image.path : producto.image
+       
        Productos.update({
            name: name,
-           image: image,
+           image: imagePath,
            description: description,
            price: price,
            tradeId: comercioId,
-           categoryId: categoriaId
-       })
+           categoryId: categoryId
+       },
+       {
+            where: {
+                id: id,
+                tradeId: comercioId,
+            },
+       },
+       )
        .then((result) => {
-           return res.redirect("/comercios/Producto");
+        if (oldCategoryId !== categoryId) {
+            return Promise.all([
+                Categoria.increment("quantity", { by: 1, where: { id: categoryId } }),
+                Categoria.decrement("quantity", { by: 1, where: { id: oldCategoryId } })
+            ]);
+        }
+        res.redirect("/comercios/Productos");
        })
        .catch((error) => {
            console.log(error);
@@ -217,29 +258,26 @@ exports.PostEditProducts = (req, res, next) => {
    
 exports.PostDeleteProducts = (req, res, next) => {
     const comercioId = req.session.user.id;
-    const comercio = Comercio.findByPk(comercioId);
+    const productId = req.params.id;
 
-    if(comercio.role !=="comercio"){
-        req.flash("errors", "You dont have access to this area");
-        return res.redirect("/login");
-    }
+    Productos.findOne({ where: { id: productId, tradeId: comercioId } })
+    .then(producto => {
+        if (!producto) {
+            req.flash("errors", "Producto no encontrado");
+            return res.redirect('/comercios/Productos');
+        }
 
-    const productId = req.params.productId;
+        const categoryId = producto.categoryId;
 
-    Productos.destroy({
-    where: {
-        id: productId,
-        tradeId: comercioId
-    }
+        return producto.destroy()
+        .then(() => {
+            return Categoria.decrement('quantifier', { by: 1, where: { id: categoryId } });
+        });
     })
-    .then((result) => {
-    if(result === 0){
-        req.flash("errors", "Producto no encontrado");
-        return res.redirect("/comercios/Producto");
-    }
-    res.redirect("/viewsComercio/viewProducto");
+    .then(() => {
+        res.redirect('/comercios/Productos');
     })
     .catch((error) => {
-    console.log("Error al eliminar el producto: " , error);
+        console.error("Error al eliminar el producto: ", error);
     });
 };
