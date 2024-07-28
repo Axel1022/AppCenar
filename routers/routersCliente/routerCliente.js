@@ -18,5 +18,14 @@ router.post(
   "/cliente/direcciones/eliminar/post",
   clienteController.postEliminarDirrecion
 );
+router.get(
+  "/cliente/direcciones/edit/:elemetnId",
+  clienteController.getEditarDirrecion
+);
+router.post(
+  "/cliente/direcciones/editar/post",
+  clienteController.postEditarDirrecion
+);
+
 router.get("/cliente/pedidos", clienteController.getPedidos);
 module.exports = router;
