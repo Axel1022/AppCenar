@@ -37,7 +37,7 @@ exports.postDireccionesAdd = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
   const idCliente = req.session.user.id;
-  console.log( "El id del cliente" , idCliente);
+  console.log("El id del cliente", idCliente);
 
   modelDirecciones
     .create({ clientId: idCliente, identifier: lugar, direction: direccion })
@@ -124,6 +124,48 @@ exports.postEliminarDirrecion = (req, res, next) => {
     })
     .catch((err) => {
       console.error("Error al eliminar la Direccion: ", err);
+      res.redirect("/cliente/direcciones");
+    });
+};
+exports.getEditarDirrecion = (req, res, next) => {
+  const elemetnID = req.params.elemetnId;
+  modelDirecciones
+    .findOne({ where: { id: elemetnID } })
+    .then((result) => {
+      if (result) {
+        res.render("viewsCliente/viewDireccionesEdit", {
+          pageTitle: `Food Rush | Direcciones`,
+          Direccion: result.dataValues,
+        });
+      } else {
+        console.log("No se ha encontrado la categoria");
+        res.redirect("/cliente/direcciones");
+      }
+    })
+    .catch((err) => {
+      console.error("Error en EditDireccion: ", err);
+      res.redirect("/cliente/direcciones");
+    });
+};
+exports.postEditarDirrecion = (req, res, next) => {
+  const lugar = req.body.lugar;
+  const direccion = req.body.direccion;
+  const idCliente = req.session.user.id;
+  const direId = req.body.elemetnId;
+  console.log("Direccion :" , direccion);
+  console.log("Lugar :" , lugar);
+  console.log("idCliente :", idCliente);
+  console.log("direId :", direId);
+
+  console.log("El id del cliente", idCliente);
+
+  modelDirecciones
+    .update(
+      { identifier: lugar, direction: direccion },
+      { where: { id: idCliente, id: direId } }
+    )
+    .then(() => {
+      console.log("Direccion editad correctamente");
       res.redirect("/cliente/direcciones");
     });
 };
