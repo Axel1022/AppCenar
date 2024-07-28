@@ -1,38 +1,39 @@
-<div class="row" style="margin-top:50px;">
-    <div class="col-md-3">
+<div class="btn-add-prod mb-3">
+    <a href="/comercios/agregarProducto" class="btn btn-add"> + Agregar Producto</a>
+</div>
+      
+<div class="row" >
+     {{#if hasProducto}}
+     {{#each productos}}
 
-      <div class="btn-add-prod mb-3">
-         <a href="/viewComercio/viewAddProducto" class="btn btn-add"> + Agregar Producto</a>
-      </div>
+    <div class="col-md-3 card-body-prod">
 
-
-        {{#if hasProducto}}
-         {{#each producto}}
         <div class="card-sl">
             <div class="card-image-prod">
                 <img
-                    src="{{producto.image}}" />
+                    src="{{image}}" class="image-fit"/>
             </div>
 
             <div class="card-heading-prod">
-                {{producto.name}}
+                {{name}}
             </div>
             <div class="card-text-prod">
-                {{producto.description}}
+                {{description}}
             </div>
             <div class="card-text-prod">
-               {{producto.price}}
+               {{price}}
             </div>
             <div class="card-button-container">
-                <a href="#" class="card-button-edit"> Edit</a>
-                <a href="#" class="card-button-delete"> Delete</a>
+                <a href="/comercios/EditarProducto/{{id}}" class="card-button-edit"> Edit</a>
+                <a href="/comercios/EliminarProducto/{{id}}" class="card-button-delete"> Delete</a>
             </div>
 
         </div>
-        {{/each}}
+        
+    </div>
+    {{/each}}
         {{else}}
 
-        <h3>No hay productos creados</h3>
+         <h3>No hay productos creados</h3>
         {{/if}}
-    </div>
 </div>

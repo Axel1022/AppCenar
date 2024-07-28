@@ -1,1 +1,37 @@
-<h1>Vista de pedidos</h1>
+{{#if hasPedidos}}
+  <div class="container mt-5">
+    <h1 class="mb-4">Tus pedidos</h1>
+    <div class="row">
+      {{#each Pedidos as |pedido|}}
+        <a href="/cliente/pedidos/detalle">
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">{{pedido.date}} . {{pedido.hour}}</h3>
+              </div>
+              <div class="card-body">
+                <div class="text-center mb-3">
+                  <img
+                    src="{{pedido.comercio}}"
+                    class="img-fluid"
+                    alt="Logo de Comercio"
+                    style="max-width: 100px;"
+                  />
+                </div>
+                <h4 class="mt-3">{{pedido.status}}</h4>
+                <h5>{{Comercio.name}}</h5>
+                <p class="card-text">RD$
+                  {{pedido.total}}
+                  . Cantidad de productos: 0</p>
+              </div>
+            </div>
+          </div>
+        </a>
+      {{/each}}
+    </div>
+  </div>
+{{else}}
+  <div class="container mt-5">
+    <h2 class="text-center">Usted no ha realizado ningún pedido!</h2>
+  </div>
+{{/if}}
