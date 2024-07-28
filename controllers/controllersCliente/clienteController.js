@@ -104,3 +104,26 @@ exports.postEditPerfil = (req, res, next) => {
       console.log(error);
     });
 };
+exports.postEliminarDirrecion = (req, res, next) => {
+  const idElemt = req.body.elemetnId;
+  const idCliente = req.session.user.id;
+
+  modelDirecciones
+    .findOne({ where: { id: idElemt, clientId: idCliente } })
+    .then((result) => {
+      if (result) {
+        return result.destroy();
+      } else {
+        console.log("Direccion no encontrada");
+        res.redirect("/cliente/direcciones");
+      }
+    })
+    .then(() => {
+      console.log("Direccion eliminada");
+      res.redirect("/cliente/direcciones");
+    })
+    .catch((err) => {
+      console.error("Error al eliminar la Direccion: ", err);
+      res.redirect("/cliente/direcciones");
+    });
+};
