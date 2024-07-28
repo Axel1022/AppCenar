@@ -1,5 +1,7 @@
 const modelCliente = require("../../models/modelCliente/cliente");
 const modelDirecciones = require("../../models/modelCliente/direccion");
+const modelComercio = require("../../models/modelComercios/comercio");
+const modelPedidos = require("../../models/modelCliente/pedido");
 exports.getHome = async (req, res, next) => {
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
@@ -69,12 +71,32 @@ exports.getPerfil = async (req, res, next) => {
     Cliente: cliente.dataValues,
   });
 };
-exports.getPedidos = (req, res, next) => {
+exports.getPedidos = async (req, res, next) => {
+  const idCliente = req.session.user.id;
+  const resultPedidos = await modelPedidos.findAll({
+    where: { clientId: idCliente },
+  });
+
+  const pedidos = await Promise.all(
+    resultPedidos.map(async (pedido) => {
+      const comercio = await modelComercio.findOne({
+        where: { id: pedido.tradeId },
+      });
+      return {
+        ...pedido.dataValues,
+        comercio: comercio ? comercio.logo : null,
+      };
+    })
+  );
+
   res.render("viewsCliente/viewPedidos", {
     pageTitle: "Food Rush | Pedidos",
     //layout: "layoutCliente",
+    Pedidos: pedidos,
+    hasPedidos: pedidos.length > 0,
   });
 };
+
 exports.getEditPerfil = async (req, res, next) => {
   const idCliente = req.session.user.id;
 
@@ -152,8 +174,8 @@ exports.postEditarDirrecion = (req, res, next) => {
   const direccion = req.body.direccion;
   const idCliente = req.session.user.id;
   const direId = req.body.elemetnId;
-  console.log("Direccion :" , direccion);
-  console.log("Lugar :" , lugar);
+  console.log("Direccion :", direccion);
+  console.log("Lugar :", lugar);
   console.log("idCliente :", idCliente);
   console.log("direId :", direId);
 
