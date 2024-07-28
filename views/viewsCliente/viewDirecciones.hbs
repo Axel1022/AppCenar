@@ -1,25 +1,41 @@
 {{#if hasDireccions}}
-<div class="container">
+  <div class="container">
     <h1 class="mb-4 display-4 text-muted">Mis direcciones</h1>
     <a class="btn btn-primary mb-3" href="/cliente/direcciones/add">+ Dirección</a>
     <div class="list-group">
-        {{#each Direcciones as |direccion|}}
+      {{#each Direcciones as |direccion|}}
         <div class="list-group-item mb-1 shadow mt-3">
-            <h5 class="display-7 mb-1">{{direccion.identifier}}</h5>
-            <div class="d-flex align-items-center">
-                <p class="lead text-secondary mb-1 me-3">{{direccion.direction}}</p>
-            </div>
-            <button class="lead text-white btn btn-warning float-end btn-sm me-3 mt-3">Editar</button>
-            <button class="lead text-white btn btn-danger float-end btn-sm me-3 mt-3">Eliminar</button>
+          <h5 class="display-7 mb-1">{{direccion.identifier}}</h5>
+          <div class="d-flex align-items-center">
+            <p class="lead text-secondary mb-1 me-3">{{direccion.direction}}</p>
+          </div>
+          <form
+            method="post"
+            action="/cliente/direcciones/eliminar/post"
+            class="form-delete"
+            onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta Dirección?');"
+          >
+            <a
+              href="/adminEdd/autores/{{direccion.id}}"
+              class="btn btn-primary me-2"
+            >
+              Editar
+            </a>
+            <input type="hidden" value="{{direccion.id}}" name="elemetnId" />
+            <button type="submit" class="btn btn-danger delete">Borrar </button>
+          </form>
+
         </div>
-        {{/each}}
+      {{/each}}
     </div>
-        <a class="btn btn-secondary mt-3" onclick="history.back()">Volver atrás</a>
-</div>
+    <a class="btn btn-secondary mt-3" onclick="history.back()">Volver atrás</a>
+  </div>
 {{else}}
-    <div class="text-center mt-5">
-        <h1 class="display-4 text-muted">No tienes direcciones guardadas.</h1>
-        <p class="lead text-secondary">Parece que aún no has agregado ninguna dirección a tu cuenta.</p>
-        <a class="btn btn-primary btn-lg mt-4" href="/cliente/direcciones/add">+ Añadir Dirección</a>
-    </div>
+  <div class="text-center mt-5">
+    <h1 class="display-4 text-muted">No tienes direcciones guardadas.</h1>
+    <p class="lead text-secondary">Parece que aún no has agregado ninguna
+      dirección a tu cuenta.</p>
+    <a class="btn btn-primary btn-lg mt-4" href="/cliente/direcciones/add">+
+      Añadir Dirección</a>
+  </div>
 {{/if}}
