@@ -125,35 +125,32 @@ exports.postDeliveryProfile = async (req, res, next) => {
 
 // Obtener el perfil del delivery
 exports.getEditPerfil = async (req, res, next) => {
-  try {
-    const deliveryId = req.session.user.id;
-    const delivery = await Delivery.findByPk(deliveryId);
+  const idDelivery = req.session.user.id;
 
-    res.render('viewsDelivery/viewEditPerfil', {
-      pageTitle: 'Food Rush | Editar Perfil',
-      layout: 'layoutDelivery',
-      Delivery: delivery.dataValues,
-    });
-  } catch (err) {
-    console.log(err);
-    res.redirect('/error');
-  }
+  const delivery = await modelDelivery.findOne({ where: { id: idDelivery } });
+  res.render("viewsDelivery/editPerfil", {
+    pageTitle: "Food Rush | perfil",
+    layout: "layoutDelivery",
+    Cliente: delivery.dataValues,
+  });
 };
+exports.postEditPerfil = (req, res, next) => {
+  const name = req.body.name;
+  const lastName = req.body.lastName;
+  const phone = req.body.telefono;
+  const imageProfile = req.file;
+  const idDelivery = req.session.user.id;
 
-exports.postEditPerfil = async (req, res, next) => {
-  try {
-    const { name, lastName, phone } = req.body;
-    const imageProfile = req.file ? req.file.path : null;
-    const deliveryId = req.session.user.id;
-
-    await Delivery.update(
+  modelCliente
+    .update(
       { name, lastName, phone, imageProfile },
-      { where: { id: deliveryId } }
-    );
-
-    res.redirect('/delivery/perfil');
-  } catch (err) {
-    console.log(err);
-    res.redirect('/error');
-  }
+      { where: { id: idDelivery } }
+    )
+    .then(() => {
+      return res.redirect("/delivery/perfil");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
+
