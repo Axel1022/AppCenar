@@ -1,5 +1,7 @@
 const modelCliente = require("../../models/modelCliente/cliente");
 const modelDirecciones = require("../../models/modelCliente/direccion");
+const modelComercio = require("../../models/modelComercios/comercio");
+const modelPedidos = require("../../models/modelCliente/pedido");
 exports.getHome = async (req, res, next) => {
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
@@ -37,7 +39,7 @@ exports.postDireccionesAdd = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
   const idCliente = req.session.user.id;
-  console.log( "El id del cliente" , idCliente);
+  console.log("El id del cliente", idCliente);
 
   modelDirecciones
     .create({ clientId: idCliente, identifier: lugar, direction: direccion })
@@ -69,12 +71,52 @@ exports.getPerfil = async (req, res, next) => {
     Cliente: cliente.dataValues,
   });
 };
-exports.getPedidos = (req, res, next) => {
+exports.getPedidos = async (req, res, next) => {
+  const idCliente = req.session.user.id;
+  const resultPedidos = await modelPedidos.findAll({
+    where: { clientId: idCliente },
+  });
+
+  const pedidos = await Promise.all(
+    resultPedidos.map(async (pedido) => {
+      const comercio = await modelComercio.findOne({
+        where: { id: pedido.tradeId },
+      });
+      return {
+        ...pedido.dataValues,
+        comercio: comercio ? comercio.logo : null,
+      };
+    })
+  );
+
   res.render("viewsCliente/viewPedidos", {
     pageTitle: "Food Rush | Pedidos",
     //layout: "layoutCliente",
+    Pedidos: pedidos,
+    hasPedidos: pedidos.length > 0,
   });
 };
+exports.getDetallePedidos = async (req, res, next) => {
+  const pedidoId = req.params.id;
+  const idCliente = req.session.user.id;
+
+  const resultPedido = await modelPedidos.findOne({
+    where: { clientId: idCliente, id: pedidoId },
+  });
+  console.log(resultPedido.dataValues);
+
+  const resultComercio = await modelComercio.findOne({
+    where: { id: resultPedido.dataValues.tradeId },
+  });
+
+  res.render("viewsCliente/viewDetallePedido", {
+    pageTitle: "Food Rush | Detalle",
+    // layout: "layoutCliente",
+    Pedido: resultPedido.dataValues,
+    Comercio: resultComercio.dataValues,
+  });
+};
+
 exports.getEditPerfil = async (req, res, next) => {
   const idCliente = req.session.user.id;
 
@@ -102,5 +144,70 @@ exports.postEditPerfil = (req, res, next) => {
     })
     .catch((error) => {
       console.log(error);
+    });
+};
+exports.postEliminarDirrecion = (req, res, next) => {
+  const idElemt = req.body.elemetnId;
+  const idCliente = req.session.user.id;
+
+  modelDirecciones
+    .findOne({ where: { id: idElemt, clientId: idCliente } })
+    .then((result) => {
+      if (result) {
+        return result.destroy();
+      } else {
+        console.log("Direccion no encontrada");
+        res.redirect("/cliente/direcciones");
+      }
+    })
+    .then(() => {
+      console.log("Direccion eliminada");
+      res.redirect("/cliente/direcciones");
+    })
+    .catch((err) => {
+      console.error("Error al eliminar la Direccion: ", err);
+      res.redirect("/cliente/direcciones");
+    });
+};
+exports.getEditarDirrecion = (req, res, next) => {
+  const elemetnID = req.params.elemetnId;
+  modelDirecciones
+    .findOne({ where: { id: elemetnID } })
+    .then((result) => {
+      if (result) {
+        res.render("viewsCliente/viewDireccionesEdit", {
+          pageTitle: `Food Rush | Direcciones`,
+          Direccion: result.dataValues,
+        });
+      } else {
+        console.log("No se ha encontrado la categoria");
+        res.redirect("/cliente/direcciones");
+      }
+    })
+    .catch((err) => {
+      console.error("Error en EditDireccion: ", err);
+      res.redirect("/cliente/direcciones");
+    });
+};
+exports.postEditarDirrecion = (req, res, next) => {
+  const lugar = req.body.lugar;
+  const direccion = req.body.direccion;
+  const idCliente = req.session.user.id;
+  const direId = req.body.elemetnId;
+  console.log("Direccion :", direccion);
+  console.log("Lugar :", lugar);
+  console.log("idCliente :", idCliente);
+  console.log("direId :", direId);
+
+  console.log("El id del cliente", idCliente);
+
+  modelDirecciones
+    .update(
+      { identifier: lugar, direction: direccion },
+      { where: { id: idCliente, id: direId } }
+    )
+    .then(() => {
+      console.log("Direccion editad correctamente");
+      res.redirect("/cliente/direcciones");
     });
 };

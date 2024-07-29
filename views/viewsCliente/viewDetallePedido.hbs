@@ -1,0 +1,22 @@
+<div class="text-center">
+  <img
+    src="../../public/assets/img/iconFoodRush - copia.png"
+    alt="Imagen Food Rush"
+    class="img-fluid mb-3"
+    style="max-width: 150px;"
+  />
+  <h1 class="display-4">Food Rush</h1>
+  <div class="my-1">
+    <h2 class="{{statusClass Pedido.status}}">{{Pedido.status}}</h2>
+    <h3 class="text-muted">{{Pedido.date}} a las {{Pedido.hour}}</h3>
+  </div>
+</div>
+
+<div class="container">
+  <p class="lead">Tu pedido:</p>
+  <!-- Aquí van los productos -->
+  <div class="card p-3 mb-4">
+    <h4>Total: RD$ {{Pedido.total}}</h4>
+  </div>
+  <button class="btn btn-primary" onclick="window.history.back();">Volver</button>
+</div>
