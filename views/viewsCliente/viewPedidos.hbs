@@ -1,34 +1,30 @@
 {{#if hasPedidos}}
   <div class="container mt-5">
-    <h1 class="mb-4">Tus pedidos</h1>
-    <div class="row">
+    <h1 class="mb-4 text-center">Tus pedidos</h1>
+    <ul class="list-group">
       {{#each Pedidos as |pedido|}}
-        <a href="/cliente/pedidos/detalle">
-          <div class="col-md-6 mb-4">
+        <li class="list-group-item mb-3">
+          <a href="/cliente/pedidos/detalle/{{pedido.id}}" class="text-decoration-none text-dark">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">{{pedido.date}} . {{pedido.hour}}</h3>
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title m-0">{{pedido.date}} - {{pedido.hour}}</h3>
+                <img
+                  src="{{pedido.comercio}}"
+                  class="img-fluid"
+                  alt="Logo de Comercio"
+                  style="max-width: 50px;"
+                />
               </div>
               <div class="card-body">
-                <div class="text-center mb-3">
-                  <img
-                    src="{{pedido.comercio}}"
-                    class="img-fluid"
-                    alt="Logo de Comercio"
-                    style="max-width: 100px;"
-                  />
-                </div>
                 <h4 class="mt-3">{{pedido.status}}</h4>
                 <h5>{{Comercio.name}}</h5>
-                <p class="card-text">RD$
-                  {{pedido.total}}
-                  . Cantidad de productos: 0</p>
+                <p class="card-text">RD$ {{pedido.total}} - Cantidad de productos: 0</p>
               </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </li>
       {{/each}}
-    </div>
+    </ul>
   </div>
 {{else}}
   <div class="container mt-5">
