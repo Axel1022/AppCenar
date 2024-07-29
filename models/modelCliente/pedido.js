@@ -52,7 +52,18 @@ const Pedido = sequelize.define("pedido", {
     status:{
         type: Sequelize.STRING,
         allowNull: false,
-    }
+    },
+    name:{
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    productId: {
+        type: Sequelize.INTEGER,
+        references: {
+            model: Comercio,
+            key: "id"
+        }
+    },
 });
 
 module.exports = Pedido;

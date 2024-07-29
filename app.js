@@ -148,7 +148,9 @@ Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
 Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
 
-
+Pedido.hasMany(Producto, {foreignKey: "productId", as: "producto"});
+Producto.belongsTo(Pedido, {foreignKey: "productId", as: "pedido"});
+ 
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
@@ -161,7 +163,7 @@ app.use(productosController);
 app.use(errorController.get404);
 
 conecctiondb
-  .sync()
+  .sync({alter:true})
   .then((items) => {
     app.listen(puerto);
   })
