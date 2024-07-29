@@ -122,3 +122,21 @@ exports.postDeliveryProfile = async (req, res, next) => {
     res.redirect('/error');
   }
 };
+
+// Obtener el perfil del delivery
+exports.getEditPerfil = async (req, res, next) => {
+  try {
+    const deliveryId = req.session.user.id;
+    const delivery = await Delivery.findByPk(deliveryId);
+
+    res.render('viewsDelivery/viewEditPerfil', {
+      pageTitle: 'Food Rush | Editar Perfil',
+      layout: 'layoutDelivery',
+      Delivery: delivery
+    });
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error');
+  }
+};
+
