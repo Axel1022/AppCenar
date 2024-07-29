@@ -28,5 +28,5 @@ router.post(
 );
 
 router.get("/cliente/pedidos", clienteController.getPedidos);
-router.get("/cliente/pedidos/detalle", clienteController.getDetallePedidos); //TODO: Hay que cambiar esto porque necesita el id
+router.get("/cliente/pedidos/detalle/:id", clienteController.getDetallePedidos); //TODO: Hay que cambiar esto porque necesita el id
 module.exports = router;
