@@ -97,9 +97,23 @@ exports.getPedidos = async (req, res, next) => {
   });
 };
 exports.getDetallePedidos = async (req, res, next) => {
+  const pedidoId = req.params.id;
+  const idCliente = req.session.user.id;
+
+  const resultPedido = await modelPedidos.findOne({
+    where: { clientId: idCliente, id: pedidoId },
+  });
+  console.log(resultPedido.dataValues);
+
+  const resultComercio = await modelComercio.findOne({
+    where: { id: resultPedido.dataValues.tradeId },
+  });
+
   res.render("viewsCliente/viewDetallePedido", {
     pageTitle: "Food Rush | Detalle",
     // layout: "layoutCliente",
+    Pedido: resultPedido.dataValues,
+    Comercio: resultComercio.dataValues,
   });
 };
 
