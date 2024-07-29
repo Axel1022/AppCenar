@@ -132,7 +132,7 @@ exports.getEditPerfil = async (req, res, next) => {
     res.render('viewsDelivery/viewEditPerfil', {
       pageTitle: 'Food Rush | Editar Perfil',
       layout: 'layoutDelivery',
-      Delivery: delivery
+      Delivery: delivery.dataValues,
     });
   } catch (err) {
     console.log(err);
@@ -140,3 +140,20 @@ exports.getEditPerfil = async (req, res, next) => {
   }
 };
 
+exports.postEditPerfil = async (req, res, next) => {
+  try {
+    const { name, lastName, phone } = req.body;
+    const imageProfile = req.file ? req.file.path : null;
+    const deliveryId = req.session.user.id;
+
+    await Delivery.update(
+      { name, lastName, phone, imageProfile },
+      { where: { id: deliveryId } }
+    );
+
+    res.redirect('/delivery/perfil');
+  } catch (err) {
+    console.log(err);
+    res.redirect('/error');
+  }
+};
