@@ -53,10 +53,6 @@ const Pedido = sequelize.define("pedido", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    name:{
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     productId: {
         type: Sequelize.INTEGER,
         references: {
