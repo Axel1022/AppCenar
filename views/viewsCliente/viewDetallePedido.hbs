@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="container text-center my-4">
   <img
     src="../../public/assets/img/iconFoodRush - copia.png"
     alt="Imagen Food Rush"
@@ -6,7 +6,7 @@
     style="max-width: 150px;"
   />
   <h1 class="display-4">Food Rush</h1>
-  <div class="my-1">
+  <div class="my-3">
     <h2 class="{{statusClass Pedido.status}}">{{Pedido.status}}</h2>
     <h3 class="text-muted">{{Pedido.date}} a las {{Pedido.hour}}</h3>
   </div>
@@ -14,9 +14,26 @@
 
 <div class="container">
   <p class="lead">Tu pedido:</p>
-  <!-- Aquí van los productos -->
+  <ul class="list-group mb-4">
+    {{#each Productos as |producto|}}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img src="/{{producto.image}}" alt="{{producto.name}}" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;">
+          <div>
+            <h5 class="mb-1">{{producto.name}}</h5>
+            <small class="text-muted">{{producto.price}}</small>
+          </div>
+        </div>
+      </li>
+    {{/each}}
+  </ul>
+
   <div class="card p-3 mb-4">
     <h4>Total: RD$ {{Pedido.total}}</h4>
   </div>
-  <button class="btn btn-primary" onclick="window.history.back();">Volver</button>
+
+  <button
+    class="btn btn-primary"
+    onclick="window.history.back();"
+  >Volver</button>
 </div>
