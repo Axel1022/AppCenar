@@ -55,7 +55,9 @@ exports.GetAddProducts = (req, res, next) => {
         include: [{ model: Comercio, as: "comercio"}]
     })
     .then(result => {
-        return Categoria.findAll()
+        return Categoria.findAll(
+            {where: {tradeId: comercioId}
+        })
             .then(categorias => {
 
                 const productos = result.map(r => r.dataValues);
@@ -99,7 +101,9 @@ exports.GetEditProducts = (req, res, next) => {
             return res.redirect("/comercios/Productos")
         }
 
-        Categoria.findAll()
+        Categoria.findAll({
+            where: {tradeId: comercioId}
+        })
         .then(categoria =>{
             res.render("viewsComercios/viewAddProducto", {
                 pageTitle: "Food Rush | Editar Producto",

@@ -177,7 +177,7 @@ exports.PostEditCategoria = (req, res, next) => {
    { where: {id : id}}
     )
     .then((result) => {
-        return res.redirect("/comercios/Categoria");
+        return res.redirect("/comercios/Categorias");
     })
     .catch((error) => {
         console.log(error);
