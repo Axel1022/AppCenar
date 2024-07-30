@@ -42,7 +42,7 @@ const Producto = sequelize.define("producto", {
             key: "id"
         },
         allowNull: false
-    }
+    },
 });
 
 
