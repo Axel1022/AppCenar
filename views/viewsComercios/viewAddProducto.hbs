@@ -22,9 +22,13 @@
             </div>
             <div class="mt-3">
                 <select class="form-select" name="categoryId" aria-label="Default select example" id="categoryId" required>
-                   <option value="" disabled {{#if (compare null producto.categoryId)}}selected{{/if}}>Categorias</option>
+                   <option value="" disabled selected>Categorias</option>
                     {{#each categorias}}
-                        <option value="{{this.id}}" {{#if (compare this.id ../producto.categoryId)}}selected{{/if}}>{{this.name}}</option>
+                    {{#if (compare this.id ../productos.categoryId)}}
+                        <option value="{{this.id}}" selected>{{this.name}}</option>
+                    {{else}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                    {{/if}}
                     {{/each}}
                 </select>
                 <div class="invalid-feedback">Please select a category or check if a category exists in the system.</div>
