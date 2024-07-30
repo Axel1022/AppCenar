@@ -150,14 +150,31 @@ Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
 Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
 
-Pedido.belongsToMany(Producto, {through: PedidoProducto, foreignKey: "pedidoId", as: "producto"});
-Producto.belongsToMany(Pedido, {through: PedidoProducto, foreignKey: "productId", as: "pedido"});
+Pedido.belongsToMany(Producto, {
+  through: PedidoProducto,
+  foreignKey: "pedidoId",
+  as: "producto",
+});
+Producto.belongsToMany(Pedido, {
+  through: PedidoProducto,
+  foreignKey: "productId",
+  as: "pedido",
+});
 
-Pedido.hasMany(PedidoProducto, {foreignKey: "pedidoId", as: "pedidoProductos"});
-Producto.hasMany(PedidoProducto, {foreignKey: "productId", as: "pedidoProductos"});
+Pedido.hasMany(PedidoProducto, {
+  foreignKey: "pedidoId",
+  as: "pedidoProductos",
+});
+Producto.hasMany(PedidoProducto, {
+  foreignKey: "productId",
+  as: "pedidoProductos",
+});
 
-PedidoProducto.belongsTo(Producto, {foreignKey: "productoId", as: "producto"});
-PedidoProducto.belongsTo(Pedido, {foreignKey: "pedidoId", as: "pedido"});
+PedidoProducto.belongsTo(Producto, {
+  foreignKey: "productoId",
+  as: "producto",
+});
+PedidoProducto.belongsTo(Pedido, { foreignKey: "pedidoId", as: "pedido" });
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);
