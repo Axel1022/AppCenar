@@ -2,6 +2,9 @@ const modelCliente = require("../../models/modelCliente/cliente");
 const modelDirecciones = require("../../models/modelCliente/direccion");
 const modelComercio = require("../../models/modelComercios/comercio");
 const modelPedidos = require("../../models/modelCliente/pedido");
+const modelProductos = require("../../models/modelComercios/producto");
+const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
+
 exports.getHome = async (req, res, next) => {
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
@@ -72,35 +75,107 @@ exports.getPerfil = async (req, res, next) => {
   });
 };
 exports.getPedidos = async (req, res, next) => {
-  const idCliente = req.session.user.id;
-  const resultPedidos = await modelPedidos.findAll({
-    where: { clientId: idCliente },
-  });
+  try {
+    const idCliente = req.session.user.id;
+    const resultPedidos = await modelPedidos.findAll({
+      where: { clientId: idCliente },
+    });
 
-  const pedidos = await Promise.all(
-    resultPedidos.map(async (pedido) => {
-      const comercio = await modelComercio.findOne({
-        where: { id: pedido.tradeId },
+    if (resultPedidos.length === 0) {
+      return res.render("viewsCliente/viewPedidos", {
+        pageTitle: "Food Rush | Pedidos",
+        layout: "layoutCliente",
+        Pedidos: [],
+        Cantidad: 0,
+        hasPedidos: false,
       });
-      return {
-        ...pedido.dataValues,
-        comercio: comercio ? comercio.logo : null,
-      };
-    })
-  );
+    }
 
-  res.render("viewsCliente/viewPedidos", {
-    pageTitle: "Food Rush | Pedidos",
-    //layout: "layoutCliente",
-    Pedidos: pedidos,
-    hasPedidos: pedidos.length > 0,
-  });
+    const pedidos = await Promise.all(
+      resultPedidos.map(async (pedido) => {
+        const comercio = await modelComercio.findOne({
+          where: { id: pedido.tradeId },
+        });
+
+        const productosPedido = await modelPedidoProducto.findAll({
+          where: { pedidoId: pedido.id },
+        });
+
+        const productos = await Promise.all(
+          productosPedido.map(async (productoPedido) => {
+            const producto = await modelProductos.findOne({
+              where: { id: productoPedido.productId },
+            });
+            return producto.dataValues;
+          })
+        );
+
+        return {
+          ...pedido.dataValues,
+          comercio: comercio ? comercio.logo : null,
+          productos: productos,
+          cantidadProductos: productos.length,
+        };
+      })
+    );
+
+    res.render("viewsCliente/viewPedidos", {
+      pageTitle: "Food Rush | Pedidos",
+      layout: "layoutCliente",
+      Pedidos: pedidos,
+      hasPedidos: pedidos.length > 0,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 };
+
 exports.getDetallePedidos = async (req, res, next) => {
-  res.render("viewsCliente/viewDetallePedido", {
-    pageTitle: "Food Rush | Detalle",
-    // layout: "layoutCliente",
-  });
+
+  //****************************** Bueno, laálogica ******************************\\
+  const pedidoId = req.params.id;
+  const idCliente = req.session.user.id;
+
+  try {
+    const resultPedido = await modelPedidos.findOne({
+      where: { clientId: idCliente, id: pedidoId },
+    });
+    //? Aqui primero se busca el pedido que tenga el id del cliente y y tambien coinscida con el id del pedido
+    //(DOBLE SEGURIDD)
+
+    const resultComercio = await modelComercio.findOne({
+      where: { id: resultPedido.dataValues.tradeId },
+    });
+    //? Con el id del comercio del pedido que se encontró...
+
+    const productosPedido = await modelPedidoProducto.findAll({
+      where: { pedidoId: resultPedido.dataValues.id },
+    });
+    //? Estoy accediendo a la tabla mucho a mucho (PedidoProducto) aqui busco los id que que tengan el pedidoId...
+
+    let productos = []; //Esto va a guardar los productos, es facil de entender, xd
+    for (const producto of productosPedido) {
+      const pedido = await modelProductos.findOne({
+        where: { id: producto.dataValues.productId },
+      });
+      productos.push(pedido.dataValues);
+      //*Ok
+      //? Por cada id_product que esté guardado en productosPedido, buscamos el producto en su tabla, xd
+      //? y lo apregamos a productos
+    }
+
+    res.render("viewsCliente/viewDetallePedido", {
+      pageTitle: "Food Rush | Detalle",
+      Pedido: resultPedido.dataValues,
+      Productos: productos,
+      Comercio: resultComercio.dataValues,
+      //? Ya esto es monte y culebra, xd
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 };
 
 exports.getEditPerfil = async (req, res, next) => {

@@ -26,14 +26,19 @@ exports.getViewMercados = async (req, res, next) => {
 exports.getViewPostres_Cafe = async (req, res, next) => {
   res.render("viewsComercios/viewPostres_Cafe", {
     pageTitle: "Food Rush | Postres y Café",
-   // layout: "layoutCliente",
+    // layout: "layoutCliente",
   });
 };
 
 exports.getViewRestaurantes = async (req, res, next) => {
+  const rsultRest = await Comercios.findAll({
+    where: { typeTrade: "Restaurante" },
+  });
   res.render("viewsComercios/viewRestaurantes", {
     pageTitle: "Food Rush | Restaurantes",
-   // layout: "layoutCliente",
+    // layout: "layoutCliente",
+    Cantidad: rsultRest.length,
+    Restaurantes: rsultRest,
   });
 };
 
@@ -47,21 +52,20 @@ exports.getViewSalud = async (req, res, next) => {
 exports.getViewTiendas = async (req, res, next) => {
   res.render("viewsComercios/viewTiendas", {
     pageTitle: "Food Rush | Tiendas",
-   // layout: "layoutCliente",
+    // layout: "layoutCliente",
   });
 };
 
-
-exports.getComercios = async (req, res, next) =>{
+exports.getComercios = async (req, res, next) => {
   const comercioId = req.session.user.id;
   const usuario = req.session.user.role;
 
-  if(usuario !=="comercio"){
+  if (usuario !== "comercio") {
     req.flash("errors", "You dont have access to this area");
     return res.redirect("/login");
- }
+  }
 
- try {
+  try {
     const comercio = await Comercios.findByPk(comercioId);
 
     if (!comercio) {
@@ -75,19 +79,19 @@ exports.getComercios = async (req, res, next) =>{
         {
           model: Productos,
           as: "producto",
-          attributes: ['name', 'price', 'quantity'] 
-        }
-      ]
+          attributes: ["name", "price", "quantity"],
+        },
+      ],
     });
 
-    const estado = pedidos.some(pedido => pedido.status === "pendiente");
+    const estado = pedidos.some((pedido) => pedido.status === "pendiente");
 
     res.render("viewsComercios/viewCategoria", {
       pageTitle: "Food Rush | Comercios",
       comercios: comercio,
       pedidos: pedidos,
       hasPedido: pedidos.length > 0,
-      estado: estado
+      estado: estado,
     });
   } catch (error) {
     console.error(error);
@@ -96,12 +100,11 @@ exports.getComercios = async (req, res, next) =>{
   }
 };
 
-
-function calcularTotal(products){
+function calcularTotal(products) {
   let subTotal = 0;
   let totalQuantity = 0;
 
-  products.forEach(product =>{
+  products.forEach((product) => {
     subTotal += product.quantity * product.price;
     totalQuantity += product.quantity;
   });
@@ -109,9 +112,9 @@ function calcularTotal(products){
   const itbis = subTotal * 0.18;
   const total = subTotal + itbis;
 
-  return{
+  return {
     subTotal: roundToDecimals(subTotal, 2),
     total: roundToDecimals(total, 2),
-    totalQuantity
+    totalQuantity,
   };
 }

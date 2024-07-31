@@ -1,1 +1,32 @@
-<H1>Este es el home del delivery</H1>
+<h1 class="mb-4">Pedidos Asignados</h1>
+{{#if pedidos.length}}
+<div class="row">
+    {{#each pedidos}}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Pedido #{{this.id}}</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Comercio: {{this.comercio.name}}</h5>
+                <p class="card-text">Logo:
+                    <img src="{{this.comercio.logo}}" width="50" height="50" alt="Logo Comercio" />
+                </p>
+                <h6>Productos:</h6>
+                <ul>
+                    {{#each this.productos}}
+                    <li>{{this.name}} - {{this.price}}</li>
+                    {{/each}}
+                </ul>
+                <a href="/delivery/pedido/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
+                <form action="/delivery/pedido/{{this.id}}/completar" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-success">Completar Pedido</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+<p>No hay pedidos asignados.</p>
+{{/if}}

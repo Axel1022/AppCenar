@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="card profile-card mx-auto">
+    <div class="card-header text-center">
+      <h2>Perfil de {{Delivery.user}}</h2>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <img
+          src="{{Delivery.imageProfile}}"
+          alt="Imagen de perfil"
+          class="rounded-circle mb-3"
+          width="150"
+          height="150"
+        />
+      </div>
+      <ul class="list-unstyled profile-info text-left">
+        <li><strong>Nombres:</strong> {{Delivery.name}}</li>
+        <li><strong>Apellidos:</strong> {{Delivery.lastName}}</li>
+        <li><strong>Email:</strong> {{Delivery.email}}</li>
+        <li><strong>Teléfono:</strong> {{Delivery.phone}}</li>
+        <li><strong>Rol:</strong> {{Delivery.role}}</li>
+      </ul>
+      <div class="mt-4 text-center">
+        <a href="/delivery/home" class="btn btn-secondary mr-2">Volver</a>
+        <a href="/delivery/editar/{{Delivery.id}}" class="btn btn-primary">Editar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-card {
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .profile-info li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .profile-info li:last-child {
+    border-bottom: none;
+  }
+  .profile-card img {
+    border: 2px solid #ddd;
+    padding: 5px;
+    background-color: #fff;
+  }
+</style>
