@@ -127,7 +127,7 @@ exports.postDeliveryProfile = async (req, res, next) => {
 exports.getEditPerfil = async (req, res, next) => {
   const idDelivery = req.session.user.id;
 
-  const delivery = await modelDelivery.findOne({ where: { id: idDelivery } });
+  const delivery = await Delivery.findOne({ where: { id: idDelivery } });
   res.render("viewsDelivery/editPerfil", {
     pageTitle: "Food Rush | perfil",
     layout: "layoutDelivery",
