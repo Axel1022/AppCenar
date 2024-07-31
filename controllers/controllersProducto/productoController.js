@@ -55,7 +55,9 @@ exports.GetAddProducts = (req, res, next) => {
         include: [{ model: Comercio, as: "comercio"}]
     })
     .then(result => {
-        return Categoria.findAll()
+        return Categoria.findAll(
+            {where: {tradeId: comercioId}
+        })
             .then(categorias => {
 
                 const productos = result.map(r => r.dataValues);
@@ -99,7 +101,9 @@ exports.GetEditProducts = (req, res, next) => {
             return res.redirect("/comercios/Productos")
         }
 
-        Categoria.findAll()
+        Categoria.findAll({
+            where: {tradeId: comercioId}
+        })
         .then(categoria =>{
             res.render("viewsComercios/viewAddProducto", {
                 pageTitle: "Food Rush | Editar Producto",
@@ -188,72 +192,67 @@ exports.PostAddProducts = (req, res, next) => {
     })
 };
 
-exports.PostEditProducts = (req, res, next) => {
+exports.PostEditProducts = async (req, res, next) => {
     const comercioId = req.session.user.id;
+    const usuario = req.session.user.role;
+    console.log("Usuario intentando editar", usuario);
 
-    const usuario = req.session.user.role
-    console.log("usuario intentando editar", usuario);
-
-    if(usuario !=="comercio"){
-        req.flash("errors", "You dont have access to this area");
+    if (usuario !== "comercio") {
+        req.flash("errors", "You don't have access to this area");
         return res.redirect("/login");
     }
-   
+
     const id = req.body.id;
     const name = req.body.name;
     const image = req.body.image;
     const description = req.body.description;
     const price = req.body.price;
     const categoryId = req.body.categoryId;
-   
-    Productos.findOne({
-        where: {
-            id: id,
-            tradeId: comercioId
-        }
-    })
-    .then((result) => {
-       const categoria = result.dataValues;
-       const producto = result.dataValues;
-   
-       if(!categoria){
-           return res.redirect("/comercios/Producto");
-       }
-   
-       const oldCategoryId = producto.categoryId;
-       const imagePath = image? "/" +image.path : producto.image
-       
-       Productos.update({
-           name: name,
-           image: imagePath,
-           description: description,
-           price: price,
-           tradeId: comercioId,
-           categoryId: categoryId
-       },
-       {
+
+    try {
+        const producto = await Productos.findOne({
             where: {
                 id: id,
-                tradeId: comercioId,
-            },
-       },
-       )
-       .then((result) => {
+                tradeId: comercioId
+            }
+        });
+
+        if (!producto) {
+            req.flash("errors", "Product not found");
+            return res.redirect("/comercios/Productos");
+        }
+
+        const oldCategoryId = producto.categoryId;
+        const imagePath = image ? "/" + image.path : producto.image;
+
+        await Productos.update({
+            name: name,
+            image: imagePath,
+            description: description,
+            price: price,
+            tradeId: comercioId,
+            categoryId: categoryId
+        }, {
+            where: {
+                id: id,
+                tradeId: comercioId
+            }
+        });
+
         if (oldCategoryId !== categoryId) {
-            return Promise.all([
+            await Promise.all([
                 Categoria.increment("quantity", { by: 1, where: { id: categoryId } }),
                 Categoria.decrement("quantity", { by: 1, where: { id: oldCategoryId } })
             ]);
         }
-        res.redirect("/comercios/Productos");
-       })
-       .catch((error) => {
-           console.log(error);
-       })
-    })
-    .catch((err) => {
-       console.log("Error al actualizar el producto", err);
-    })
+
+        req.flash("success", "Product updated successfully");
+        return res.redirect("/comercios/Productos");
+    } catch (error) {
+        console.log("Error al actualizar el producto", error);
+        req.flash("errors", "An error occurred while updating the product");
+        return res.redirect("/comercios/Productos");
+    }
 };
    
 exports.PostDeleteProducts = (req, res, next) => {

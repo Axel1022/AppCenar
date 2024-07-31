@@ -10,7 +10,7 @@ const { v4: uuidv4 } = require("uuid");
 const conecctiondb = require("./contexts/appContext");
 const setLayout = require("./midelwares/setLayout");
 const compare = require("./helpers/compare");
-
+const statusClass = require("./helpers/status");
 
 // Configuración del motor de vistas
 app.engine(
@@ -19,9 +19,10 @@ app.engine(
     layoutsDir: "views/layouts",
     //Ya quite el main por dejeto
     extname: "hbs",
-    helpers:{
-      compare: compare
-    }
+    helpers: {
+      compare: compare,
+      statusClass: statusClass,
+    },
   })
 );
 app.set("view engine", "hbs");
@@ -120,6 +121,7 @@ const Comercio = require("./models/modelComercios/comercio");
 const Producto = require("./models/modelComercios/producto");
 const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
+const PedidoProducto = require("./models/modelPedidoProducto/pedidoProducto");
 
 Cliente.hasMany(Direccion, { foreignKey: "clientId", as: "direccion" });
 Direccion.belongsTo(Cliente, { foreignKey: "clientId", as: "cliente" });
@@ -148,7 +150,31 @@ Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
 Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
 
+Pedido.belongsToMany(Producto, {
+  through: PedidoProducto,
+  foreignKey: "pedidoId",
+  as: "producto",
+});
+Producto.belongsToMany(Pedido, {
+  through: PedidoProducto,
+  foreignKey: "productId",
+  as: "pedido",
+});
 
+Pedido.hasMany(PedidoProducto, {
+  foreignKey: "pedidoId",
+  as: "pedidoProductos",
+});
+Producto.hasMany(PedidoProducto, {
+  foreignKey: "productId",
+  as: "pedidoProductos",
+});
+
+PedidoProducto.belongsTo(Producto, {
+  foreignKey: "productoId",
+  as: "producto",
+});
+PedidoProducto.belongsTo(Pedido, { foreignKey: "pedidoId", as: "pedido" });
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);

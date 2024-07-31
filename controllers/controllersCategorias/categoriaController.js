@@ -1,3 +1,4 @@
+const { captureRejectionSymbol } = require("nodemailer/lib/xoauth2");
 const Categorias = require("../../models/modelComercios/categoria");
 const Comercio = require("../../models/modelComercios/comercio");
 const Producto = require("../../models/modelComercios/producto");
@@ -93,7 +94,7 @@ exports.GetDeleteCategoria = (req, res, next) => {
         return res.redirect("/login");
     }
 
-    const categoriaId = req.params.categoriaId;
+    const categoriaId = req.params.id;
 
     Categorias.findOne({
         where: {
@@ -103,13 +104,13 @@ exports.GetDeleteCategoria = (req, res, next) => {
     })
     .then((categoria) => {
         if(!categoria){
-            return res.redirect("/comercios/DeleteCategoria");
+            return res.redirect("/comercios/EliminarCategoria");
         }
 
-        res.render("viewsComercio/viewDeleteCategoria", {
+        res.render("viewsComercios/viewDeleteCategoria", {
             pageTitle: "Food Rush | Eliminar Categoria",
             hasCategoria: categoria.length > 0,
-            categorias: categoria
+            categorias: categoria.dataValues
         });
     })
     .catch((error) => {
@@ -176,7 +177,7 @@ exports.PostEditCategoria = (req, res, next) => {
    { where: {id : id}}
     )
     .then((result) => {
-        return res.redirect("/comercios/Categoria");
+        return res.redirect("/comercios/Categorias");
     })
     .catch((error) => {
         console.log(error);
@@ -187,17 +188,18 @@ exports.PostEditCategoria = (req, res, next) => {
  })
 };
 
-exports.PostDeleteCategoria = (req, res, next) => {
+exports.PostDeleteCategoria = async (req, res, next) => {
   const comercioId = req.session.user.id;
-  const usuario = req.session.user.id;
+  const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("/login");
     }
 
-  const categoriaId = req.params.categoriaId;
+  const categoriaId = req.body.id;
 
+  console.log("ID a eliminar:", categoriaId),
   Categorias.destroy({
     where: {
         id: categoriaId,
@@ -212,5 +214,46 @@ exports.PostDeleteCategoria = (req, res, next) => {
   })
   .catch((error) => {
     console.log("Error al eliminar la categoria: " , error);
-  });
+  }); try {
+    const categoria = await Categorias.findOne({
+        where: {
+            id: categoriaId,
+            tradeId: comercioId
+        }
+    });
+
+    if (!categoria) {
+        req.flash("errors", "Categoría no encontrada.");
+        return res.redirect("/comercios/Categorias");
+    }
+
+    const productos = await Productos.findAll({ where: { categoryId: categoriaId } });
+
+    if (productos.length > 0) {
+        req.flash("errors", "Al eliminar esta categoria los productos asociados no tendran categoria")
+        await Productos.update(
+            { categoryId: null },
+            { where: { categoryId: categoriaId } }
+        );
+    }
+
+    const result = await Categorias.destroy({
+        where: {
+            id: categoriaId,
+            tradeId: comercioId
+        }
+    });
+
+    if (result === 0) {
+        req.flash("errors", "No se pudo eliminar la categoría.");
+    } else {
+        req.flash("success", "Categoría eliminada con éxito.");
+    }
+
+} catch (error) {
+    console.error("Error al eliminar la categoría:", error);
+    req.flash("errors", "Error al eliminar la categoría.");
+}
+
+res.redirect("/comercios/Categorias");
 };

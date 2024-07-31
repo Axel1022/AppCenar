@@ -1,1 +1,40 @@
-<h1>Vista del Postres y café</h1>
+<div class="container my-4">
+  <form class="d-flex mb-4" action="">
+    <input
+      type="text"
+      class="form-control me-2"
+      placeholder="Buscar..."
+      aria-label="Buscar"
+      name="buscar"
+    />
+    <button type="submit" class="btn btn-primary">Buscar</button>
+  </form>
+
+  <h6 class="mb-4">{{Cantidad}} 1021 Cafeterias</h6>
+
+  <!-- Lista de Cafeterias -->
+  <ul class="list-unstyled">
+    {{#each Cafeterias as |Cafeteria|}}
+      <li class="mb-3">
+        <a
+          href="#"
+          class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
+        >
+          <img
+            src="/{{Cafeteria.logo}}"
+            alt="{{Cafeteria.name}}"
+            class="img-fluid me-3"
+            style="width: 100px; height: auto;"
+          />
+          <p class="mb-0">{{Cafeteria.name}}</p>
+        </a>
+      </li>
+    {{/each}}
+  </ul>
+  <div class="text-center mt-4">
+    <button
+      class="btn btn-secondary"
+      onclick="window.history.back();"
+    >Volver</button>
+  </div>
+</div>

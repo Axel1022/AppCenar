@@ -45,11 +45,19 @@ exports.PostClienteSingUp = async (req, res, next) => {
           "errors",
           "This user already exists, please select another one"
         );
+        req.flash(
+          "errors",
+          "This user already exists, please select another one"
+        );
         return res.redirect("/registroCliente");
       }
 
       existingUser = await Cliente.findOne({ where: { email } });
       if (existingUser) {
+        req.flash(
+          "errors",
+          "This email already exists, please select another one"
+        );
         req.flash(
           "errors",
           "This email already exists, please select another one"
