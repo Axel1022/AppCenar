@@ -1,11 +1,11 @@
-<div class="container text-center my-4">
+<div class="container text-center">
   <img
-    src="../../public/assets/img/iconFoodRush - copia.png"
+    src="/../../assets/img/iconFoodRush - copia.png"
     alt="Imagen Food Rush"
-    class="img-fluid mb-3"
+    class="img-fluid "
     style="max-width: 150px;"
   />
-  <h1 class="display-4">Food Rush</h1>
+  <h1 class="display-4 font-weight-bold">Food Rush</h1>
   <div class="my-3">
     <h2 class="{{statusClass Pedido.status}}">{{Pedido.status}}</h2>
     <h3 class="text-muted">{{Pedido.date}} a las {{Pedido.hour}}</h3>
@@ -13,27 +13,29 @@
 </div>
 
 <div class="container">
-  <p class="lead">Tu pedido:</p>
+  <p class="lead font-weight-bold">Tu pedido:</p>
   <ul class="list-group mb-4">
     {{#each Productos as |producto|}}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li class="list-group-item d-flex justify-content-between align-items-center shadow-sm">
         <div class="d-flex align-items-center">
-          <img src="/{{producto.image}}" alt="{{producto.name}}" class="img-thumbnail" style="width: 50px; height: 50px; margin-right: 10px;">
+          <img src="{{producto.image}}" alt="{{producto.name}}" class="img-thumbnail rounded mr-3" style="width: 50px; height: 50px;">
           <div>
             <h5 class="mb-1">{{producto.name}}</h5>
-            <small class="text-muted">{{producto.price}}</small>
+            <small class="text-muted">RD$ {{producto.price}}</small>
           </div>
         </div>
       </li>
     {{/each}}
   </ul>
 
-  <div class="card p-3 mb-4">
-    <h4>Total: RD$ {{Pedido.total}}</h4>
+  <div class="card p-3 mb-4 shadow-sm">
+    <h4 class="font-weight-bold">Total: RD$ {{Pedido.total}}</h4>
   </div>
 
-  <button
-    class="btn btn-primary"
-    onclick="window.history.back();"
-  >Volver</button>
+  <div class="text-center">
+    <button
+      class="btn btn-primary btn-lg"
+      onclick="window.history.back();"
+    >Volver</button>
+  </div>
 </div>
