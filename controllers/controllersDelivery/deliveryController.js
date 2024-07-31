@@ -141,7 +141,7 @@ exports.postEditPerfil = (req, res, next) => {
   const imageProfile = req.file;
   const idDelivery = req.session.user.id;
 
-  modelCliente
+  Delivery
     .update(
       { name, lastName, phone, imageProfile },
       { where: { id: idDelivery } }
