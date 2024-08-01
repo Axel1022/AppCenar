@@ -1,0 +1,9 @@
+{{#if has}}
+  <h1 class="text-center"> {{Comercio.name}}</h1>
+  {{#each Productos}}
+    <img src="{{this.image}}" alt="{{this.descripcion}}" />
+    <h3>{{this.name}}</h3>
+  {{/each}}
+{{else}}
+  <h3>Lo siento, no tenemos productos disponibles</h3>
+{{/if}}

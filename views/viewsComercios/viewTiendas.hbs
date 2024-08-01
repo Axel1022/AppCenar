@@ -13,21 +13,29 @@
   <h6 class="mb-4">{{Cantidad}}51 Tiendas</h6>
 
   <!-- Lista de Tienda -->
-  <ul class="list-unstyled">
-    {{#each Tiendas as |Tienda|}}
-      <li class="mb-3">
-        <a href="#" class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm">
-          <img
-            src="/{{Tienda.logo}}"
-            alt="{{Tienda.name}}"
-            class="img-fluid me-3"
-            style="width: 100px; height: auto;"
-          />
-          <p class="mb-0">{{Tienda.name}}</p>
-        </a>
-      </li>
-    {{/each}}
-  </ul>
+  {{#if has}}
+    <ul class="list-unstyled">
+      {{#each Restaurantes as |restaurante|}}
+        <li class="mb-3">
+          <a
+            href="#"
+            class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
+          >
+            <img
+              src="/{{restaurante.logo}}"
+              alt="{{restaurante.name}}"
+              class="img-fluid me-3"
+              style="width: 100px; height: auto;"
+            />
+            <p class="mb-0">{{restaurante.name}}</p>
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+  <h2>No hay tiendas disponibles</h2>
+
+  {{/if}}
 
   <div class="text-center mt-4">
     <button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
