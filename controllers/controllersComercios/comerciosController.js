@@ -96,7 +96,7 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
 };
 
 exports.getComercios = async (req, res, next) => {
-  const comercioId = req.session.user.id;
+  const comercioId = verificUseer(req, res, next);
   const usuario = req.session.user.role;
 
   if (usuario !== "comercio") {

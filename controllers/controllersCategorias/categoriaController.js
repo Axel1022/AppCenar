@@ -2,10 +2,11 @@ const { captureRejectionSymbol } = require("nodemailer/lib/xoauth2");
 const Categorias = require("../../models/modelComercios/categoria");
 const Comercio = require("../../models/modelComercios/comercio");
 const Producto = require("../../models/modelComercios/producto");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.GetCategoria = async (req, res, next) => {
 
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
 
     const categorias = await Categorias.findAll({
         where: {tradeId: comercioId},
@@ -31,7 +32,7 @@ exports.GetCategoria = async (req, res, next) => {
 }
 
 exports.GetAddCategoria =  (req, res, next) => {
-   const comercioId = req.session.user.id;
+   const comercioId = verificUseer(req, res, next);
    const usuario= req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -58,7 +59,7 @@ exports.GetAddCategoria =  (req, res, next) => {
 };
 
 exports.GetEditCategoria = (req, res, next) => {
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -86,7 +87,7 @@ exports.GetEditCategoria = (req, res, next) => {
 }
 
 exports.GetDeleteCategoria = (req, res, next) => {
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -119,7 +120,7 @@ exports.GetDeleteCategoria = (req, res, next) => {
 };
 
 exports.PostAddCategorias = (req, res, next) => {
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -144,7 +145,7 @@ exports.PostAddCategorias = (req, res, next) => {
 };
 
 exports.PostEditCategoria = (req, res, next) => {
- const comercioId = req.session.user.id;
+ const comercioId = verificUseer(req, res, next);
  const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -189,7 +190,7 @@ exports.PostEditCategoria = (req, res, next) => {
 };
 
 exports.PostDeleteCategoria = async (req, res, next) => {
-  const comercioId = req.session.user.id;
+  const comercioId = verificUseer(req, res, next);
   const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){

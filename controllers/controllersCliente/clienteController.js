@@ -4,8 +4,10 @@ const modelComercio = require("../../models/modelComercios/comercio");
 const modelPedidos = require("../../models/modelCliente/pedido");
 const modelProductos = require("../../models/modelComercios/producto");
 const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
+  verificUseer(req, res, next);
   res.render("viewsCliente/home", {
     pageTitle: "Food Rush | Cliente",
     layout: "layoutCliente",
@@ -16,7 +18,7 @@ exports.getDirecciones = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
   // console.log(idCliente);
 
   const result = await modelDirecciones.findAll({
@@ -41,7 +43,7 @@ exports.getDireccionesAdd = (req, res, next) => {
 exports.postDireccionesAdd = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
   console.log("El id del cliente", idCliente);
 
   modelDirecciones
@@ -63,7 +65,7 @@ exports.getPerfil = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en el perfil, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   const cliente = await modelCliente.findOne({ where: { id: idCliente } });
   console.log(cliente.dataValues);
@@ -76,7 +78,7 @@ exports.getPerfil = async (req, res, next) => {
 };
 exports.getPedidos = async (req, res, next) => {
   try {
-    const idCliente = req.session.user.id;
+    const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
       where: { clientId: idCliente },
     });
@@ -132,10 +134,9 @@ exports.getPedidos = async (req, res, next) => {
 };
 
 exports.getDetallePedidos = async (req, res, next) => {
-
   //****************************** Bueno, laálogica ******************************\\
   const pedidoId = req.params.id;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   try {
     const resultPedido = await modelPedidos.findOne({
@@ -179,7 +180,7 @@ exports.getDetallePedidos = async (req, res, next) => {
 };
 
 exports.getEditPerfil = async (req, res, next) => {
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   const cliente = await modelCliente.findOne({ where: { id: idCliente } });
   res.render("viewsCliente/viewEditPerfil", {
@@ -193,7 +194,7 @@ exports.postEditPerfil = (req, res, next) => {
   const lastName = req.body.lastName;
   const phone = req.body.telefono;
   const imageProfile = req.file;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   modelCliente
     .update(
@@ -209,7 +210,7 @@ exports.postEditPerfil = (req, res, next) => {
 };
 exports.postEliminarDirrecion = (req, res, next) => {
   const idElemt = req.body.elemetnId;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   modelDirecciones
     .findOne({ where: { id: idElemt, clientId: idCliente } })
@@ -253,7 +254,7 @@ exports.getEditarDirrecion = (req, res, next) => {
 exports.postEditarDirrecion = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
   const direId = req.body.elemetnId;
   console.log("Direccion :", direccion);
   console.log("Lugar :", lugar);
