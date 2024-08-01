@@ -7,34 +7,43 @@ const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProd
 const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
-  verificUseer(req, res, next);
-  res.render("viewsCliente/home", {
-    pageTitle: "Food Rush | Cliente",
-    layout: "layoutCliente",
-    //layout: "layoutCliente",
-  });
+  try {
+    verificUseer(req, res, next);
+    res.render("viewsCliente/home", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      //layout: "layoutCliente",
+    });
+  } catch (error) {
+    console.log("El problema está en GETHOME >>> ", error);
+  }
 };
 exports.getDirecciones = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const idCliente = verificUseer(req, res, next);
-  // console.log(idCliente);
+  try {
+    const idCliente = verificUseer(req, res, next);
+    // console.log(idCliente);
 
-  const result = await modelDirecciones.findAll({
-    where: { clientId: idCliente },
-  });
-  const direcciones = result.map((result) => result.dataValues);
-  console.log(direcciones.length > 0);
+    const result = await modelDirecciones.findAll({
+      where: { clientId: idCliente },
+    });
+    const direcciones = result.map((result) => result.dataValues);
+    console.log(direcciones.length > 0);
 
-  res.render("viewsCliente/viewDirecciones", {
-    pageTitle: "Food Rush | Direcciones",
-    //layout: "layoutCliente",
-    Direcciones: direcciones,
-    hasDireccions: direcciones.length > 0,
-  });
+    res.render("viewsCliente/viewDirecciones", {
+      pageTitle: "Food Rush | Direcciones",
+      //layout: "layoutCliente",
+      Direcciones: direcciones,
+      hasDireccions: direcciones.length > 0,
+    });
+  } catch (error) {
+    console.log("El problema está en GETDIRECCIONES >>> ", error);
+  }
 };
 exports.getDireccionesAdd = (req, res, next) => {
+  verificUseer(req, res, next);
   res.render("viewsCliente/viewDireccionesAdd", {
     pageTitle: "Food Rush | Direcciones ",
     layout: "layoutCliente",
