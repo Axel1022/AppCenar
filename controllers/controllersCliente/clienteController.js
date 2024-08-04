@@ -4,6 +4,7 @@ const modelComercio = require("../../models/modelComercios/comercio");
 const modelPedidos = require("../../models/modelCliente/pedido");
 const modelProductos = require("../../models/modelComercios/producto");
 const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
+const modelFavoritos = require("../../models/modelCliente/favoritos");
 const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
@@ -64,10 +65,23 @@ exports.postDireccionesAdd = (req, res, next) => {
       console.log(error);
     });
 };
-exports.getFavoritos = (req, res, next) => {
+exports.getFavoritos = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
+  const items = await modelFavoritos.findAll({ where: { clientId: idCliente } });
+  const favoritos = items.map((result) => result.dataValues);
+  const comercios = await Promise.all(
+    favoritos.map(async (favorito) => {
+      const comercio = await modelComercio.findOne({
+        where: { id: favorito.tradeId },
+      });
+      return comercio.dataValues;
+    })
+  );
   res.render("viewsCliente/viewFavoritos", {
     pageTitle: "Food Rush | Favoritos",
     // layout: "layoutCliente",
+    Comercios: comercios,
+    has: comercios.length > 0,
   });
 };
 exports.getPerfil = async (req, res, next) => {
