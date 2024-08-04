@@ -5,6 +5,7 @@ const modelPedidos = require("../../models/modelCliente/pedido");
 const modelProductos = require("../../models/modelComercios/producto");
 const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
 const modelFavoritos = require("../../models/modelCliente/favoritos");
+const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
@@ -17,6 +18,84 @@ exports.getHome = async (req, res, next) => {
     });
   } catch (error) {
     console.log("El problema está en GETHOME >>> ", error);
+  }
+};
+exports.confirmarPedido = async (req, res, next) => {
+  //TODO: Aqui hay que hacer magia, xd
+  /*
+  !Al crear el pedido se debe guardar en el mismo, los productos seleccionados para ese
+  !pedido, el cliente que hizo el pedido, la dirección del cliente a la que se va entregar ese
+  !pedido, el comercio a quien se le hizo el pedido, el subtotal, fecha y hora de cuando se hizo
+  !el pedido y el total del pedido. Una vez creado el pedido se redirecciona al usuario al home
+  !del cliente donde se lista los tipos de comercios.
+   */
+  const idCliente = verificUseer(req, res, next);
+  const idDireccion = req.body.radioDire;
+  const idComercio = req.body.comercioID;
+
+  //?Tabla pedido
+
+  const now = new Date();
+  const formattedDate = now.toISOString().split("T")[0];
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+  const newPedido = await modelPedidos.create({
+    clientId: idCliente,
+    directionId: idDireccion,
+    tradeId: idComercio,
+    subTotal: 0,
+    date: formattedDate,
+    hour: formattedTime,
+    total: 0,
+    status: "Pendiente",
+  });
+  const idPedido = newPedido.dataValues.id;
+  const temProducts = await temProductos.findAll();
+  temProducts.forEach((element) => {
+    modelPedidoProducto.create({
+      pedidoId: idPedido,
+      productId: element.id,
+      producto_id: element.id,
+    });
+  });
+  await temProductos.destroy({
+    where: {},
+  });
+
+  console.log("Creado correctamente");
+
+  res.redirect("/cliente/home");
+};
+exports.getCompletarPedido = async (req, res, next) => {
+  try {
+    const idCliente = verificUseer(req, res, next);
+    const idComercio = req.params.idComercio;
+    const itemsProduct = await temProductos.findAll();
+    const productosFind = itemsProduct.map((producto) => producto.dataValues);
+    const itemsDirecciones = await modelDirecciones.findAll({
+      where: { clientId: idCliente },
+    });
+    const direccionesFind = itemsDirecciones.map(
+      (direccion) => direccion.dataValues
+    );
+
+    const itemsComercio = await modelComercio.findOne({
+      where: { id: idComercio },
+    });
+
+    res.render("viewsCliente/viewCompletarPedido", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      Orden: productosFind,
+      Direcciones: direccionesFind,
+      has: productosFind.length > 0,
+      Comercio: itemsComercio.dataValues,
+    });
+  } catch (error) {
+    console.log("El problema está en getCompletarPedido >>> ", error);
   }
 };
 exports.getDirecciones = async (req, res, next) => {
