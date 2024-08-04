@@ -20,7 +20,7 @@ exports.getHome = async (req, res, next) => {
 
 exports.getViewBebidas = async (req, res, next) => {
   const items = await Comercios.findAll({
-    where: { typeTrade: "Bebidas" },
+    where: { typeTrade: "Bars" },
   });
   const rsultRest = items.map((comercio) => comercio.dataValues);
 
@@ -61,7 +61,7 @@ exports.getViewPostres_Cafe = async (req, res, next) => {
 
 exports.getViewRestaurantes = async (req, res, next) => {
   const rsultRest = await Comercios.findAll({
-    where: { typeTrade: "Restaurante" },
+    where: { typeTrade: "Restaurantes" },
   });
   res.render("viewsComercios/viewRestaurantes", {
     pageTitle: "Food Rush | Restaurantes",
