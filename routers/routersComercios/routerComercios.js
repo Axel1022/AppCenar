@@ -14,8 +14,9 @@ router.get("/comercios/tiendas", comerciosController.getViewTiendas);
 //   comerciosController.getViewListProductsAndConfirmar
 // );
 router.get(
-  "/comercios/pedido/realizar/:id/:idProduct",
+  "/comercios/pedido/realizar/:id",
   comerciosController.getViewListProductsAndConfirmar
 );
-router.get("/producto/:id/:idProduct", comerciosController.getAddProduct);
+router.post("/agregarProducto/orden", comerciosController.AddProductPost);
+router.post("/eliminarProducto/orden", comerciosController.deleteProductPost);
 module.exports = router;
