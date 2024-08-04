@@ -19,23 +19,40 @@ exports.getHome = async (req, res, next) => {
 };
 
 exports.getViewBebidas = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Bebidas" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
+
   res.render("viewsComercios/viewBebidas", {
     pageTitle: "Food Rush | Bebidas",
-    //layout: "layoutCliente",
+    Bars: rsultRest,
+    has: rsultRest.length > 0,
   });
 };
 
 exports.getViewMercados = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Mercados" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
+
   res.render("viewsComercios/viewMercados", {
     pageTitle: "Food Rush | Mercados",
-    //layout: "layoutCliente",
+    Mercados: rsultRest,
+    has: rsultRest.length > 0,
   });
 };
 
 exports.getViewPostres_Cafe = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Cafeterias" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
   res.render("viewsComercios/viewPostres_Cafe", {
     pageTitle: "Food Rush | Postres y Café",
-    // layout: "layoutCliente",
+    has: rsultRest.length > 0,
+    Cafeterias: rsultRest,
   });
 };
 
@@ -69,11 +86,17 @@ exports.getViewSalud = async (req, res, next) => {
 };
 
 exports.getViewTiendas = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Tiendas" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
   res.render("viewsComercios/viewTiendas", {
     pageTitle: "Food Rush | Tiendas",
-    // layout: "layoutCliente",
+    has: rsultRest.length > 0,
+    Tiendas: rsultRest,
   });
 };
+
 exports.AddProductPost = async (req, res, next) => {
   verificUseer(req, res, next);
   const idProducto = req.body.idProducto;
@@ -104,6 +127,7 @@ exports.AddProductPost = async (req, res, next) => {
   }
   res.redirect(`/comercios/pedido/realizar/${idComercio}`);
 };
+
 exports.deleteProductPost = async (req, res, next) => {
   verificUseer(req, res, next);
   const idProducto = req.body.idProducto;
