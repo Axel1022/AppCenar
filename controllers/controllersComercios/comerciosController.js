@@ -2,6 +2,13 @@ const Comercios = require("../../models/modelComercios/comercio");
 const Pedidos = require("../../models/modelComercios/comercio");
 const Productos = require("../../models/modelComercios/producto");
 const verificUseer = require("../../utils/verificUserLog");
+const jsonFileHandler = require("../../utils/jsonFileHandler");
+const path = require("path");
+const dataPath = path.join(
+  path.dirname(require.main.filename),
+  "database",
+  "volatil.json"
+);
 
 exports.getHome = async (req, res, next) => {
   res.render("viewsComercios/home", {
@@ -66,13 +73,46 @@ exports.getViewTiendas = async (req, res, next) => {
     // layout: "layoutCliente",
   });
 };
+exports.getAddProduct = async (req, res, next) => {
+  verificUseer(req, res, next);
+  const idProducto = req.params.id;
+  const idComercio = req.params.idProduct;
+  const producto = await Productos.findOne({ where: { id: idProducto } });
+
+  if (producto) {
+    jsonFileHandler.ReadAllData(dataPath, (products) => {
+      products.push(producto);
+      jsonFileHandler.WriteData(dataPath, products);
+      res.json({ success: true, product: producto });
+    });
+  } else {
+    res.json({ success: false, message: "Producto no encontrado" });
+  }
+};
+exports.getDelProduct = async (req, res, next) => {};
 
 exports.getViewListProductsAndConfirmar = async (req, res, next) => {
   try {
     verificUseer(req, res, next);
     const comercioID = req.params.id;
     console.log("El id del comercio recibido: ", comercioID);
+    const idProduct = req.params.idProduct;
 
+    if (idProduct != "null") {
+      const producto = await Productos.findOne({ where: { id: idProduct } });
+      if (producto) {
+        jsonFileHandler.ReadAllData(dataPath, (products) => {
+          products.push(producto);
+          jsonFileHandler.WriteData(dataPath, products);
+        });
+        //! Esto es un peligro ------------
+        // req.session.isLoggedIn = true;
+        // req.session.user = {
+        //   id: id,
+        //   role: role,
+        // };
+      }
+    }
     const items = await Productos.findAll({ where: { tradeId: comercioID } });
     const comercio = await Comercios.findOne({ where: { id: comercioID } });
 
@@ -83,12 +123,30 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
 
     const rsultRest = items.map((producto) => producto.dataValues);
 
-    res.render("viewsComercios/viewListProductosAndConfirmar", {
-      pageTitle: "Food Rush | Realizar pedido",
-      Productos: rsultRest,
-      has: rsultRest.length > 0,
-      Comercio: comercio.dataValues,
+    const columnas = [[], []];
+    rsultRest.forEach((producto, index) => {
+      columnas[index % 2].push(producto);
     });
+    jsonFileHandler.ReadAllData(dataPath, (cb) => {
+      res.render("viewsComercios/viewListProductosAndConfirmar", {
+        pageTitle: "Food Rush | Realizar pedido",
+        columnas,
+        has: rsultRest.length > 0,
+        Comercio: comercio.dataValues,
+        Orden: cb,
+        hasOrden: cb.length > 0,
+      });
+    });
+  } catch (error) {
+    console.error("Error en getViewListProductsAndConfirmar: ", error);
+    next(error);
+  }
+};
+
+exports.getIdProductos = async (req, res, next) => {
+  try {
+    verificUseer(req, res, next);
+    const comercioID = req.params.id;
   } catch (error) {
     console.error("Error en getViewListProductsAndConfirmar: ", error);
     next(error);
