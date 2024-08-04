@@ -1,1 +1,68 @@
-[{"id":16,"name":"Producto 13","image":"imagen2.png","description":"Descripción del producto 13","price":"20.99","tradeId":9,"categoryId":2,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"},{"id":16,"name":"Producto 13","image":"imagen2.png","description":"Descripción del producto 13","price":"20.99","tradeId":9,"categoryId":2,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"},{"id":15,"name":"Producto 12","image":"imagen1.png","description":"Descripción del producto 12","price":"10.99","tradeId":9,"categoryId":1,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"},{"id":16,"name":"Producto 13","image":"imagen2.png","description":"Descripción del producto 13","price":"20.99","tradeId":9,"categoryId":2,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"},{"id":15,"name":"Producto 12","image":"imagen1.png","description":"Descripción del producto 12","price":"10.99","tradeId":9,"categoryId":1,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"},{"id":15,"name":"Producto 12","image":"imagen1.png","description":"Descripción del producto 12","price":"10.99","tradeId":9,"categoryId":1,"createdAt":"2024-08-01T00:21:43.000Z","updatedAt":"2024-08-01T00:21:43.000Z"}]
+[
+  {
+    "id": 16,
+    "name": "Producto 13",
+    "image": "imagen2.png",
+    "description": "Descripción del producto 13",
+    "price": "20.99",
+    "tradeId": 9,
+    "categoryId": 2,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  },
+  {
+    "id": 16,
+    "name": "Producto 13",
+    "image": "imagen2.png",
+    "description": "Descripción del producto 13",
+    "price": "20.99",
+    "tradeId": 9,
+    "categoryId": 2,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  },
+  {
+    "id": 15,
+    "name": "Producto 12",
+    "image": "imagen1.png",
+    "description": "Descripción del producto 12",
+    "price": "10.99",
+    "tradeId": 9,
+    "categoryId": 1,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  },
+  {
+    "id": 16,
+    "name": "Producto 13",
+    "image": "imagen2.png",
+    "description": "Descripción del producto 13",
+    "price": "20.99",
+    "tradeId": 9,
+    "categoryId": 2,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  },
+  {
+    "id": 15,
+    "name": "Producto 12",
+    "image": "imagen1.png",
+    "description": "Descripción del producto 12",
+    "price": "10.99",
+    "tradeId": 9,
+    "categoryId": 1,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  },
+  {
+    "id": 15,
+    "name": "Producto 12",
+    "image": "imagen1.png",
+    "description": "Descripción del producto 12",
+    "price": "10.99",
+    "tradeId": 9,
+    "categoryId": 1,
+    "createdAt": "2024-08-01T00:21:43.000Z",
+    "updatedAt": "2024-08-01T00:21:43.000Z"
+  }
+]
