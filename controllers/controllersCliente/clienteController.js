@@ -67,22 +67,47 @@ exports.postDireccionesAdd = (req, res, next) => {
 };
 exports.getFavoritos = async (req, res, next) => {
   const idCliente = verificUseer(req, res, next);
-  const items = await modelFavoritos.findAll({ where: { clientId: idCliente } });
+  const items = await modelFavoritos.findAll({
+    where: { clientId: idCliente },
+  });
   const favoritos = items.map((result) => result.dataValues);
   const comercios = await Promise.all(
     favoritos.map(async (favorito) => {
       const comercio = await modelComercio.findOne({
         where: { id: favorito.tradeId },
       });
-      return comercio.dataValues;
+      return { ...comercio.dataValues, idfavorito: favorito.id };
     })
   );
+
   res.render("viewsCliente/viewFavoritos", {
     pageTitle: "Food Rush | Favoritos",
     // layout: "layoutCliente",
     Comercios: comercios,
     has: comercios.length > 0,
   });
+};
+exports.DeleteFavoritosPost = async (req, res, next) => {
+  verificUseer(req, res, next);
+  const idFavorito = req.body.id;
+  modelFavoritos
+    .findOne({ where: { id: idFavorito } })
+    .then((favorito) => {
+      if (favorito) {
+        return favorito.destroy();
+      } else {
+        console.log("Favorito no encontrado");
+        res.redirect("/cliente/favoritos");
+      }
+    })
+    .then(() => {
+      console.log("Favorito eliminado");
+      res.redirect("/cliente/favoritos");
+    })
+    .catch((err) => {
+      console.error("Error al eliminar el favorito: ", err);
+      res.redirect("/cliente/favoritos");
+    });
 };
 exports.getPerfil = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en el perfil, etc...
