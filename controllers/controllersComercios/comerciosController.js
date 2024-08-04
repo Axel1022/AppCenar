@@ -28,6 +28,7 @@ exports.getViewBebidas = async (req, res, next) => {
     pageTitle: "Food Rush | Bebidas",
     Bars: rsultRest,
     has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
   });
 };
 
@@ -41,6 +42,7 @@ exports.getViewMercados = async (req, res, next) => {
     pageTitle: "Food Rush | Mercados",
     Mercados: rsultRest,
     has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
   });
 };
 
@@ -52,6 +54,7 @@ exports.getViewPostres_Cafe = async (req, res, next) => {
   res.render("viewsComercios/viewPostres_Cafe", {
     pageTitle: "Food Rush | Postres y Café",
     has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
     Cafeterias: rsultRest,
   });
 };
@@ -65,6 +68,7 @@ exports.getViewRestaurantes = async (req, res, next) => {
     // layout: "layoutCliente",
     Cantidad: rsultRest.length,
     Restaurantes: rsultRest,
+    Cantidad: rsultRest.length,
     has: rsultRest.length > 0,
   });
 };
@@ -94,6 +98,7 @@ exports.getViewTiendas = async (req, res, next) => {
     pageTitle: "Food Rush | Tiendas",
     has: rsultRest.length > 0,
     Tiendas: rsultRest,
+    Cantidad: rsultRest.length,
   });
 };
 
