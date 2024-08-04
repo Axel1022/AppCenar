@@ -1,9 +1,50 @@
-{{#if has}}
-  <h1 class="text-center"> {{Comercio.name}}</h1>
-  {{#each Productos}}
-    <img src="{{this.image}}" alt="{{this.descripcion}}" />
-    <h3>{{this.name}}</h3>
-  {{/each}}
-{{else}}
-  <h3>Lo siento, no tenemos productos disponibles</h3>
-{{/if}}
+<div class="container">
+  {{#if has}}
+    <div class="row">
+      <h1 class="text-center mb-5">{{Comercio.name}}</h1>
+      {{#each columnas}}
+        <div class="col-md-4">
+          {{#each this}}
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="card-title">{{name}}</h3>
+                <p class="card-text">{{description}}</p>
+                <p class="card-text">{{price}}</p>
+                <input type="hidden" value="{{id}}" />
+                <a
+                  type="submit"
+                  class="btn btn-primary"
+                  href="/comercios/pedido/realizar/{{../../Comercio.id}}/{{id}}"
+                >Agregar</a>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{/each}}
+      <div class="col-md-4">
+        <div class="card mb-4" id="orderList">
+          <div class="card-body">
+            <h3 class="card-title">Orden</h3>
+            {{#if hasOrden}}
+              {{#each Orden}}
+                <div class="row">
+                  <li
+                    class="list-item d-flex justify-content-between align-items-center p-2 mb-2 border"
+                  >
+                    <p class="mb-0">{{this.name}}</p>
+                    <p class="mb-0">RD$ {{this.price}}</p>
+                    <a class="btn btn-danger btn-sm">Eliminar</a>
+                  </li>
+                </div>
+              {{/each}}
+            {{else}}
+              <p class="card-text">Usted no ha seleccionado ningún pedido.</p>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <h3 class="text-center">Lo siento, no tenemos productos disponibles</h3>
+  {{/if}}
+</div>
