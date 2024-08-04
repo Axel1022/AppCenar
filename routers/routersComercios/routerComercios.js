@@ -9,8 +9,13 @@ router.get("/comercios/postres_cafe", comerciosController.getViewPostres_Cafe);
 router.get("/comercios/restaurantes", comerciosController.getViewRestaurantes);
 router.get("/comercios/salud", comerciosController.getViewSalud);
 router.get("/comercios/tiendas", comerciosController.getViewTiendas);
+// router.get(
+//   "/comercios/pedido/realizar/:id",
+//   comerciosController.getViewListProductsAndConfirmar
+// );
 router.get(
-  "/comercios/pedido/realizar/:id",
+  "/comercios/pedido/realizar/:id/:idProduct",
   comerciosController.getViewListProductsAndConfirmar
 );
+router.get("/producto/:id/:idProduct", comerciosController.getAddProduct);
 module.exports = router;
