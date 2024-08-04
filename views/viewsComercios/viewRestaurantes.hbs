@@ -12,31 +12,31 @@
 
   <h6 class="mb-4">{{Cantidad}} Restaurantes</h6>
 
-  <!-- Lista de restaurantes -->
+  <!-- Lista de Tienda -->
   {{#if has}}
     <ul class="list-unstyled">
-      {{#each Restaurantes as |restaurante|}}
+      {{#each Restaurantes}}
         <li class="mb-3">
           <a
-            href="#"
+            href="/comercios/pedido/realizar/{{this.id}}"
             class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
           >
             <img
-              src="/{{restaurante.logo}}"
-              alt="{{restaurante.name}}"
+              src="{{this.logo}}"
+              alt="{{this.name}}"
               class="img-fluid me-3"
               style="width: 100px; height: auto;"
             />
-            <p class="mb-0">{{restaurante.name}}</p>
+            <p class="mb-0">{{this.name}}</p>
+            {{! Le falta el corazon para ponerlo de favorito }}
           </a>
         </li>
       {{/each}}
     </ul>
   {{else}}
-  <h2>No hay restaurantes disponibles</h2>
+    <h2>No hay Restaurantes disponibles</h2>
 
   {{/if}}
-
   <div class="text-center mt-4">
     <button
       class="btn btn-secondary"

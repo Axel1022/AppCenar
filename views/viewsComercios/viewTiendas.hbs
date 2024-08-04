@@ -10,34 +10,37 @@
     <button type="submit" class="btn btn-primary">Buscar</button>
   </form>
 
-  <h6 class="mb-4">{{Cantidad}}51 Tiendas</h6>
+  <h6 class="mb-4">{{Cantidad}} Tiendas</h6>
 
   <!-- Lista de Tienda -->
   {{#if has}}
     <ul class="list-unstyled">
-      {{#each Restaurantes as |restaurante|}}
+      {{#each Tiendas}}
         <li class="mb-3">
           <a
-            href="#"
+            href="/comercios/pedido/realizar/{{this.id}}"
             class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
           >
             <img
-              src="/{{restaurante.logo}}"
-              alt="{{restaurante.name}}"
+              src="{{this.logo}}"
+              alt="{{this.name}}"
               class="img-fluid me-3"
               style="width: 100px; height: auto;"
             />
-            <p class="mb-0">{{restaurante.name}}</p>
+            <p class="mb-0">{{this.name}}</p>
+            {{! Le falta el corazon para ponerlo de favorito }}
           </a>
         </li>
       {{/each}}
     </ul>
   {{else}}
-  <h2>No hay tiendas disponibles</h2>
+    <h2>No hay Tiendas disponibles</h2>
 
   {{/if}}
-
   <div class="text-center mt-4">
-    <button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
+    <button
+      class="btn btn-secondary"
+      onclick="window.history.back();"
+    >Volver</button>
   </div>
 </div>
