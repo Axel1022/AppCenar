@@ -1,6 +1,7 @@
 const Categoria = require("../../models/modelComercios/categoria");
 const Productos = require("../../models/modelComercios/producto");
 const Comercio = require("../../models/modelComercios/comercio");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.GetProducts = async (req, res, next) => {
   if (!req.session.isLoggedIn || !req.session.user) {
