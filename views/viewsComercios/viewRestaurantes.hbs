@@ -1,20 +1,20 @@
 <div class="container my-4">
-  <form class="d-flex mb-4" action="">
-    <input
-      type="text"
-      class="form-control me-2"
-      placeholder="Buscar..."
-      aria-label="Buscar"
-      name="buscar"
-    />
-    <button type="submit" class="btn btn-primary">Buscar</button>
-  </form>
-
   <h6 class="mb-4">{{Cantidad}} Restaurantes</h6>
-
   <!-- Lista de Tienda -->
   {{#if has}}
     <ul class="list-unstyled">
+      <ul class="list-unstyled">
+      <form class="d-flex mb-4" action="">
+        <input
+          type="text"
+          class="form-control me-2"
+          placeholder="Buscar..."
+          aria-label="Buscar"
+          name="buscar"
+        />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+      <h6 class="mb-4">{{Cantidad}} Tiendas</h6>
       {{#each Restaurantes}}
         <li class="mb-3">
           <a
