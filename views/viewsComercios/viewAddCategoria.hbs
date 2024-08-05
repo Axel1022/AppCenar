@@ -1,18 +1,37 @@
 <div class="col-12 col-sm-6 offset-3 d-flex align-items-center justify-content-center">
+    
     <form action="/comercios/{{#if editMode}}EditarCategoria{{else}}AgregarCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
 
-      <h3>Agregar Categoria</h3>
+     {{#if editMode}}
+       <h3>Editar Categoria</h3>
+      {{else}}
+       <h3>Agregar Categoria</h3>
+      {{/if}}
+
        {{#if editMode}}
          <input type="hidden" value="{{categorias.id}}" name="id">
        {{/if}}
 
         <div class="form-group mt-3">
-            <label for="name">Nombre:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{#if editMode}}{{categorias.name}}{{/if}}" required>
-        </div>
+          <label for="name">Categoría:</label>
+          <select class="form-select" name="name" id="name" required>
+            <option value="" disabled selected>Selecciona una categoría</option>
+            {{#each opcionesCategoria}}
+
+              {{#if (compare this.value ../categorias.name )}}
+               <option value="{{this.value}}" selected>{{this.text}}</option>
+              {{else}}
+                <option value="{{this.value}}">{{this.text}}</option>
+              {{/if}}
+
+            {{/each}}
+          </select>
+          <div class="invalid-feedback">Por favor selecciona una categoría.</div>
+       </div>
+
         <div class="form-group mt-3">
-            <label for="description">Descripcion:</label><br>
-            <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}}</textarea>
+          <label for="description">Descripcion:</label><br>
+          <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}}</textarea>
         </div>
         <button type="submit" class="btn btn-primary float-end mt-3 btn-save">Guardar</button>
         <a href="/comercios/Categorias" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
