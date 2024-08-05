@@ -6,8 +6,10 @@ const deliveryController = require("../../controllers/controllersDelivery/delive
 router.get("/delivery/home",deliveryController.getHome);
 router.get('/home',deliveryController.getDeliveryHome);
 router.get('/pedido/:id',deliveryController.getPedidoDetail);
-router.get('/delivery/perfil',deliveryController.getDeliveryProfile);
+router.get('/delivery/perfil/',deliveryController.getDeliveryProfile);
 router.post('/perfil',deliveryController.postDeliveryProfile);
 router.post('/pedido/:id/completar',deliveryController.completePedido);
+router.get("/delivery/perfil/editar", deliveryController.getEditPerfil);
+router.post("/delivery/perfil/editar/post", deliveryController.postEditPerfil);
 
 module.exports = router;
