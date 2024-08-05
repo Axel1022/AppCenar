@@ -157,3 +157,55 @@ function calcularTotal(products) {
     totalQuantity,
   };
 }
+
+exports.getPerfil = async (req, res, next) =>{
+
+  const comercioId = req.session.user.id;
+
+  const comercio = await Comercios.findOne({ where: { id: comercioId} });
+  console.log(comercio.dataValues);
+
+  res.render("viewsComercios/viewPerfilComercio", {
+    pageTitle: "Food Rush | Perfil",
+    // layout: "layoutCliente",
+    comercio: comercio.dataValues,
+  });
+};
+
+exports.getEditPerfil = async (req, res, next) =>{
+
+  const comercioId = req.session.user.id;
+
+  const comercio = await Comercios.findOne({ where: { id: comercioId} });
+  console.log(comercio.dataValues);
+
+  res.render("viewsComercios/viewEditPerfil", {
+    pageTitle: "Food Rush | Perfil",
+    // layout: "layoutCliente",
+    comercio: comercio.dataValues,
+  });
+};
+
+exports.PostEditPerfil = (req, res, next) =>{
+  const name = req.body.name;
+  const phone = req.body.phone;
+  const email = req.body.email;
+  const role = req.body.role;
+  const logo = req.file;
+  const openTime = req.body.openTime;
+  const closeTime = req.body.closeTime;
+  const typeTrade = req.body.typeTrade;
+  const comercioId = req.session.user.id;
+
+   Comercios
+    .update({
+       name, phone, email, role, logo, openTime, closeTime, typeTrade, },
+      { where: { id: comercioId } }
+    )
+    .then(() => {
+      return res.redirect("/comercios/perfil");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}

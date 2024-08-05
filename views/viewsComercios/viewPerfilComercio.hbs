@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="card profile-card mx-auto">
+    <div class="card-header text-center">
+      <h2>Perfil de {{comercio.name}}</h2>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <img
+          src="{{comercio.logo}}"
+          alt="Imagen de perfil"
+          class="rounded-circle mb-3"
+          width="150"
+          height="150"
+        />
+        </div>
+      <ul class="list-unstyled profile-info text-left">
+        <li><strong>Nombre:</strong> {{comercio.name}}</li>
+        <li><strong>Email:</strong> {{comercio.email}}</li>
+        <li><strong>Teléfono:</strong> {{comercio.phone}}</li>
+        <li><strong>Horario de apertura:</strong> {{comercio.openTime}}</li>
+        <li><strong>Horario de cierre:</strong> {{comercio.closeTime}}</li>
+        <li><strong>Tipo de comercio:</strong> {{comercio.typeTrade}}</li>
+        <li><strong>Rol:</strong> {{comercio.role}}</li>
+      </ul>
+      <div class="mt-4 text-center">
+        <a href="/comercios/home" class="btn btn-secondary mr-2">Volver</a>
+        <a href="/comercios/perfil/editar" class="btn btn-primary">Editar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-card { max-width: 400px; border: 1px solid #ddd; border-radius: 10px;
+  background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); } .profile-info
+  li { padding: 10px 0; border-bottom: 1px solid #ddd; } .profile-info
+  li:last-child { border-bottom: none; } .profile-card img { border: 2px solid
+  #ddd; padding: 5px; background-color: #fff; }
+</style>

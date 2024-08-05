@@ -67,7 +67,8 @@ exports.GetAddProducts = (req, res, next) => {
                     pageTitle: "Food Rush | Agregar Producto",
                     hasProducto: productos.length > 0,
                     productos: productos,
-                    categorias: categoriasData
+                    categorias: categoriasData,
+    
                 });
             });
     })

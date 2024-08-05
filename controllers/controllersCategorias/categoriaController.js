@@ -30,7 +30,7 @@ exports.GetCategoria = async (req, res, next) => {
     });
 }
 
-exports.GetAddCategoria =  (req, res, next) => {
+exports.GetAddCategoria = async  (req, res, next) => {
    const comercioId = req.session.user.id;
    const usuario= req.session.user.role;
 
@@ -39,50 +39,251 @@ exports.GetAddCategoria =  (req, res, next) => {
         return res.redirect("/login");
     }
 
-   Categorias.findAll({
-        where: {tradeId: comercioId},
-        include: [{model: Comercio, as: "comercio"}]
-   })
-   .then((result) => {
-        const categorias  = result.map((result) => result.dataValues);
-
-        res.render("viewsComercios/viewAddCategoria", {
-            pageTitle: "Food Rush | Agregar Categorias",
-            hasCategoria: categorias.length > 0,
-            categorias: categorias
+    try {
+        const categorias = await Categorias.findAll({
+            where: { tradeId: comercioId },
+            include: [{ model: Comercio, as: "comercio" }]
         });
-    })
-    .catch((err) => {
-        console.error("Error al obtner las categorias:", err);
-    });
+
+        const comercio = await Comercio.findOne({
+            where: { id: comercioId }
+        });
+
+        if (!comercio) {
+            throw new Error("Comercio no encontrado");
+        }
+
+        const categoriaData = categorias.dataValues;
+        const tipoComercio = comercio.typeTrade; 
+
+       let opcionesCategoria = [];
+       switch(tipoComercio) {
+        case "restaurante":
+            opcionesCategoria =[
+                {value: "Entradas", text: "Entradas"},
+                {value: "Aperitivos", text: "Aperitivos"},
+                {value: "Platos Principales", text: "Platos Principales"},
+                {value: "Parrilladas", text: "Parrilladas"},
+                {value: "Postres", text: "Postres"},
+                {value: "Especialidades del chef", text: "Especialidades del chef"},
+                {value: "Menu infantil", text: "Menu infantil"},
+                {value: "Comida Vegana/Vegetariana", text: "Comida Vegana/Vegetariana"},
+            ];  break;
+
+        case "mercado" : 
+            opcionesCategoria = [
+                {value: "Frutas", text: "Frutas"},
+                {value: "Verduras y Vegetales", text: "Verduras y Vegetales"},
+                {value: "Carnes", text: "Carnes"},
+                {value: "Mariscos y Pescados", text: "Mariscos y Pescados"},
+                {value: "Lácteos", text: "Lácteos"},
+                {value: "Panadería", text: "Panadería"},
+                {value: "Alimentos enlatados", text: "Alimentos enlatados"},
+                {value: "Productos orgánicos", text: "Productos orgánicos"},
+                {value: "Granos y Cereales", text: "Granos y Cereales"},
+           ]; break;
+
+        case "tienda" :
+            opcionesCategoria =[
+                { value: "Ropa", text: "Ropa" },
+                { value: "Calzado", text: "Calzado" },
+                { value: "Accesorios", text: "Accesorios" },
+                { value: "Electrónica", text: "Electrónica" },
+                { value: "Hogar y Jardín", text: "Hogar y Jardín" },
+                { value: "Juguetes", text: "Juguetes" },
+                { value: "Belleza y Cuidado Personal", text: "Belleza y Cuidado Personal" },
+                { value: "Alimentos y Bebidas", text: "Alimentos y Bebidas" },
+                { value: "Papelería", text: "Papelería" },
+                { value: "Deportes", text: "Deportes" }
+            ]; break;
+
+        case "salud": 
+           opcionesCategoria = [
+                { value: "Farmacia", text: "Farmacia" },
+                { value: "Suplementos Nutricionales", text: "Suplementos Nutricionales" },
+                { value: "Productos de Cuidado Personal", text: "Productos de Cuidado Personal" },
+                { value: "Equipos Médicos", text: "Equipos Médicos" },
+                { value: "Productos para el Cuidado de la Piel", text: "Productos para el Cuidado de la Piel" },
+                { value: "Vitaminas", text: "Vitaminas" },
+                { value: "Productos para el Bienestar", text: "Productos para el Bienestar" },
+                { value: "Salud Dental", text: "Salud Dental" },
+                { value: "Cuidado del Cabello", text: "Cuidado del Cabello" },
+                { value: "Productos para el Manejo del Estrés", text: "Productos para el Manejo del Estrés" }
+           ]; break;
+          
+        case "drink":
+            opcionesCategoria = [
+                { value: "Jugos", text: "Jugos" },
+                { value: "Refrescos", text: "Refrescos" },
+                { value: "Agua", text: "Agua" },
+                { value: "Bebidas Energéticas", text: "Bebidas Energéticas" },
+                { value: "Licores", text: "Licores" },
+                { value: "Cervezas", text: "Cervezas" },
+                { value: "Vinos", text: "Vinos" },
+                { value: "Cócteles", text: "Cócteles" },
+                { value: "Bebidas sin Alcohol", text: "Bebidas sin Alcohol" },
+                { value: "Tés e Infusiones", text: "Tés e Infusiones" }
+            ]; break;
+              
+       case "cafe y postres":
+            opcionesCategoria = [
+                { value: "Café Clásico", text: "Café Clásico" },
+                { value: "Espresso y Americano", text: "Espresso y Americano" },
+                { value: "Café filtrado y Cold Brew", text: "Café filtrado y Cold Brew" },
+                { value: "Café Especiales", text: "Café Especiales" },
+                { value: "Latte y Cappuccino", text: "Latte y Cappuccino" },
+                { value: "Mocha y Café con leche", text: "Mocha y Café con leche" },
+                { value: "Postres Clásicos", text: "Postres Clásicos" },
+                { value: "Pasteles y Tartas", text: "Pasteles y Tartas" },
+                { value: "Galletas y Muffins", text: "Galletas y Muffins" },
+                { value: "Postres Especiales", text: "Postres Especiales" },
+                { value: "Helados y Brownies", text: "Helados y Brownies" },
+                { value: "Flanes y Mousse", text: "Flanes y Mousse" }
+            ]; break;
+       }
+        res.render("viewsComercios/viewAddCategoria", {
+            pageTitle: "Food Rush | Agregar Categorías",
+            categorias: categoriaData,
+            opcionesCategoria: opcionesCategoria,
+        });
+    } catch (err) {
+        console.error("Error al obtener las categorías:", err);
+        req.flash("errors", "Error al obtener las categorías.");
+        res.redirect("/login");
+    }
 };
 
-exports.GetEditCategoria = (req, res, next) => {
+exports.GetEditCategoria = async (req, res, next) => {
     const comercioId = req.session.user.id;
     const usuario = req.session.user.role;
+    const id = req.params.id;
 
     if(usuario !=="comercio"){
         req.flash("errors", "You dont have access to this area");
         return res.redirect("login");
     }
-    const id = req.params.id;
 
-    Categorias.findOne({
-        where: {id: id,
-            tradeId: comercioId
-        },
-        include: [{model: Comercio, as: "comercio"}]
-    })
-    .then((categorias) => {
+    try {
+        const comercio = await Comercio.findOne({
+            where: { id: comercioId }
+        });
+
+        if (!comercio) {
+            throw new Error("Comercio no encontrado");
+        }
+
+        const tipoComercio = comercio.typeTrade;
+        let categoria = null;
+        if (id) {
+            categoria = await Categorias.findOne({
+                where: { id: id, tradeId: comercioId }
+            });
+
+            if (!categoria) {
+                throw new Error("Categoría no encontrada");
+            }
+        }
+        const categoriasData = categoria.dataValues;
+
+        let opcionesCategoria = [];
+       switch(tipoComercio) {
+        case "restaurante":
+            opcionesCategoria =[
+                {value: "Entradas", text: "Entradas"},
+                {value: "Aperitivos", text: "Aperitivos"},
+                {value: "Platos Principales", text: "Platos Principales"},
+                {value: "Parrilladas", text: "Parrilladas"},
+                {value: "Postres", text: "Postres"},
+                {value: "Especialidades del chef", text: "Especialidades del chef"},
+                {value: "Menu infantil", text: "Menu infantil"},
+                {value: "Comida Vegana/Vegetariana", text: "Comida Vegana/Vegetariana"},
+            ];  break;
+
+        case "mercado" : 
+            opcionesCategoria = [
+                {value: "Frutas", text: "Frutas"},
+                {value: "Verduras y Vegetales", text: "Verduras y Vegetales"},
+                {value: "Carnes", text: "Carnes"},
+                {value: "Mariscos y Pescados", text: "Mariscos y Pescados"},
+                {value: "Lácteos", text: "Lácteos"},
+                {value: "Panadería", text: "Panadería"},
+                {value: "Alimentos enlatados", text: "Alimentos enlatados"},
+                {value: "Productos orgánicos", text: "Productos orgánicos"},
+                {value: "Granos y Cereales", text: "Granos y Cereales"},
+           ]; break;
+
+        case "tienda" :
+            opcionesCategoria =[
+                { value: "Ropa", text: "Ropa" },
+                { value: "Calzado", text: "Calzado" },
+                { value: "Accesorios", text: "Accesorios" },
+                { value: "Electrónica", text: "Electrónica" },
+                { value: "Hogar y Jardín", text: "Hogar y Jardín" },
+                { value: "Juguetes", text: "Juguetes" },
+                { value: "Belleza y Cuidado Personal", text: "Belleza y Cuidado Personal" },
+                { value: "Alimentos y Bebidas", text: "Alimentos y Bebidas" },
+                { value: "Papelería", text: "Papelería" },
+                { value: "Deportes", text: "Deportes" }
+            ]; break;
+
+        case "salud": 
+           opcionesCategoria = [
+                { value: "Farmacia", text: "Farmacia" },
+                { value: "Suplementos Nutricionales", text: "Suplementos Nutricionales" },
+                { value: "Productos de Cuidado Personal", text: "Productos de Cuidado Personal" },
+                { value: "Equipos Médicos", text: "Equipos Médicos" },
+                { value: "Productos para el Cuidado de la Piel", text: "Productos para el Cuidado de la Piel" },
+                { value: "Vitaminas", text: "Vitaminas" },
+                { value: "Productos para el Bienestar", text: "Productos para el Bienestar" },
+                { value: "Salud Dental", text: "Salud Dental" },
+                { value: "Cuidado del Cabello", text: "Cuidado del Cabello" },
+                { value: "Productos para el Manejo del Estrés", text: "Productos para el Manejo del Estrés" }
+           ]; break;
+          
+        case "drink":
+            opcionesCategoria = [
+                { value: "Jugos", text: "Jugos" },
+                { value: "Refrescos", text: "Refrescos" },
+                { value: "Agua", text: "Agua" },
+                { value: "Bebidas Energéticas", text: "Bebidas Energéticas" },
+                { value: "Licores", text: "Licores" },
+                { value: "Cervezas", text: "Cervezas" },
+                { value: "Vinos", text: "Vinos" },
+                { value: "Cócteles", text: "Cócteles" },
+                { value: "Bebidas sin Alcohol", text: "Bebidas sin Alcohol" },
+                { value: "Tés e Infusiones", text: "Tés e Infusiones" }
+            ]; break;
+              
+       case "cafe y postres":
+            opcionesCategoria = [
+                { value: "Café Clásico", text: "Café Clásico" },
+                { value: "Espresso y Americano", text: "Espresso y Americano" },
+                { value: "Café filtrado y Cold Brew", text: "Café filtrado y Cold Brew" },
+                { value: "Café Especiales", text: "Café Especiales" },
+                { value: "Latte y Cappuccino", text: "Latte y Cappuccino" },
+                { value: "Mocha y Café con leche", text: "Mocha y Café con leche" },
+                { value: "Postres Clásicos", text: "Postres Clásicos" },
+                { value: "Pasteles y Tartas", text: "Pasteles y Tartas" },
+                { value: "Galletas y Muffins", text: "Galletas y Muffins" },
+                { value: "Postres Especiales", text: "Postres Especiales" },
+                { value: "Helados y Brownies", text: "Helados y Brownies" },
+                { value: "Flanes y Mousse", text: "Flanes y Mousse" }
+            ]; break;
+       }
+
+       console.log("Opciones: " , opcionesCategoria)
+       
+       console.log("Lista de opciones", opcionesCategoria);
         res.render("viewsComercios/viewAddCategoria", {
             pageTitle: "Food Rush | Editar Producto",
-            categorias: categorias.dataValues,
+            categorias: categoriasData,
+            opcionesCategoria: opcionesCategoria,
             editMode: true
         });
-    })
-    .catch((err) => {
+
+    } catch (error) {
         console.error("Error al obtener las categorías:", err);
-    });
+    }
 }
 
 exports.GetDeleteCategoria = (req, res, next) => {

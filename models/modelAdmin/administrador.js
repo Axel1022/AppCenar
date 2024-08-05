@@ -37,6 +37,9 @@ const Administrador = sequelize.define("administrador", {
         type: Sequelize.STRING,
         allowNull: false,
     },
+    token:{
+        type: Sequelize.STRING,
+    },
 })
 
 module.exports = Administrador;

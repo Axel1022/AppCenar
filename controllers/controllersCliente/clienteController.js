@@ -74,6 +74,7 @@ exports.getPerfil = async (req, res, next) => {
     Cliente: cliente.dataValues,
   });
 };
+
 exports.getPedidos = async (req, res, next) => {
   try {
     const idCliente = req.session.user.id;
