@@ -36,6 +36,7 @@ exports.confirmarPedido = async (req, res, next) => {
   //?Tabla pedido
 
   const now = new Date();
+  now.setDate(now.getDate() - 1); 
   const formattedDate = now.toISOString().split("T")[0];
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
