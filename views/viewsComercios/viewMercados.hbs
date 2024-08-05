@@ -13,24 +13,29 @@
   <h6 class="mb-4">{{Cantidad}} 1021 Mercados</h6>
 
   <!-- Lista de Mercados -->
-  <ul class="list-unstyled">
-    {{#each Mercados as |Mercado|}}
-      <li class="mb-3">
-        <a
-          href="#"
-          class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
-        >
-          <img
-            src="/{{Mercado.logo}}"
-            alt="{{Mercado.name}}"
-            class="img-fluid me-3"
-            style="width: 100px; height: auto;"
-          />
-          <p class="mb-0">{{Mercado.name}}</p>
-        </a>
-      </li>
-    {{/each}}
-  </ul>
+   {{#if has}}
+    <ul class="list-unstyled">
+      {{#each Restaurantes as |restaurante|}}
+        <li class="mb-3">
+          <a
+            href="#"
+            class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
+          >
+            <img
+              src="/{{restaurante.logo}}"
+              alt="{{restaurante.name}}"
+              class="img-fluid me-3"
+              style="width: 100px; height: auto;"
+            />
+            <p class="mb-0">{{restaurante.name}}</p>
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+  <h2>No hay mercados disponibles</h2>
+
+  {{/if}}
   <div class="text-center mt-4">
     <button
       class="btn btn-secondary"

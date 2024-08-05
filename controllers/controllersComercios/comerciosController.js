@@ -1,6 +1,7 @@
 const Comercios = require("../../models/modelComercios/comercio");
 const Pedidos = require("../../models/modelComercios/comercio");
 const Productos = require("../../models/modelComercios/producto");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
   res.render("viewsComercios/home", {
@@ -39,13 +40,23 @@ exports.getViewRestaurantes = async (req, res, next) => {
     // layout: "layoutCliente",
     Cantidad: rsultRest.length,
     Restaurantes: rsultRest,
+    has: rsultRest.length > 0,
   });
 };
 
 exports.getViewSalud = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Salud" },
+  });
+  rsultRest = items.map((comercio) => comercio.dataValues);
+
+  // console.log("Resultado de la busqueda: ", rsultRest);
   res.render("viewsComercios/viewSalud", {
     pageTitle: "Food Rush | Salud",
     //layout: "layoutCliente",
+    Farmacias: rsultRest,
+    Cantidad: rsultRest.length,
+    has: rsultRest.length > 0,
   });
 };
 
@@ -54,6 +65,34 @@ exports.getViewTiendas = async (req, res, next) => {
     pageTitle: "Food Rush | Tiendas",
     // layout: "layoutCliente",
   });
+};
+
+exports.getViewListProductsAndConfirmar = async (req, res, next) => {
+  try {
+    verificUseer(req, res, next);
+    const comercioID = req.params.id;
+    console.log("El id del comercio recibido: ", comercioID);
+
+    const items = await Productos.findAll({ where: { tradeId: comercioID } });
+    const comercio = await Comercios.findOne({ where: { id: comercioID } });
+
+    if (!comercio) {
+      console.error("No se encontró el comercio con id: ", comercioID);
+      return res.status(404).send("Comercio no encontrado");
+    }
+
+    const rsultRest = items.map((producto) => producto.dataValues);
+
+    res.render("viewsComercios/viewListProductosAndConfirmar", {
+      pageTitle: "Food Rush | Realizar pedido",
+      Productos: rsultRest,
+      has: rsultRest.length > 0,
+      Comercio: comercio.dataValues,
+    });
+  } catch (error) {
+    console.error("Error en getViewListProductsAndConfirmar: ", error);
+    next(error);
+  }
 };
 
 exports.getComercios = async (req, res, next) => {

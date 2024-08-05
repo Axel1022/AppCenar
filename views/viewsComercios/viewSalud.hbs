@@ -10,25 +10,33 @@
     <button type="submit" class="btn btn-primary">Buscar</button>
   </form>
 
-  <h6 class="mb-4">{{Cantidad}}51 Farnacias</h6>
+  <h6 class="mb-4">{{Cantidad}} Farnacias</h6>
 
   <!-- Lista de Tienda -->
-  <ul class="list-unstyled">
-    {{#each Farnacias as |Farnacia|}}
-      <li class="mb-3">
-        <a href="#" class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm">
-          <img
-            src="/{{Farnacia.logo}}"
-            alt="{{Farnacia.name}}"
-            class="img-fluid me-3"
-            style="width: 100px; height: auto;"
-          />
-          <p class="mb-0">{{Farnacia.name}}</p>
-        </a>
-      </li>
-    {{/each}}
-  </ul>
+  {{#if has}}
+    <ul class="list-unstyled">
+      {{#each Farmacias}}
+        <li class="mb-3">
+          <a
+            href="/comercios/pedido/realizar/{{this.id}}"
+            class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
+          >
+            <img
+              src="{{this.logo}}"
+              alt="{{this.name}}"
+              class="img-fluid me-3"
+              style="width: 100px; height: auto;"
+            />
+            <p class="mb-0">{{this.name}}</p>
+            {{!-- Le falta el corazon para ponerlo de favorito --}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+  <h2>No hay Farmacias disponibles</h2>
 
+  {{/if}}
   <div class="text-center mt-4">
     <button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
   </div>
