@@ -1,0 +1,69 @@
+<div class="container my-5">
+  {{#if has}}
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center mb-5">{{Comercio.name}}</h1>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          {{#each Productos}}
+            <div class="col-md-6 mb-4">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                  <img src="{{this.image}}" class="card-img-top" alt="imagen de {{this.name}}">
+                  <h3 class="card-title">{{this.name}}</h3>
+                  <p class="card-text">{{this.description}}</p>
+                  <p class="card-text font-weight-bold">RD$ {{this.price}}</p>
+                  <form method="post" action="/agregarProducto/orden" class="mt-auto">
+                    <input type="hidden" value="{{this.id}}" name="idProducto" />
+                    <input type="hidden" value="{{../Comercio.id}}" name="idComercio" />
+                    <button type="submit" class="btn btn-primary w-100">
+                      Agregar
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4 shadow-sm" id="orderList">
+          <div class="card-body">
+            <h3 class="card-title">Orden</h3>
+            {{#if hasOrden}}
+              <ul class="list-group">
+                {{#each Orden}}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <img src="{{this.image}}" class="img-thumbnail" alt="imagen de {{this.name}}">
+                    <span>{{this.name}}</span>
+                    <span>RD$ {{this.price}}</span>
+                    <form method="post" action="/eliminarProducto/orden" class="ml-3">
+                      <input type="hidden" value="{{this.id}}" name="idProducto" />
+                      <input type="hidden" value="{{../Comercio.id}}" name="idComercio" />
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        Eliminar
+                      </button>
+                    </form>
+                  </li>
+                {{/each}}
+              </ul>
+               <li class="list-group-item d-flex justify-content-between align-items-center m-2">
+                  <strong>Subtotal:</strong>
+                  <span>RD$ 150</span>
+                </li>
+                <a href="/cliente/completar/pedido/{{Comercio.id}}" class="btn btn-primary d-flex justify-content-between align-items-center">
+                  Continuar
+                </a>
+            {{else}}
+              <p class="card-text">Usted no ha seleccionado ningún pedido.</p>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <h3 class="text-center">Lo siento, no tenemos productos disponibles</h3>
+<a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-primary">Volver</a>
+  {{/if}}
+</div>

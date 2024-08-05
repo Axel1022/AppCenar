@@ -9,4 +9,14 @@ router.get("/comercios/postres_cafe", comerciosController.getViewPostres_Cafe);
 router.get("/comercios/restaurantes", comerciosController.getViewRestaurantes);
 router.get("/comercios/salud", comerciosController.getViewSalud);
 router.get("/comercios/tiendas", comerciosController.getViewTiendas);
+// router.get(
+//   "/comercios/pedido/realizar/:id",
+//   comerciosController.getViewListProductsAndConfirmar
+// );
+router.get(
+  "/comercios/pedido/realizar/:id",
+  comerciosController.getViewListProductsAndConfirmar
+);
+router.post("/agregarProducto/orden", comerciosController.AddProductPost);
+router.post("/eliminarProducto/orden", comerciosController.deleteProductPost);
 module.exports = router;

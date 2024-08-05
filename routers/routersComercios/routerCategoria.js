@@ -8,6 +8,6 @@ router.get("/comercios/EditarCategoria/:id", categoriaController.GetEditCategori
 router.get("/comercios/EliminarCategoria/:id", categoriaController.GetDeleteCategoria);
 router.post("/comercios/AgregarCategoria", categoriaController.PostAddCategorias);
 router.post("/comercios/EditarCategoria", categoriaController.PostEditCategoria);
-router.post("/comercios/DeleteCategoria", categoriaController.PostDeleteCategoria);
+router.post("/comercios/EliminarCategoria", categoriaController.PostDeleteCategoria);
 
 module.exports = router;

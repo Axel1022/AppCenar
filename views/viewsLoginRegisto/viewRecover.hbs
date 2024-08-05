@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-12">
+        <h2>Recuperar Contraseña</h2>
+
+        {{#if token}}
+
+        <h6>Ingresa la nueva contraseña</h6>
+       <form method="post" action="/recover-password" class="needs-validation" novalidate>
+         <input type="hidden" name="token" value="{{token}}" />
+
+         <div class="form-group">
+                <label for="password" class="mt-4">Contraseña</label>
+                <input
+                type="password"
+                class="form-control mt-2"
+                name="password"
+                id="password"
+                placeholder="Ingresa la nueva contraseña"
+                required
+                />
+                <div class="valid-feedback">Good!</div>
+                <div class="invalid-feedback">Please enter a password.</div>
+         </div>
+
+         <div class="form-group mb-4">
+                <label for="password" class="mt-4">Confirmar contraseña</label>
+                <input
+                type="password"
+                class="form-control mt-2"
+                name="confirmPassword"
+                id="confirmPassword"
+                placeholder="Ingresa la nueva contraseña nuevamente"
+                required
+                />
+                <div class="valid-feedback">Good!</div>
+                <div class="invalid-feedback">Please enter an password again.</div>
+        </div>
+          <button type="submit" class="btn btn-primary btn-block mb-4 ">Enviar</button>
+       </form>
+       {{else}}
+
+       <h5>No tienes ningun token para recuperar contrasna para acceder a esta pagina</h5>
+       {{/if}}
+    </div>
+</div>
