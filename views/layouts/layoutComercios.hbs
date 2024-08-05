@@ -54,7 +54,7 @@
               </a>
             </li>
             <li class="nav-item m-2">
-              <a class="nav-link" href="/perfilComercio">
+              <a class="nav-link" href="/comercios/perfil">
                 <img
                   src="/assets/img/avatar-de-usuario.png"
                   width="25"
@@ -147,7 +147,22 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-    
+    <script>
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+    </script>
   </body>
 
 </html>

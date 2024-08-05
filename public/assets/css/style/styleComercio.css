@@ -55,9 +55,15 @@ a {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.card-image-prod{
+    height: 200px;
+    width: 300px;
+}
+
+
 .card-image-prod img {
-    height: 350px;
-    width: 100%;
+    height: 300px;
+    width: 206px;
     border-radius: 8px 8px 0px 0;
 }
 
@@ -94,7 +100,7 @@ a {
 }
 
 .card-text-prod {
-    padding: 10px 15px;
+    padding: 3px 5px;
     background: #fff;
     font-size: 14px;
     color: #636262;
@@ -108,8 +114,8 @@ a {
 .card-button-edit, .card-button-delete {
     display: flex;
     justify-content: center;
-    padding: 10px 0;
     width: 50%;
+    height: 30px;
     color: #fff;
     margin: 3px;
     border-radius: 4px;
@@ -170,8 +176,8 @@ a {
 }
 
 .card-body-prod{
-    width: 350px;
-    height: 600px;
+    width: 230px;
+    height: 200px;
 }
 
 .card-home-com {

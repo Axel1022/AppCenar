@@ -6,29 +6,25 @@
         <div class="card-home-com">
 
          <div class="card-content">
-                <div class="card-img-com">
-                    <img src="{{comercio.logo}}"  class="card-img">
-                </div>
+            <div class="card-img-com">
+              <img src="{{comercios.logo}}"  class="card-img">
+          </div>
 
-              <card class="text">
-                <div class="card-info">
-                    <div class="header">
-                        <h4 class="card-title">{{pedidos.status}}</h4> 
-                        <p class="card-text-com">{{pedidos.fecha}} - {{pedidos.hora}}</p>
-                    </div>
+          <card class="text">
+            <div class="card-info">
+              <div class="header">
+                <h4 class="card-title">{{pedidos.status}}</h4> 
+                <p class="card-text-com">{{pedidos.fecha}} - {{pedidos.hora}}</p>
               </div>
+          </div>
 
-                <div class="card-details">
-                    <h6>{{comercio.name}}</h6>
-                    <p class="card-text-com">{{pedidos.total}} - {{pedidos.quantity}}</p> 
-                </div>
-                
-
-                {{#if estado}}
-                <a href="#">Asignar a delivery</a>
-                {{/if}}
-              </card>
-         </div>
+          <div class="card-details">
+            <h6>{{comercios.name}}</h6>
+            <p class="card-text-com">{{pedidos.total}} - {{pedidos.quantity}}</p> 
+          </div>
+          
+        </card>
+    </div>
 
         </div>
       {{/each}}

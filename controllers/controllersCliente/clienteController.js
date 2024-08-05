@@ -7,6 +7,7 @@ const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProd
 const modelFavoritos = require("../../models/modelCliente/favoritos");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
+const calcularTotal = require("../../utils/calcularTotal");
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -69,6 +70,7 @@ exports.confirmarPedido = async (req, res, next) => {
 
   res.redirect("/cliente/home");
 };
+
 exports.getCompletarPedido = async (req, res, next) => {
   try {
     const idCliente = verificUseer(req, res, next);
@@ -86,6 +88,8 @@ exports.getCompletarPedido = async (req, res, next) => {
       where: { id: idComercio },
     });
 
+    const total = calcularTotal(productosFind);
+
     res.render("viewsCliente/viewCompletarPedido", {
       pageTitle: "Food Rush | Cliente",
       layout: "layoutCliente",
@@ -94,6 +98,8 @@ exports.getCompletarPedido = async (req, res, next) => {
       has: productosFind.length > 0,
       Comercio: itemsComercio.dataValues,
       hasDire: direccionesFind.length > 0,
+      test: total.subTotal,
+      testTotal: total.total
     });
   } catch (error) {
     console.log("El problema está en getCompletarPedido >>> ", error);
@@ -241,6 +247,7 @@ exports.getPedidos = async (req, res, next) => {
           })
         );
 
+
         return {
           ...pedido.dataValues,
           comercio: comercio ? comercio.logo : null,
@@ -249,7 +256,7 @@ exports.getPedidos = async (req, res, next) => {
         };
       })
     );
-
+     
     res.render("viewsCliente/viewPedidos", {
       pageTitle: "Food Rush | Pedidos",
       layout: "layoutCliente",
@@ -300,6 +307,7 @@ exports.getDetallePedidos = async (req, res, next) => {
       Pedido: resultPedido.dataValues,
       Productos: productos,
       Comercio: resultComercio.dataValues,
+      test: total.total,
       //? Ya esto es monte y culebra, xd
     });
   } catch (error) {
