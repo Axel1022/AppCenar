@@ -1,4 +1,3 @@
-// controllers/controllersDelivery/deliveryController.js
 
 exports.getHome = async (req, res, next) => {
   res.render("viewsDelivery/home", {
