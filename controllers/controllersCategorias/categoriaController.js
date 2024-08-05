@@ -2,10 +2,11 @@ const { captureRejectionSymbol } = require("nodemailer/lib/xoauth2");
 const Categorias = require("../../models/modelComercios/categoria");
 const Comercio = require("../../models/modelComercios/comercio");
 const Producto = require("../../models/modelComercios/producto");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.GetCategoria = async (req, res, next) => {
 
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
 
     const categorias = await Categorias.findAll({
         where: {tradeId: comercioId},
@@ -54,7 +55,7 @@ exports.GetAddCategoria = async  (req, res, next) => {
         }
 
         const categoriaData = categorias.dataValues;
-        const tipoComercio = comercio.typeTrade; 
+        const tipoComercio = comercio.typeTrade;
 
        let opcionesCategoria = [];
        switch(tipoComercio) {
@@ -70,7 +71,7 @@ exports.GetAddCategoria = async  (req, res, next) => {
                 {value: "Comida Vegana/Vegetariana", text: "Comida Vegana/Vegetariana"},
             ];  break;
 
-        case "mercado" : 
+        case "mercado" :
             opcionesCategoria = [
                 {value: "Frutas", text: "Frutas"},
                 {value: "Verduras y Vegetales", text: "Verduras y Vegetales"},
@@ -97,7 +98,7 @@ exports.GetAddCategoria = async  (req, res, next) => {
                 { value: "Deportes", text: "Deportes" }
             ]; break;
 
-        case "salud": 
+        case "salud":
            opcionesCategoria = [
                 { value: "Farmacia", text: "Farmacia" },
                 { value: "Suplementos Nutricionales", text: "Suplementos Nutricionales" },
@@ -110,7 +111,7 @@ exports.GetAddCategoria = async  (req, res, next) => {
                 { value: "Cuidado del Cabello", text: "Cuidado del Cabello" },
                 { value: "Productos para el Manejo del Estrés", text: "Productos para el Manejo del Estrés" }
            ]; break;
-          
+
         case "drink":
             opcionesCategoria = [
                 { value: "Jugos", text: "Jugos" },
@@ -124,7 +125,7 @@ exports.GetAddCategoria = async  (req, res, next) => {
                 { value: "Bebidas sin Alcohol", text: "Bebidas sin Alcohol" },
                 { value: "Tés e Infusiones", text: "Tés e Infusiones" }
             ]; break;
-              
+
        case "cafe y postres":
             opcionesCategoria = [
                 { value: "Café Clásico", text: "Café Clásico" },
@@ -199,7 +200,7 @@ exports.GetEditCategoria = async (req, res, next) => {
                 {value: "Comida Vegana/Vegetariana", text: "Comida Vegana/Vegetariana"},
             ];  break;
 
-        case "mercado" : 
+        case "mercado" :
             opcionesCategoria = [
                 {value: "Frutas", text: "Frutas"},
                 {value: "Verduras y Vegetales", text: "Verduras y Vegetales"},
@@ -226,7 +227,7 @@ exports.GetEditCategoria = async (req, res, next) => {
                 { value: "Deportes", text: "Deportes" }
             ]; break;
 
-        case "salud": 
+        case "salud":
            opcionesCategoria = [
                 { value: "Farmacia", text: "Farmacia" },
                 { value: "Suplementos Nutricionales", text: "Suplementos Nutricionales" },
@@ -239,7 +240,7 @@ exports.GetEditCategoria = async (req, res, next) => {
                 { value: "Cuidado del Cabello", text: "Cuidado del Cabello" },
                 { value: "Productos para el Manejo del Estrés", text: "Productos para el Manejo del Estrés" }
            ]; break;
-          
+
         case "drink":
             opcionesCategoria = [
                 { value: "Jugos", text: "Jugos" },
@@ -253,7 +254,7 @@ exports.GetEditCategoria = async (req, res, next) => {
                 { value: "Bebidas sin Alcohol", text: "Bebidas sin Alcohol" },
                 { value: "Tés e Infusiones", text: "Tés e Infusiones" }
             ]; break;
-              
+
        case "cafe y postres":
             opcionesCategoria = [
                 { value: "Café Clásico", text: "Café Clásico" },
@@ -272,7 +273,7 @@ exports.GetEditCategoria = async (req, res, next) => {
        }
 
        console.log("Opciones: " , opcionesCategoria)
-       
+
        console.log("Lista de opciones", opcionesCategoria);
         res.render("viewsComercios/viewAddCategoria", {
             pageTitle: "Food Rush | Editar Producto",
@@ -287,7 +288,7 @@ exports.GetEditCategoria = async (req, res, next) => {
 }
 
 exports.GetDeleteCategoria = (req, res, next) => {
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -320,7 +321,7 @@ exports.GetDeleteCategoria = (req, res, next) => {
 };
 
 exports.PostAddCategorias = (req, res, next) => {
-    const comercioId = req.session.user.id;
+    const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -345,7 +346,7 @@ exports.PostAddCategorias = (req, res, next) => {
 };
 
 exports.PostEditCategoria = (req, res, next) => {
- const comercioId = req.session.user.id;
+ const comercioId = verificUseer(req, res, next);
  const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){
@@ -390,7 +391,7 @@ exports.PostEditCategoria = (req, res, next) => {
 };
 
 exports.PostDeleteCategoria = async (req, res, next) => {
-  const comercioId = req.session.user.id;
+  const comercioId = verificUseer(req, res, next);
   const usuario = req.session.user.role;
 
     if(usuario !=="comercio"){

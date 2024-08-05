@@ -4,35 +4,127 @@ const modelComercio = require("../../models/modelComercios/comercio");
 const modelPedidos = require("../../models/modelCliente/pedido");
 const modelProductos = require("../../models/modelComercios/producto");
 const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
+const modelFavoritos = require("../../models/modelCliente/favoritos");
+const temProductos = require("../../models/modelCliente/pedidoTemporal");
+const verificUseer = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
-  res.render("viewsCliente/home", {
-    pageTitle: "Food Rush | Cliente",
-    layout: "layoutCliente",
-    //layout: "layoutCliente",
+  try {
+    verificUseer(req, res, next);
+    res.render("viewsCliente/home", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      //layout: "layoutCliente",
+    });
+  } catch (error) {
+    console.log("El problema está en GETHOME >>> ", error);
+  }
+};
+exports.confirmarPedido = async (req, res, next) => {
+  //TODO: Aqui hay que hacer magia, xd
+  /*
+  !Al crear el pedido se debe guardar en el mismo, los productos seleccionados para ese
+  !pedido, el cliente que hizo el pedido, la dirección del cliente a la que se va entregar ese
+  !pedido, el comercio a quien se le hizo el pedido, el subtotal, fecha y hora de cuando se hizo
+  !el pedido y el total del pedido. Una vez creado el pedido se redirecciona al usuario al home
+  !del cliente donde se lista los tipos de comercios.
+   */
+  const idCliente = verificUseer(req, res, next);
+  const idDireccion = req.body.radioDire;
+  const idComercio = req.body.comercioID;
+
+  //?Tabla pedido
+
+  const now = new Date();
+  const formattedDate = now.toISOString().split("T")[0];
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+  const newPedido = await modelPedidos.create({
+    clientId: idCliente,
+    directionId: idDireccion,
+    tradeId: idComercio,
+    subTotal: 0,
+    date: formattedDate,
+    hour: formattedTime,
+    total: 0,
+    status: "Pendiente",
   });
+  const idPedido = newPedido.dataValues.id;
+  const temProducts = await temProductos.findAll();
+  temProducts.forEach((element) => {
+    modelPedidoProducto.create({
+      pedidoId: idPedido,
+      productId: element.id,
+      producto_id: element.id,
+    });
+  });
+  await temProductos.destroy({
+    where: {},
+  });
+
+  console.log("Creado correctamente");
+
+  res.redirect("/cliente/home");
+};
+exports.getCompletarPedido = async (req, res, next) => {
+  try {
+    const idCliente = verificUseer(req, res, next);
+    const idComercio = req.params.idComercio;
+    const itemsProduct = await temProductos.findAll();
+    const productosFind = itemsProduct.map((producto) => producto.dataValues);
+    const itemsDirecciones = await modelDirecciones.findAll({
+      where: { clientId: idCliente },
+    });
+    const direccionesFind = itemsDirecciones.map(
+      (direccion) => direccion.dataValues
+    );
+
+    const itemsComercio = await modelComercio.findOne({
+      where: { id: idComercio },
+    });
+
+    res.render("viewsCliente/viewCompletarPedido", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      Orden: productosFind,
+      Direcciones: direccionesFind,
+      has: productosFind.length > 0,
+      Comercio: itemsComercio.dataValues,
+      hasDire: direccionesFind.length > 0,
+    });
+  } catch (error) {
+    console.log("El problema está en getCompletarPedido >>> ", error);
+  }
 };
 exports.getDirecciones = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const idCliente = req.session.user.id;
-  // console.log(idCliente);
+  try {
+    const idCliente = verificUseer(req, res, next);
+    // console.log(idCliente);
 
-  const result = await modelDirecciones.findAll({
-    where: { clientId: idCliente },
-  });
-  const direcciones = result.map((result) => result.dataValues);
-  console.log(direcciones.length > 0);
+    const result = await modelDirecciones.findAll({
+      where: { clientId: idCliente },
+    });
+    const direcciones = result.map((result) => result.dataValues);
+    console.log(direcciones.length > 0);
 
-  res.render("viewsCliente/viewDirecciones", {
-    pageTitle: "Food Rush | Direcciones",
-    //layout: "layoutCliente",
-    Direcciones: direcciones,
-    hasDireccions: direcciones.length > 0,
-  });
+    res.render("viewsCliente/viewDirecciones", {
+      pageTitle: "Food Rush | Direcciones",
+      //layout: "layoutCliente",
+      Direcciones: direcciones,
+      hasDireccions: direcciones.length > 0,
+    });
+  } catch (error) {
+    console.log("El problema está en GETDIRECCIONES >>> ", error);
+  }
 };
 exports.getDireccionesAdd = (req, res, next) => {
+  verificUseer(req, res, next);
   res.render("viewsCliente/viewDireccionesAdd", {
     pageTitle: "Food Rush | Direcciones ",
     layout: "layoutCliente",
@@ -41,7 +133,7 @@ exports.getDireccionesAdd = (req, res, next) => {
 exports.postDireccionesAdd = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
   console.log("El id del cliente", idCliente);
 
   modelDirecciones
@@ -53,17 +145,55 @@ exports.postDireccionesAdd = (req, res, next) => {
       console.log(error);
     });
 };
-exports.getFavoritos = (req, res, next) => {
+exports.getFavoritos = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
+  const items = await modelFavoritos.findAll({
+    where: { clientId: idCliente },
+  });
+  const favoritos = items.map((result) => result.dataValues);
+  const comercios = await Promise.all(
+    favoritos.map(async (favorito) => {
+      const comercio = await modelComercio.findOne({
+        where: { id: favorito.tradeId },
+      });
+      return { ...comercio.dataValues, idfavorito: favorito.id };
+    })
+  );
+
   res.render("viewsCliente/viewFavoritos", {
     pageTitle: "Food Rush | Favoritos",
     // layout: "layoutCliente",
+    Comercios: comercios,
+    has: comercios.length > 0,
   });
+};
+exports.DeleteFavoritosPost = async (req, res, next) => {
+  verificUseer(req, res, next);
+  const idFavorito = req.body.id;
+  modelFavoritos
+    .findOne({ where: { id: idFavorito } })
+    .then((favorito) => {
+      if (favorito) {
+        return favorito.destroy();
+      } else {
+        console.log("Favorito no encontrado");
+        res.redirect("/cliente/favoritos");
+      }
+    })
+    .then(() => {
+      console.log("Favorito eliminado");
+      res.redirect("/cliente/favoritos");
+    })
+    .catch((err) => {
+      console.error("Error al eliminar el favorito: ", err);
+      res.redirect("/cliente/favoritos");
+    });
 };
 exports.getPerfil = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en el perfil, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
 
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   const cliente = await modelCliente.findOne({ where: { id: idCliente } });
   console.log(cliente.dataValues);
@@ -77,7 +207,7 @@ exports.getPerfil = async (req, res, next) => {
 
 exports.getPedidos = async (req, res, next) => {
   try {
-    const idCliente = req.session.user.id;
+    const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
       where: { clientId: idCliente },
     });
@@ -133,10 +263,9 @@ exports.getPedidos = async (req, res, next) => {
 };
 
 exports.getDetallePedidos = async (req, res, next) => {
-
   //****************************** Bueno, laálogica ******************************\\
   const pedidoId = req.params.id;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   try {
     const resultPedido = await modelPedidos.findOne({
@@ -180,7 +309,7 @@ exports.getDetallePedidos = async (req, res, next) => {
 };
 
 exports.getEditPerfil = async (req, res, next) => {
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   const cliente = await modelCliente.findOne({ where: { id: idCliente } });
   res.render("viewsCliente/viewEditPerfil", {
@@ -194,7 +323,7 @@ exports.postEditPerfil = (req, res, next) => {
   const lastName = req.body.lastName;
   const phone = req.body.telefono;
   const imageProfile = req.file;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   modelCliente
     .update(
@@ -210,7 +339,7 @@ exports.postEditPerfil = (req, res, next) => {
 };
 exports.postEliminarDirrecion = (req, res, next) => {
   const idElemt = req.body.elemetnId;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
 
   modelDirecciones
     .findOne({ where: { id: idElemt, clientId: idCliente } })
@@ -254,7 +383,7 @@ exports.getEditarDirrecion = (req, res, next) => {
 exports.postEditarDirrecion = (req, res, next) => {
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
-  const idCliente = req.session.user.id;
+  const idCliente = verificUseer(req, res, next);
   const direId = req.body.elemetnId;
   console.log("Direccion :", direccion);
   console.log("Lugar :", lugar);

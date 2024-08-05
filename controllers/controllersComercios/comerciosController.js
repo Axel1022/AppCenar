@@ -1,7 +1,15 @@
 const Comercios = require("../../models/modelComercios/comercio");
 const Pedidos = require("../../models/modelComercios/comercio");
 const Productos = require("../../models/modelComercios/producto");
+const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
+const jsonFileHandler = require("../../utils/jsonFileHandler");
+const path = require("path");
+const dataPath = path.join(
+  path.dirname(require.main.filename),
+  "database",
+  "volatil.json"
+);
 
 exports.getHome = async (req, res, next) => {
   res.render("viewsComercios/home", {
@@ -11,35 +19,56 @@ exports.getHome = async (req, res, next) => {
 };
 
 exports.getViewBebidas = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Bars" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
+
   res.render("viewsComercios/viewBebidas", {
     pageTitle: "Food Rush | Bebidas",
-    //layout: "layoutCliente",
+    Bars: rsultRest,
+    has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
   });
 };
 
 exports.getViewMercados = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Mercados" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
+
   res.render("viewsComercios/viewMercados", {
     pageTitle: "Food Rush | Mercados",
-    //layout: "layoutCliente",
+    Mercados: rsultRest,
+    has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
   });
 };
 
 exports.getViewPostres_Cafe = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Cafeterias" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
   res.render("viewsComercios/viewPostres_Cafe", {
     pageTitle: "Food Rush | Postres y Café",
-    // layout: "layoutCliente",
+    has: rsultRest.length > 0,
+    Cantidad: rsultRest.length,
+    Cafeterias: rsultRest,
   });
 };
 
 exports.getViewRestaurantes = async (req, res, next) => {
   const rsultRest = await Comercios.findAll({
-    where: { typeTrade: "Restaurante" },
+    where: { typeTrade: "Restaurantes" },
   });
   res.render("viewsComercios/viewRestaurantes", {
     pageTitle: "Food Rush | Restaurantes",
     // layout: "layoutCliente",
     Cantidad: rsultRest.length,
     Restaurantes: rsultRest,
+    Cantidad: rsultRest.length,
     has: rsultRest.length > 0,
   });
 };
@@ -61,18 +90,76 @@ exports.getViewSalud = async (req, res, next) => {
 };
 
 exports.getViewTiendas = async (req, res, next) => {
+  const items = await Comercios.findAll({
+    where: { typeTrade: "Tiendas" },
+  });
+  const rsultRest = items.map((comercio) => comercio.dataValues);
   res.render("viewsComercios/viewTiendas", {
     pageTitle: "Food Rush | Tiendas",
-    // layout: "layoutCliente",
+    has: rsultRest.length > 0,
+    Tiendas: rsultRest,
+    Cantidad: rsultRest.length,
   });
+};
+
+exports.AddProductPost = async (req, res, next) => {
+  verificUseer(req, res, next);
+  const idProducto = req.body.idProducto;
+  const idComercio = req.body.idComercio;
+  const producto = await Productos.findOne({ where: { id: idProducto } });
+
+  if (producto) {
+    const productoExistente = await temProductos.findOne({
+      where: { id: idProducto },
+    });
+
+    if (!productoExistente) {
+      await temProductos.create({
+        id: producto.dataValues.id,
+        name: producto.dataValues.name,
+        image: producto.dataValues.image,
+        description: producto.dataValues.description,
+        price: producto.dataValues.price,
+        tradeId: producto.dataValues.tradeId,
+        categoryId: producto.dataValues.categoryId,
+      });
+      console.log("Producto agregado exitosamente a temProductos");
+    } else {
+      console.log("El producto ya existe en temProductos");
+    }
+  } else {
+    console.log("Error al encontrar el producto en Productos.");
+  }
+  res.redirect(`/comercios/pedido/realizar/${idComercio}`);
+};
+
+exports.deleteProductPost = async (req, res, next) => {
+  verificUseer(req, res, next);
+  const idProducto = req.body.idProducto;
+  const idComercio = req.body.idComercio;
+  console.log("Id del producto: " + idProducto);
+  console.log("Id del comercio: " + idComercio);
+  await temProductos
+    .findOne({ where: { id: idProducto } })
+    .then((producto) => {
+      if (producto) {
+        return producto.destroy();
+      } else {
+        console.log("Producto no encontrado");
+        return;
+      }
+    })
+    .catch((err) => {
+      console.error("Error al eliminar el producto: ", err);
+      return;
+    });
+  res.redirect(`/comercios/pedido/realizar/${idComercio}`);
 };
 
 exports.getViewListProductsAndConfirmar = async (req, res, next) => {
   try {
     verificUseer(req, res, next);
     const comercioID = req.params.id;
-    console.log("El id del comercio recibido: ", comercioID);
-
     const items = await Productos.findAll({ where: { tradeId: comercioID } });
     const comercio = await Comercios.findOne({ where: { id: comercioID } });
 
@@ -82,12 +169,16 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
     }
 
     const rsultRest = items.map((producto) => producto.dataValues);
+    const itemsProduct = await temProductos.findAll();
+    const productosFind = itemsProduct.map((producto) => producto.dataValues);
 
     res.render("viewsComercios/viewListProductosAndConfirmar", {
       pageTitle: "Food Rush | Realizar pedido",
-      Productos: rsultRest,
       has: rsultRest.length > 0,
       Comercio: comercio.dataValues,
+      Productos: rsultRest,
+      Orden: productosFind,
+      hasOrden: productosFind.length > 0,
     });
   } catch (error) {
     console.error("Error en getViewListProductsAndConfirmar: ", error);
@@ -95,8 +186,18 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
   }
 };
 
+exports.getIdProductos = async (req, res, next) => {
+  try {
+    verificUseer(req, res, next);
+    const comercioID = req.params.id;
+  } catch (error) {
+    console.error("Error en getViewListProductsAndConfirmar: ", error);
+    next(error);
+  }
+};
+
 exports.getComercios = async (req, res, next) => {
-  const comercioId = req.session.user.id;
+  const comercioId = verificUseer(req, res, next);
   const usuario = req.session.user.role;
 
   if (usuario !== "comercio") {
