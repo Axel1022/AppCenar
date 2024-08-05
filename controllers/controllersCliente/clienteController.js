@@ -93,6 +93,7 @@ exports.getCompletarPedido = async (req, res, next) => {
       Direcciones: direccionesFind,
       has: productosFind.length > 0,
       Comercio: itemsComercio.dataValues,
+      hasDire: direccionesFind.length > 0,
     });
   } catch (error) {
     console.log("El problema está en getCompletarPedido >>> ", error);
