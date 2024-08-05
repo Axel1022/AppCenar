@@ -2,7 +2,12 @@
 
     <form action="/comercios/{{#if editMode}}EditarProducto{{else}}AgregarProducto{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
       
-      <h3>Agregar Producto</h3>
+      {{#if editMode}}
+       <h3>Editar Producto</h3>
+      {{else}}
+       <h3>Agregar Producto</h3>
+      {{/if}}
+      
        {{#if editMode}}
          <input type="hidden" value="{{productos.id}}" name="id">
        {{/if}}
