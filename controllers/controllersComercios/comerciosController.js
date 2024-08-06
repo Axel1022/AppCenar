@@ -36,43 +36,32 @@ exports.getHome = async (req, res, next) => {
 
     const pedidos = await Pedidos.findAll({
       where: {tradeId: comercioId},
-      include: [{model: PedidosProducto, as: "pedidoProductos"}]
+      order: [["date", "DESC"], ["hour" , "DESC"]],
+      include:[{model: PedidosProducto, as: "pedidoProductos",
+        attributes: ["quantity", "productId"]
+      }]
     })
 
-  
-    const pedidoIds = pedidos.map(pedido => pedido.id);
-    const status = pedidos.filter(p => p.status === "pendiente")
 
-    const pedidoProducto = await PedidosProducto.findAll({
-      where: {pedidoId : pedidoIds},
-      include: [{model: Productos, as: "producto"}]
-    });
-  
-    const pedidosData = pedidos.map(pedido => ({
-      id: pedido.id,
-      ...pedido.dataValues,
-      productos: pedidoProducto
-      .filter(pp => pp.pedidoId === pedido.id)
-      .map(pp => {
-        if(pp.producto) {
-          return pp.producto.dataValues
-        }
-        else{
-          console.warn(`Producto no encontrado para pedido ${pp.pedidoId}`, )
-          return null;
-        }
-      })
-      .filter(producto => producto !== null)
+    const pedidosData = pedidos.map(p => ({
+      id: p.id,
+      date: p.date,
+      hour: p.hour,
+      total: p.total,
+      status: p.status,
+      totalProductos: p.pedidoProductos.reduce((sum, pp) => sum + pp.quantity, 0) 
     }));
+    
+    console.log("Pedidos:" , pedidosData);
+    console.log("Comercio", comercio
 
-
+    )
     
     res.render("viewsComercios/home", {
       pageTitle: "Food Rush | Pedidos Realizados",
-      comercios: comercio.dataValues,
+      comercio: comercio.dataValues,
       pedidos: pedidosData,
-      hasPedido: pedidosData.length > 0,
-      estado: status,
+      hasPedidos: pedidosData.length > 0,
     });
     
   } catch (error) {
@@ -313,6 +302,56 @@ exports.getComercios = async (req, res, next) => {
   }
 };
 
+exports.getDetails = async (req, res, next) => {
+  const pedidoId = req.params.id;
+  const comercioId = req.session.user.id;
+  const usuario = req.session.user.role;
+
+  if (usuario !== "comercio") {
+    req.flash("errors", "You don't have access to this area");
+    return res.redirect("/login");
+  }
+
+  try {
+    const comercio = await Comercios.findOne({
+      where: { id: comercioId }
+    });
+
+    if (!comercio) {
+      throw new Error("Comercio no encontrado");
+    }
+
+    const pedido = await Pedidos.findOne({
+      where: { id: pedidoId },
+      include: [
+        {
+          model: Productos,
+          as: 'producto',
+          through: {
+            attributes: ['quantity'] 
+          }
+        }
+      ]
+    });
+
+    if (!pedido) {
+      throw new Error("Pedido no encontrado");
+    }
+
+    const pedidoData = pedido.toJSON();
+    const comercioData = comercio.toJSON();
+
+    res.render("viewsComercios/viewDetail", {
+      pageTitle: "Detalle del Pedido",
+      comercio: comercioData,
+      pedido: pedidoData
+    });
+  } catch (error) {
+    console.error("Error al obtener los detalles del pedido:", error);
+    req.flash("errors", "Error al obtener los detalles del pedido.");
+    res.redirect("/login");
+  }
+};
 
 
 exports.getPerfil = async (req, res, next) =>{

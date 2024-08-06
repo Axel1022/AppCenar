@@ -12,6 +12,7 @@ router.get("/comercios/tiendas", comerciosController.getViewTiendas);
 router.get("/comercios/perfil/", comerciosController.getPerfil);
 router.get("/comercios/perfil/editar", comerciosController.getEditPerfil);
 router.post("/comercios/perfil/editar/post", comerciosController.PostEditPerfil);
+router.get("/comercios/detalle/:id", comerciosController.getDetails);
 // router.get(
 //   "/comercios/pedido/realizar/:id",
 //   comerciosController.getViewListProductsAndConfirmar

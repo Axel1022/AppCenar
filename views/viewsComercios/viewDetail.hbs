@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="info-comercio">
+      <div class="card-header-detail">
+        <div class="header-content">
+          <img src="{{comercio.logo}}" alt="Logo del comercio" class="img-comercio" />
+          <div class="header-text">
+            <div class="card-title-det">{{comercio.name}}</div>
+            <div class="card-text-det">{{pedido.status}}</div>
+            <div class="card-text-det">{{pedido.date}} - {{pedido.hour}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-prod">
+        <table class="productos-table">
+          <thead>
+            <tr>
+              <th class="1"></th>
+              <th class="2"></th>
+              <th class="3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each pedido.producto}}
+            <tr>
+              <td><img src="{{image}}" alt="{{name}}" class="producto-imagen" /></td>
+              <td>{{name}}</td>
+              <td>${{price}}</td>
+            </tr>
+            {{/each}}
+
+            <tr class="total-row">
+              <td> <strong>Total:</strong></td>
+              <td></td>
+              <td>${{pedido.total}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+       
+
+        {{#if (compare pedido.status "Pendiente")}}
+        <a href="#" class="btn btn-success float-end">Asignar a delivery</a>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

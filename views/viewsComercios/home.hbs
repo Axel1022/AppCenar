@@ -1,32 +1,33 @@
 <div class="row">
     <div class="col-12">
         <h4>Pedidos</h4>
-        {{#if hasPedido}}
+        {{#if hasPedidos}}
         {{#each pedidos}}
-        <div class="card-home-com">
+        <a href="/comercios/detalle/{{id}}" class="card-home-com-link ">
+          <div class="card-home-com mt-4">
 
          <div class="card-content">
             <div class="card-img-com">
-              <img src="{{comercios.logo}}"  class="card-img">
+              <img src="{{../comercio.logo}}"  class="card-img">
           </div>
 
           <card class="text">
             <div class="card-info">
               <div class="header">
-                <h4 class="card-title">{{pedidos.status}}</h4> 
-                <p class="card-text-com">{{pedidos.fecha}} - {{pedidos.hora}}</p>
+                <h4 class="card-title">{{status}}</h4> 
+                <p class="card-text-com">{{date}} - {{hour}}</p>
               </div>
           </div>
 
-          <div class="card-details">
-            <h6>{{comercios.name}}</h6>
-            <p class="card-text-com">{{pedidos.total}} - {{pedidos.quantity}}</p> 
-          </div>
-          
-        </card>
-    </div>
+            <div class="card-details">
+              <h6>{{../comercio.name}}</h6>
+             <p class="card-text-com">{{total}} - {{totalProductos}}</p>
+            </div>
+          </card>
 
         </div>
+      </div>
+        </a>
       {{/each}}
     </div>
 {{/if}}

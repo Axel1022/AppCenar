@@ -42,7 +42,7 @@ const Pedido = sequelize.define("pedido", {
     },
   },
   subTotal: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   date: {
@@ -54,7 +54,7 @@ const Pedido = sequelize.define("pedido", {
     allowNull: false,
   },
   total: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   status: {
