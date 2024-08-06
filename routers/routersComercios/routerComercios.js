@@ -13,6 +13,8 @@ router.get("/comercios/perfil/", comerciosController.getPerfil);
 router.get("/comercios/perfil/editar", comerciosController.getEditPerfil);
 router.post("/comercios/perfil/editar/post", comerciosController.PostEditPerfil);
 router.get("/comercios/detalle/:id", comerciosController.getDetails);
+router.get("/comercios/asignarDelivery/:id", comerciosController.GetAsignarDelivery)
+router.post("/comercios/asignarDelivery", comerciosController.postAsignarDelivery);
 // router.get(
 //   "/comercios/pedido/realizar/:id",
 //   comerciosController.getViewListProductsAndConfirmar

@@ -257,65 +257,73 @@ a {
     justify-content: center;
     padding: 20px;
     text-align: center;
-  }
+}
   
-  .header-content {
+.header-content {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+}
   
-  .img-comercio {
+.img-comercio {
     width: 100px; /* Ajusta el tamaño de la imagen del comercio según tus necesidades */
     height: auto;
     margin-right: 20px; /* Espacio entre la imagen y el texto */
-  }
+}
   
-  .header-text-det {
-    text-align: left;
-  }
   
-  .card-title-det {
-    font-size: 24px;
-    font-weight: bold;
-  }
+.info-prod {
+    padding: 20px;
+}
   
-  .card-text {
-    font-size: 16px;
-    margin: 5px 0;
-  }
+.product-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 20px; 
+}
   
-  /* Estilos para la tabla de productos */
-  .productos-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .productos-table th,
-  .productos-table td {
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .producto-imagen {
-    width: 50px; /* Tamaño pequeño para la imagen del producto */
+.img-prod img {
+    width: 70px; 
     height: auto;
-    margin-right: 10px; /* Espacio entre la imagen y el nombre */
-  }
+    border-radius: 5px; 
+}
   
-  .productos-table tr {
-    border-bottom: 1px solid #ddd; /* Línea debajo de cada producto */
-  }
+.name-prod, .price-prod {
+    flex: 1; 
+}
   
-  .total-pedido {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: right;
-  }
+.product-separator {
+    border: 0;
+    border-top: 1px solid #ccc; 
+    margin: 20px 0; 
+}
   
-  .btn-success {
-    margin-top: 10px;
-  }
+.linea {
+    height: 2px;
+    background-color: #ccc;
+    width: 100%; 
+    margin: 20px 0; 
+}
+
+.container-total {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 10px 0; 
+}
   
+.total {
+    margin: 0; 
+}
+  
+.total-price{
+    margin-right: 2%;
+}
+.total-price h5 {
+    margin: 0;
+}
+  
+.price-prod{
+    margin-left: 75%;
+}

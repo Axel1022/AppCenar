@@ -156,6 +156,7 @@ Pedido.belongsToMany(Producto, {
   foreignKey: "pedidoId",
   as: "producto",
 });
+
 Producto.belongsToMany(Pedido, {
   through: PedidoProducto,
   foreignKey: "productId",
@@ -166,6 +167,7 @@ Pedido.hasMany(PedidoProducto, {
   foreignKey: "pedidoId",
   as: "pedidoProductos",
 });
+
 Producto.hasMany(PedidoProducto, {
   foreignKey: "productId",
   as: "pedidoProductos",

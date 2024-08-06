@@ -3,6 +3,7 @@ const Productos = require("../../models/modelComercios/producto");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const Pedidos = require("../../models/modelCliente/pedido");
 const PedidosProducto = require("../../models/modelPedidoProducto/pedidoProducto")
+const Delivery = require("../../models/modelDelivery/delivery");
 const verificUseer = require("../../utils/verificUserLog");
 const jsonFileHandler = require("../../utils/jsonFileHandler");
 const path = require("path");
@@ -407,4 +408,61 @@ exports.PostEditPerfil = (req, res, next) =>{
     .catch((error) => {
       console.log(error);
     });
+};
+
+exports.GetAsignarDelivery = async (req, res, next) => {
+ const pedidoId = req.params.id
+
+  try{
+    const pedido = await Pedidos.findByPk(pedidoId, {
+      include:[{
+        model: Productos, as: "producto",
+        attributes: ["id", "name", "image","price"]
+      }]
+    });
+
+    const deliveries = await Delivery.findAll({where: {status: "Desocupado"}});
+    console.log("Deliveries disponibles", deliveries)
+
+    const delivery = deliveries.map(d => d.toJSON());
+
+    res.render("viewsComercios/viewAsign",{
+      pageTitle: "Food Rush | Deliveries Disponibles",
+      pedido: pedido,
+      delivery: delivery,
+      hasDelivery: delivery.length > 0,
+    })
+  }catch(error){
+    console.log("Error al obtener los deliveries", error);
+    return res.redirect("/comercios/home");
+  }
+  
+};
+
+exports.postAsignarDelivery = async (req, res, next) => {
+
+  const deliveryId = req.body.deliveryId;
+  const pedidoId = req.body.pedidoId;
+
+  try {
+    const delivery = Delivery.findByPk(deliveryId);
+
+    if ( !delivery) {
+      return res.status(404).send("Pedido o Delivery no encontrado");
+    }
+
+   await Pedidos.update({id: pedidoId, status: "En Proceso"},
+    {where: {id: pedidoId}}
+   );
+   
+   await Delivery.update({status: "Ocupado"},
+    {where: {id: deliveryId}}
+   );
+
+    res.redirect("/comercios/home")
+    req.flash("success", "Pedido asignado correctamente");
+  } catch (error) {
+    console.error("Error al asignar al delivery", error);
+  }
+
 }
