@@ -4,6 +4,7 @@ const Productos = require("../../models/modelComercios/producto");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
 const jsonFileHandler = require("../../utils/jsonFileHandler");
+const isFavorito = require("../../utils/isFavorito");
 const path = require("path");
 const dataPath = path.join(
   path.dirname(require.main.filename),
@@ -19,10 +20,17 @@ exports.getHome = async (req, res, next) => {
 };
 
 exports.getViewBebidas = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "Bars" },
   });
-  const rsultRest = items.map((comercio) => comercio.dataValues);
+  const rsultRest = await Promise.all(
+    items.map(async (comercio) => {
+      const data = comercio.dataValues;
+      data.isFavorito = await isFavorito(idCliente, data.id);
+      return data;
+    })
+  );
 
   res.render("viewsComercios/viewBebidas", {
     pageTitle: "Food Rush | Bebidas",
@@ -33,10 +41,17 @@ exports.getViewBebidas = async (req, res, next) => {
 };
 
 exports.getViewMercados = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "Mercados" },
   });
-  const rsultRest = items.map((comercio) => comercio.dataValues);
+  const rsultRest = await Promise.all(
+    items.map(async (comercio) => {
+      const data = comercio.dataValues;
+      data.isFavorito = await isFavorito(idCliente, data.id);
+      return data;
+    })
+  );
 
   res.render("viewsComercios/viewMercados", {
     pageTitle: "Food Rush | Mercados",
@@ -47,10 +62,17 @@ exports.getViewMercados = async (req, res, next) => {
 };
 
 exports.getViewPostres_Cafe = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "Cafeterias" },
   });
-  const rsultRest = items.map((comercio) => comercio.dataValues);
+  const rsultRest = await Promise.all(
+    items.map(async (comercio) => {
+      const data = comercio.dataValues;
+      data.isFavorito = await isFavorito(idCliente, data.id);
+      return data;
+    })
+  );
   res.render("viewsComercios/viewPostres_Cafe", {
     pageTitle: "Food Rush | Postres y Café",
     has: rsultRest.length > 0,
@@ -60,9 +82,17 @@ exports.getViewPostres_Cafe = async (req, res, next) => {
 };
 
 exports.getViewRestaurantes = async (req, res, next) => {
-  const rsultRest = await Comercios.findAll({
+  const idCliente = verificUseer(req, res, next);
+  const items = await Comercios.findAll({
     where: { typeTrade: "Restaurantes" },
   });
+  const rsultRest = await Promise.all(
+    items.map(async (comercio) => {
+      const data = comercio.dataValues;
+      data.isFavorito = await isFavorito(idCliente, data.id);
+      return data;
+    })
+  );
   res.render("viewsComercios/viewRestaurantes", {
     pageTitle: "Food Rush | Restaurantes",
     // layout: "layoutCliente",
@@ -74,10 +104,18 @@ exports.getViewRestaurantes = async (req, res, next) => {
 };
 
 exports.getViewSalud = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "Salud" },
   });
-  rsultRest = items.map((comercio) => comercio.dataValues);
+
+   const rsultRest = await Promise.all(
+     items.map(async (comercio) => {
+       const data = comercio.dataValues;
+       data.isFavorito = await isFavorito(idCliente, data.id);
+       return data;
+     })
+   );
 
   // console.log("Resultado de la busqueda: ", rsultRest);
   res.render("viewsComercios/viewSalud", {
@@ -90,10 +128,18 @@ exports.getViewSalud = async (req, res, next) => {
 };
 
 exports.getViewTiendas = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "Tiendas" },
   });
-  const rsultRest = items.map((comercio) => comercio.dataValues);
+
+  const rsultRest = await Promise.all(
+    items.map(async (comercio) => {
+      const data = comercio.dataValues;
+      data.isFavorito = await isFavorito(idCliente, data.id);
+      return data;
+    })
+  );
   res.render("viewsComercios/viewTiendas", {
     pageTitle: "Food Rush | Tiendas",
     has: rsultRest.length > 0,
@@ -259,11 +305,10 @@ function calcularTotal(products) {
   };
 }
 
-exports.getPerfil = async (req, res, next) =>{
-
+exports.getPerfil = async (req, res, next) => {
   const comercioId = req.session.user.id;
 
-  const comercio = await Comercios.findOne({ where: { id: comercioId} });
+  const comercio = await Comercios.findOne({ where: { id: comercioId } });
   console.log(comercio.dataValues);
 
   res.render("viewsComercios/viewPerfilComercio", {
@@ -273,11 +318,10 @@ exports.getPerfil = async (req, res, next) =>{
   });
 };
 
-exports.getEditPerfil = async (req, res, next) =>{
-
+exports.getEditPerfil = async (req, res, next) => {
   const comercioId = req.session.user.id;
 
-  const comercio = await Comercios.findOne({ where: { id: comercioId} });
+  const comercio = await Comercios.findOne({ where: { id: comercioId } });
   console.log(comercio.dataValues);
 
   res.render("viewsComercios/viewEditPerfil", {
@@ -287,7 +331,7 @@ exports.getEditPerfil = async (req, res, next) =>{
   });
 };
 
-exports.PostEditPerfil = (req, res, next) =>{
+exports.PostEditPerfil = (req, res, next) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
@@ -298,15 +342,23 @@ exports.PostEditPerfil = (req, res, next) =>{
   const typeTrade = req.body.typeTrade;
   const comercioId = req.session.user.id;
 
-   Comercios
-    .update({
-       name, phone, email, role, logo, openTime, closeTime, typeTrade, },
-      { where: { id: comercioId } }
-    )
+  Comercios.update(
+    {
+      name,
+      phone,
+      email,
+      role,
+      logo,
+      openTime,
+      closeTime,
+      typeTrade,
+    },
+    { where: { id: comercioId } }
+  )
     .then(() => {
       return res.redirect("/comercios/perfil");
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
