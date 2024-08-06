@@ -4,6 +4,7 @@ const sequelize = require("../../contexts/appContext");
 const Cliente = require("./cliente");
 const Direccion = require("./direccion");
 const Comercio = require("../modelComercios/comercio");
+const Delivery = require("../modelDelivery/delivery");
 
 const Pedido = sequelize.define("pedido", {
   id: {
@@ -33,8 +34,15 @@ const Pedido = sequelize.define("pedido", {
       key: "id",
     },
   },
+  deliverId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: Delivery,
+      key: "id",
+    },
+  },
   subTotal: {
-    type: Sequelize.STRING,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   date: {
@@ -46,19 +54,12 @@ const Pedido = sequelize.define("pedido", {
     allowNull: false,
   },
   total: {
-    type: Sequelize.STRING,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   status: {
     type: Sequelize.STRING,
     allowNull: false,
-  },
-  productId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: Comercio,
-      key: "id",
-    },
   },
 });
 

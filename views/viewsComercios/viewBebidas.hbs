@@ -1,35 +1,58 @@
+<link rel="stylesheet" href="../../assets/css/style/favorito.css">
+
 <div class="container my-4">
-  <form class="d-flex mb-4" action="">
-    <input
-      type="text"
-      class="form-control me-2"
-      placeholder="Buscar..."
-      aria-label="Buscar"
-      name="buscar"
-    />
-    <button type="submit" class="btn btn-primary">Buscar</button>
-  </form>
+  <!-- Lista de Tienda -->
+  {{#if has}}
+    <ul class="list-unstyled">
+      <ul class="list-unstyled">
+      <form class="d-flex mb-4" action="/buscarComercio" method="post">
+        <input
+          type="text"
+          class="form-control me-2"
+          placeholder="Buscar..."
+          aria-label="Buscar"
+          name="buscar"
+        />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+      <h6 class="mb-4">{{Cantidad}} Tiendas</h6>
+      {{#each Bars}}
+        <li class="mb-3">
+          <a
+            href="/comercios/pedido/realizar/{{this.id}}"
+            class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm"
+          >
+            <img
+              src="{{this.logo}}"
+              alt="{{this.name}}"
+              class="img-fluid me-3"
+              style="width: 100px; height: auto;"
+            />
+            <p class="mb-0">{{this.name}}</p>
+            {{! Le falta el corazon para ponerlo de favorito }}
+           {{#if this.isFavorito}}
+            <div class="container-buttons-favorito" >
+								<form action="/cliente/AgregarFavorito" class="mt-3" method="post">
+                    <input type="hidden" name="idComercio" value="{{this.id}}">
+                    <button class="btnFavorite">
+                        <img src="../../assets/img/favorito.png" alt="icon de Favorito" height="15px" width="15px">
+                        <p>Agregar a favorito</p>
+                    </button>
+                </form>
+						</div>
+           {{/if}}
+            {{! Le falta el corazon para ponerlo de favorito }}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <h2>No hay Bars disponibles</h2>
 
-  <h6 class="mb-4">{{Cantidad}}51 Bards</h6>
-
-  <!-- Lista de Bards -->
-  <ul class="list-unstyled">
-    {{#each Bards as |bars|}}
-      <li class="mb-3">
-        <a href="#" class="text-decoration-none d-flex align-items-center p-3 border rounded shadow-sm">
-          <img
-            src="/{{bars.logo}}"
-            alt="{{bars.name}}"
-            class="img-fluid me-3"
-            style="width: 100px; height: auto;"
-          />
-          <p class="mb-0">{{bars.name}}</p>
-        </a>
-      </li>
-    {{/each}}
-  </ul>
-
+  {{/if}}
   <div class="text-center mt-4">
-    <button class="btn btn-secondary" onclick="window.history.back();">Volver</button>
+    <a href="/cliente/home" class="btn btn-secondary">
+Volver
+</a>
   </div>
 </div>

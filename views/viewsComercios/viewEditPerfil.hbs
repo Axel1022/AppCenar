@@ -1,0 +1,117 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center">
+      <h2>Formulario de Comercio</h2>
+    </div>
+    <form
+      class="needs-validation"
+      method="POST"
+      action="/comercios/perfil/editar/post"
+      novalidate
+    >
+      <div class="card-body">
+        <div class="form-group mb-3">
+          <label for="nombre">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            id="nombre"
+            value="{{comercio.name}}"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="telefono">Teléfono</label>
+          <input
+            type="tel"
+            class="form-control"
+            name="phone"
+            id="telefono"
+            value="{{comercio.phone}}"
+            pattern="[0-9]{10}"
+            title="Debe contener 10 dígitos numéricos"
+            required
+          />
+        </div>
+          <div class="form-group mb-3">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            id="email"
+            value="{{comercio.email}}"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="image">Logo</label>
+          <input
+            type="file"
+            name="image"
+            class="form-control"
+            id="image"
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="openTime">Horario de apertura</label>
+          <input
+            type="text"
+            class="form-control"
+            name="openTime"
+            id="openTime"
+            value="{{comercio.openTime}}"
+            required
+          />
+        </div>
+           <div class="form-group mb-3">
+          <label for="closeTime">Horario de cierre</label>
+          <input
+            type="text"
+            class="form-control"
+            name="closeTime"
+            id="closeTime"
+            value="{{comercio.closeTime}}"
+            required
+          />
+        </div>
+
+       <div class="form-group mb-3">
+          <label for="category">Categoria</label>
+          <select class="form-control" id="category" name="typeTrade" required>
+              <option value="">Selecciona tu categoria</option>
+              <option value="Restaurante" {{#if (compare comercio.typeTrade "Restaurante")}}selected{{/if}}>Restaurante</option>
+              <option value="Mercado" {{#if (compare comercio.typeTrade "Mercado")}}selected{{/if}}>Mercado</option>
+              <option value="Drink" {{#if (compare comercio.typeTrade "Drink")}}selected{{/if}}>Drink</option>
+              <option value="Cafeteria" {{#if (compare comercio.typeTrade "Cafeteria")}}selected{{/if}}>Cafeteria</option>
+              <option value="Tienda" {{#if (compare comercio.typeTrade "Tienda")}}selected{{/if}}>Tienda</option>
+              <option value="Salud" {{#if (compare comercio.typeTrade "Salud")}}selected{{/if}}>Salud</option>
+          </select>
+          <div class="valid-feedback">Good!</div>
+          <div class="invalid-feedback">Please select a category.</div>
+      </div>
+
+           <div class="form-group mb-3">
+          <label for="role">Rol</label>
+          <input
+            type="text"
+            class="form-control"
+            name="role"
+            id="role"
+            value="{{comercio.role}}"
+            required
+          />
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.history.back();"
+        >Volver</a>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>

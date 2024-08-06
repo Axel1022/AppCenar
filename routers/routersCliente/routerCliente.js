@@ -4,6 +4,10 @@ const router = express.Router();
 const clienteController = require("../../controllers/controllersCliente/clienteController");
 
 router.get("/cliente/home", clienteController.getHome);
+router.get(
+  "/cliente/completar/pedido/:idComercio",
+  clienteController.getCompletarPedido
+);
 router.get("/cliente/direcciones", clienteController.getDirecciones);
 router.get("/cliente/direcciones/add", clienteController.getDireccionesAdd);
 router.post(
@@ -26,7 +30,15 @@ router.post(
   "/cliente/direcciones/editar/post",
   clienteController.postEditarDirrecion
 );
+router.post(
+  "/cliente/comercios/eliminar",
+  clienteController.DeleteFavoritosPost
+);
+router.post("/cliente/confirmarpedido", clienteController.confirmarPedido);
+router.post("/buscarComercio", clienteController.postBuscarComercio);
+router.post("/cliente/AgregarFavorito", clienteController.addFavorito);
 
 router.get("/cliente/pedidos", clienteController.getPedidos);
 router.get("/cliente/pedidos/detalle/:id", clienteController.getDetallePedidos); //TODO: Hay que cambiar esto porque necesita el id
 module.exports = router;
+

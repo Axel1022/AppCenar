@@ -1,0 +1,15 @@
+.btnFavorite {
+    display: inline-block;
+    vertical-align: middle;
+    border: none;
+    background-color: transparent;
+}
+
+.btnFavorite img,
+.btnFavorite p {
+    font-size: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0; 
+}
+
