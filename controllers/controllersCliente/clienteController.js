@@ -8,6 +8,7 @@ const modelFavoritos = require("../../models/modelCliente/favoritos");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
 const calcularTotal = require("../../utils/calcularTotal");
+const { Op } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -33,7 +34,7 @@ exports.confirmarPedido = async (req, res, next) => {
     const productData = await Promise.all(
       temProducts.map(async (element) => {
      const producto = await modelProductos.findByPk(element.id);
-       
+
      if (!producto) {
       throw new Error(`Producto con ID ${element.id} no encontrado.`);
     }
@@ -54,12 +55,13 @@ exports.confirmarPedido = async (req, res, next) => {
     console.log("sub total:", total.subTotal);
     console.log("total:", total.total);
 
-    const now = new Date();
-    const formattedDate = now.toISOString().split("T")[0];
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    const seconds = now.getSeconds().toString().padStart(2, "0");
-    const formattedTime = `${hours}:${minutes}:${seconds}`;
+  const now = new Date();
+  now.setDate(now.getDate() - 1);
+  const formattedDate = now.toISOString().split("T")[0];
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  const formattedTime = `${hours}:${minutes}:${seconds}`;
 
     const newPedido = await modelPedidos.create({
       clientId: idCliente,
@@ -245,7 +247,10 @@ exports.getPedidos = async (req, res, next) => {
     const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
       where: { clientId: idCliente },
-      order: [["date", "DESC"], ["hour", "DESC"]],
+      order: [
+        ["date", "DESC"],
+        ["hour", "DESC"],
+      ],
     });
 
     if (resultPedidos.length === 0) {
@@ -277,7 +282,6 @@ exports.getPedidos = async (req, res, next) => {
           })
         );
 
-
         return {
           ...pedido.dataValues,
           comercio: comercio ? comercio.logo : null,
@@ -286,7 +290,7 @@ exports.getPedidos = async (req, res, next) => {
         };
       })
     );
-     
+
     res.render("viewsCliente/viewPedidos", {
       pageTitle: "Food Rush | Pedidos",
       layout: "layoutCliente",
@@ -337,7 +341,7 @@ exports.getDetallePedidos = async (req, res, next) => {
       Pedido: resultPedido.dataValues,
       Productos: productos,
       Comercio: resultComercio.dataValues,
-      test: total.total,
+      // test: total.total,
       //? Ya esto es monte y culebra, xd
     });
   } catch (error) {
@@ -439,4 +443,38 @@ exports.postEditarDirrecion = (req, res, next) => {
       console.log("Direccion editad correctamente");
       res.redirect("/cliente/direcciones");
     });
+};
+exports.postBuscarComercio = async (req, res, next) => {
+  const buscar = req.body.buscar;
+  verificUseer(req, res, next);
+  if (buscar === "" || buscar === undefined || buscar === null) {
+    return res.redirect("back");
+  } else {
+    const items = await modelComercio.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${buscar}%`,
+        },
+      },
+    });
+    const comercios = items.map((item) => item.dataValues);
+    res.render("viewsComercios/viewComerciosBuscados", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      Comercios: comercios,
+      has: comercios.length > 0,
+      Cantidad: comercios.length,
+      //layout: "layoutCliente",
+    });
+  }
+};
+exports.addFavorito = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
+  const idComercio = req.body.idComercio;
+
+  modelFavoritos.create({
+    clientId: idCliente,
+    tradeId: idComercio,
+  });
+  return res.redirect("back");
 };

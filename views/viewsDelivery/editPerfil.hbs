@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center">
+      <h2>Formulario de Delivery</h2>
+    </div>
+    <form
+      class="needs-validation"
+      method="POST"
+      action="/delivery/perfil/editar/post"
+    >
+      <div class="card-body">
+        <div class="form-group mb-3">
+          <label for="name">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            id="name"
+            value="{{Cliente.name}}"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="lastName">Apellido</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lastName"
+            id="lastName"
+            value="{{Cliente.lastName}}"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="phone">Teléfono</label>
+          <input
+            type="tel"
+            class="form-control"
+            name="phone"
+            id="phone"
+            value="{{Cliente.phone}}"
+            pattern="[0-9]{10}"
+            title="Debe contener 10 dígitos numéricos"
+            required
+          />
+        </div>
+        <div class="form-group mb-3">
+          <label for="imageProfile">Foto de Perfil</label>
+          <input
+            type="file"
+            name="imageProfile"
+            class="form-control"
+            id="imageProfile"
+          />
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a
+          type="button"
+          class="btn btn-secondary"
+          href="/delivery/perfil"
+        >Volver</a>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .card {
+    max-width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  .card-body {
+    padding: 1.5rem;
+  }
+  .card-footer {
+    padding: 1rem;
+    background-color: #f7f7f7;
+    border-top: 1px solid #ddd;
+  }
+  .form-group label {
+    font-weight: bold;
+  }
+</style>

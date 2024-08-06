@@ -1,0 +1,16 @@
+{{#if has}}
+<h1>Listado de Clientes</h1>
+{{#each Clientes}}
+<div>
+    <p>{{this.name}}</p>
+<p>{{this.lastName}}</p>
+<p>{{this.phone}}</p>
+<p>{{this.email}}</p>
+<button class="btn btn-primary">Activar </button>
+<button class="btn btn-danger">Desactivar </button>
+<br>
+</divclass>
+{{/each}}
+{{else}}
+<p>No hay clientes, idiota</p>
+{{/if}}
