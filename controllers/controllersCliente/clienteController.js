@@ -7,6 +7,7 @@ const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProd
 const modelFavoritos = require("../../models/modelCliente/favoritos");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
+const { Op } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -36,7 +37,7 @@ exports.confirmarPedido = async (req, res, next) => {
   //?Tabla pedido
 
   const now = new Date();
-  now.setDate(now.getDate() - 1); 
+  now.setDate(now.getDate() - 1);
   const formattedDate = now.toISOString().split("T")[0];
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
@@ -402,4 +403,28 @@ exports.postEditarDirrecion = (req, res, next) => {
       console.log("Direccion editad correctamente");
       res.redirect("/cliente/direcciones");
     });
+};
+exports.postBuscarComercio = async (req, res, next) => {
+  const buscar = req.body.buscar;
+  verificUseer(req, res, next);
+  if (buscar === "" || buscar === undefined || buscar === null) {
+    return res.redirect("back");
+  } else {
+    const items = await modelComercio.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${buscar}%`,
+        },
+      },
+    });
+    const comercios = items.map((item) => item.dataValues);
+    res.render("viewsComercios/viewComerciosBuscados", {
+      pageTitle: "Food Rush | Cliente",
+      layout: "layoutCliente",
+      Comercios: comercios,
+      has: comercios.length > 0,
+      Cantidad: comercios.length,
+      //layout: "layoutCliente",
+    });
+  }
 };
