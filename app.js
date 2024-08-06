@@ -121,7 +121,7 @@ const Comercio = require("./models/modelComercios/comercio");
 const Producto = require("./models/modelComercios/producto");
 const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
-const Delivey =  require("./models/modelDelivery/delivery");
+const Delivey = require("./models/modelDelivery/delivery");
 const PedidoProducto = require("./models/modelPedidoProducto/pedidoProducto");
 const Itbis = require("./models/modelAdmin/itbis");
 

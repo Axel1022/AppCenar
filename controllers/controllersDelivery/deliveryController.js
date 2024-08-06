@@ -1,4 +1,3 @@
-// controllers/controllersDelivery/deliveryController.js
 
 exports.getHome = async (req, res, next) => {
   res.render("viewsDelivery/home", {
@@ -122,3 +121,35 @@ exports.postDeliveryProfile = async (req, res, next) => {
     res.redirect('/error');
   }
 };
+
+// Obtener el perfil del delivery
+exports.getEditPerfil = async (req, res, next) => {
+  const idDelivery = req.session.user.id;
+
+  const delivery = await Delivery.findOne({ where: { id: idDelivery } });
+  res.render("viewsDelivery/editPerfil", {
+    pageTitle: "Food Rush | perfil",
+    layout: "layoutDelivery",
+    Cliente: delivery.dataValues,
+  });
+};
+exports.postEditPerfil = (req, res, next) => {
+  const name = req.body.name;
+  const lastName = req.body.lastName;
+  const phone = req.body.telefono;
+  const imageProfile = req.file;
+  const idDelivery = req.session.user.id;
+
+  Delivery
+    .update(
+      { name, lastName, phone, imageProfile },
+      { where: { id: idDelivery } }
+    )
+    .then(() => {
+      return res.redirect("/delivery/perfil");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
