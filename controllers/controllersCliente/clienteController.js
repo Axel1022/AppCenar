@@ -7,6 +7,7 @@ const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProd
 const modelFavoritos = require("../../models/modelCliente/favoritos");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
+const calcularTotal = require("../../utils/calcularTotal");
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -20,55 +21,85 @@ exports.getHome = async (req, res, next) => {
     console.log("El problema está en GETHOME >>> ", error);
   }
 };
+
 exports.confirmarPedido = async (req, res, next) => {
-  //TODO: Aqui hay que hacer magia, xd
-  /*
-  !Al crear el pedido se debe guardar en el mismo, los productos seleccionados para ese
-  !pedido, el cliente que hizo el pedido, la dirección del cliente a la que se va entregar ese
-  !pedido, el comercio a quien se le hizo el pedido, el subtotal, fecha y hora de cuando se hizo
-  !el pedido y el total del pedido. Una vez creado el pedido se redirecciona al usuario al home
-  !del cliente donde se lista los tipos de comercios.
-   */
-  const idCliente = verificUseer(req, res, next);
-  const idDireccion = req.body.radioDire;
-  const idComercio = req.body.comercioID;
+  try {
+    const idCliente = verificUseer(req, res, next);
+    const idDireccion = req.body.radioDire;
+    const idComercio = req.body.comercioID;
 
-  //?Tabla pedido
+    const temProducts = await temProductos.findAll();
 
-  const now = new Date();
-  const formattedDate = now.toISOString().split("T")[0];
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const seconds = now.getSeconds().toString().padStart(2, "0");
-  const formattedTime = `${hours}:${minutes}:${seconds}`;
+    const productData = await Promise.all(
+      temProducts.map(async (element) => {
+     const producto = await modelProductos.findByPk(element.id);
+       
+     if (!producto) {
+      throw new Error(`Producto con ID ${element.id} no encontrado.`);
+    }
 
-  const newPedido = await modelPedidos.create({
-    clientId: idCliente,
-    directionId: idDireccion,
-    tradeId: idComercio,
-    subTotal: 0,
-    date: formattedDate,
-    hour: formattedTime,
-    total: 0,
-    status: "Pendiente",
-  });
-  const idPedido = newPedido.dataValues.id;
-  const temProducts = await temProductos.findAll();
-  temProducts.forEach((element) => {
-    modelPedidoProducto.create({
-      pedidoId: idPedido,
-      productId: element.id,
-      producto_id: element.id,
+    console.log("Producto recuperado:", producto);
+    console.log("Precios:", producto.price);
+
+    return {
+      id: producto.id,
+      quantity: element.quantity || 1, // Asumiendo que quantity es un campo en temProductos
+      price: producto.price
+    };
+    })
+    );
+
+    const total = calcularTotal(productData);
+
+    console.log("sub total:", total.subTotal);
+    console.log("total:", total.total);
+
+    const now = new Date();
+    const formattedDate = now.toISOString().split("T")[0];
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+    const newPedido = await modelPedidos.create({
+      clientId: idCliente,
+      directionId: idDireccion,
+      tradeId: idComercio,
+      subTotal: total.subTotal,
+      date: formattedDate,
+      hour: formattedTime,
+      total: total.total,
+      status: "Pendiente",
     });
-  });
-  await temProductos.destroy({
-    where: {},
-  });
 
-  console.log("Creado correctamente");
+    const idPedido = newPedido.dataValues.id;
+    const totalProducts = productData.length;
 
-  res.redirect("/cliente/home");
+    // Agregar los productos al pedido
+    await Promise.all(
+      temProducts.map(async (element) => {
+        await modelPedidoProducto.create({
+          pedidoId: idPedido,
+          productId: element.id,
+          producto_id: element.id,
+          quantity: totalProducts
+        });
+      })
+    );
+    await temProductos.destroy({
+      where: {},
+    });
+
+    console.log("Pedido creado correctamente");
+
+    // Redirigir al usuario
+    res.redirect("/cliente/home");
+  } catch (error) {
+    console.log("El problema está en confirmarPedido >>> ", error);
+    next(error);
+  }
 };
+
 exports.getCompletarPedido = async (req, res, next) => {
   try {
     const idCliente = verificUseer(req, res, next);
@@ -86,6 +117,8 @@ exports.getCompletarPedido = async (req, res, next) => {
       where: { id: idComercio },
     });
 
+    const total = calcularTotal(productosFind);
+
     res.render("viewsCliente/viewCompletarPedido", {
       pageTitle: "Food Rush | Cliente",
       layout: "layoutCliente",
@@ -94,6 +127,8 @@ exports.getCompletarPedido = async (req, res, next) => {
       has: productosFind.length > 0,
       Comercio: itemsComercio.dataValues,
       hasDire: direccionesFind.length > 0,
+      test: total.subTotal,
+      testTotal: total.total
     });
   } catch (error) {
     console.log("El problema está en getCompletarPedido >>> ", error);
@@ -210,6 +245,7 @@ exports.getPedidos = async (req, res, next) => {
     const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
       where: { clientId: idCliente },
+      order: [["date", "DESC"], ["hour", "DESC"]],
     });
 
     if (resultPedidos.length === 0) {
@@ -241,6 +277,7 @@ exports.getPedidos = async (req, res, next) => {
           })
         );
 
+
         return {
           ...pedido.dataValues,
           comercio: comercio ? comercio.logo : null,
@@ -249,7 +286,7 @@ exports.getPedidos = async (req, res, next) => {
         };
       })
     );
-
+     
     res.render("viewsCliente/viewPedidos", {
       pageTitle: "Food Rush | Pedidos",
       layout: "layoutCliente",
@@ -300,6 +337,7 @@ exports.getDetallePedidos = async (req, res, next) => {
       Pedido: resultPedido.dataValues,
       Productos: productos,
       Comercio: resultComercio.dataValues,
+      test: total.total,
       //? Ya esto es monte y culebra, xd
     });
   } catch (error) {

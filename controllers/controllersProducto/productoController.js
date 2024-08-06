@@ -258,7 +258,7 @@ exports.PostEditProducts = async (req, res, next) => {
 
 exports.PostDeleteProducts = (req, res, next) => {
   const comercioId = verificUseer(req, res, next);
-  const productId = req.params.id;
+  const productId = req.body.id;
 
   Productos.findOne({ where: { id: productId, tradeId: comercioId } })
     .then((producto) => {
@@ -270,7 +270,7 @@ exports.PostDeleteProducts = (req, res, next) => {
       const categoryId = producto.categoryId;
 
       return producto.destroy().then(() => {
-        return Categoria.decrement("quantifier", {
+        return Categoria.decrement("quantity", {
           by: 1,
           where: { id: categoryId },
         });

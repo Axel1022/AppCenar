@@ -39,7 +39,7 @@ exports.PostClienteSingUp = async (req, res, next) => {
     let existingUser;
 
     if (role === "cliente") {
-      existingUser = await Cliente.findOne({ where: { user } });
+      existingUser = await Cliente.findOne({ where: { user: user } });
       if (existingUser) {
         req.flash(
           "errors",
@@ -52,7 +52,7 @@ exports.PostClienteSingUp = async (req, res, next) => {
         return res.redirect("/registroCliente");
       }
 
-      existingUser = await Cliente.findOne({ where: { email } });
+      existingUser = await Cliente.findOne({ where: { email: email } });
       if (existingUser) {
         req.flash(
           "errors",
@@ -112,7 +112,7 @@ exports.PostClienteSingUp = async (req, res, next) => {
 
       return res.redirect("/login");
     } else if (role === "delivery") {
-      existingUser = await Delivery.findOne({ where: { user } });
+      existingUser = await Delivery.findOne({ where: { user: user } });
       if (existingUser) {
         req.flash(
           "errors",
@@ -121,7 +121,7 @@ exports.PostClienteSingUp = async (req, res, next) => {
         return res.redirect("/registroCliente");
       }
 
-      existingUser = await Delivery.findOne({ where: { email } });
+      existingUser = await Delivery.findOne({ where: { email: email } });
       if (existingUser) {
         req.flash(
           "errors",
@@ -220,7 +220,7 @@ exports.PostComercioSingUp = async (req, res, next) => {
   }
 
   try {
-    const existingComercio = await Comercio.findOne({ where: { email } });
+    const existingComercio = await Comercio.findOne({ where: { email: email } });
     if (existingComercio) {
       req.flash(
         "errors",
@@ -311,7 +311,7 @@ exports.PostAdminSingUp = async (req, res, next) => {
   }
 
   try {
-    const existingUser = await Admin.findOne({ where: { user } });
+    const existingUser = await Admin.findOne({ where: { user: user } });
     if (existingUser) {
       req.flash(
         "errors",
@@ -320,7 +320,7 @@ exports.PostAdminSingUp = async (req, res, next) => {
       return res.redirect("/registroAdmin");
     }
 
-    const existingEmail = await Admin.findOne({ where: { email } });
+    const existingEmail = await Admin.findOne({ where: { email: email } });
     if (existingEmail) {
       req.flash(
         "errors",

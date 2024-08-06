@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-md-12">
+        {{#if hasDelivery}}
+            {{#each delivery}}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.name}} {{this.lastName}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{this.role}}</h6>
+                        <p class="card-text">Telefono: {{this.phone}}</p>
+                    </div>
+
+
+                   <form action="/comercios/asignarDelivery" method="POST">
+                        <input type="hidden" name="pedidoId" value="{{pedido.id}}">
+                        <input type="hidden" name="deliveryId" value="{{id}}">
+                        <button type="submit" class="btn btn-success btn-sm  float-end">Asignar a delivery</button>
+                    </form>                
+                </div>
+            {{/each}}
+
+            {{else}}
+            <h4>No hay deliveries disponibles</h4>
+        {{/if}}
+    </div>
+</div>
