@@ -1,4 +1,4 @@
-module.exports = function calcularTotal(products) {
+module.exports = function calcularTotal(products, itbisValue) {
     let subTotal = 0;
     let totalQuantity = 0;
   
@@ -14,7 +14,7 @@ module.exports = function calcularTotal(products) {
       }
     });
   
-    const itbis = subTotal * 0.18;
+    const itbis = subTotal * itbisValue;
     const total = subTotal + itbis;
   
     return {

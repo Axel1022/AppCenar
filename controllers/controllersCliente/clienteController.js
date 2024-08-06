@@ -43,16 +43,17 @@ exports.confirmarPedido = async (req, res, next) => {
 
     return {
       id: producto.id,
-      quantity: element.quantity || 1, // Asumiendo que quantity es un campo en temProductos
+      quantity: element.quantity || 1, 
       price: producto.price
     };
     })
     );
 
-    const total = calcularTotal(productData);
+    const itbisVal = await Itbis.findOne();
+    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
 
-    console.log("sub total:", total.subTotal);
-    console.log("total:", total.total);
+    const total = calcularTotal(productosFind, itbs);
+
 
     const now = new Date();
     const formattedDate = now.toISOString().split("T")[0];
@@ -90,9 +91,6 @@ exports.confirmarPedido = async (req, res, next) => {
       where: {},
     });
 
-    console.log("Pedido creado correctamente");
-
-    // Redirigir al usuario
     res.redirect("/cliente/home");
   } catch (error) {
     console.log("El problema está en confirmarPedido >>> ", error);
@@ -117,7 +115,10 @@ exports.getCompletarPedido = async (req, res, next) => {
       where: { id: idComercio },
     });
 
-    const total = calcularTotal(productosFind);
+    const itbisVal = await Itbis.findOne();
+    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
+
+    const total = calcularTotal(productosFind, itbs);
 
     res.render("viewsCliente/viewCompletarPedido", {
       pageTitle: "Food Rush | Cliente",
