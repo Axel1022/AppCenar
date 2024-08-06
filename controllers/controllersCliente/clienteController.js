@@ -428,3 +428,13 @@ exports.postBuscarComercio = async (req, res, next) => {
     });
   }
 };
+exports.addFavorito = async (req, res, next) => {
+  const idCliente = verificUseer(req, res, next);
+  const idComercio = req.body.idComercio;
+
+  modelFavoritos.create({
+    clientId: idCliente,
+    tradeId: idComercio,
+  });
+  return res.redirect("back");
+};
