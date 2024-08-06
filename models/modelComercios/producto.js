@@ -24,7 +24,7 @@ const Producto = sequelize.define("producto", {
         allowNull: false,
     },
     price:{
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
     tradeId:{

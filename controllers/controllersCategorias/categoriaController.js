@@ -1,8 +1,9 @@
 const { captureRejectionSymbol } = require("nodemailer/lib/xoauth2");
 const Categorias = require("../../models/modelComercios/categoria");
 const Comercio = require("../../models/modelComercios/comercio");
-const Producto = require("../../models/modelComercios/producto");
+const Productos = require("../../models/modelComercios/producto");
 const verificUseer = require("../../utils/verificUserLog");
+
 
 exports.GetCategoria = async (req, res, next) => {
 

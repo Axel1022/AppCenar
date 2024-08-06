@@ -81,7 +81,7 @@ exports.PostLogin = (req, res, next) =>{
       }
       else{
         req.flash("errors", "Password is invalid");
-        console.log("Contrase;a incorrecta");
+        console.log("Password invalid");
         return res.redirect("/login"); //ruta al mismo login
       }
     });

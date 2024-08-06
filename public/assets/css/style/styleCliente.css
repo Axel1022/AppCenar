@@ -1,0 +1,60 @@
+.card-list{
+    width: 200px;
+    height: 400px;
+}
+
+.card-body-list{
+    width: 300px;
+    height: 350px;
+    margin: 3px;
+}
+
+.card-image-list{
+    height: 200px;
+    width: 300px;
+}
+
+
+.card-image-list img{
+    height: 300px;
+    width: 200px;
+    border-radius: 8px 8px 0px 0;
+}
+
+.image-fit {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.btn-add{
+    width: 100px;
+}
+
+.card-order{
+  width: auto;
+  height: auto;
+}
+
+.card-body-order{
+margin: 0;
+padding: 0;
+}
+
+.img-orden{
+  width: 70px;
+  height: 70px;
+}
+
+.img-orden img{
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.btn-del-order{
+    margin-top: 9px;
+}
+
+.btn-cont{
+    margin-bottom: 4px;
+}

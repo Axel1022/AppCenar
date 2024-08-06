@@ -55,9 +55,15 @@ a {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.card-image-prod{
+    height: 200px;
+    width: 300px;
+}
+
+
 .card-image-prod img {
-    height: 350px;
-    width: 100%;
+    height: 300px;
+    width: 206px;
     border-radius: 8px 8px 0px 0;
 }
 
@@ -94,7 +100,7 @@ a {
 }
 
 .card-text-prod {
-    padding: 10px 15px;
+    padding: 3px 5px;
     background: #fff;
     font-size: 14px;
     color: #636262;
@@ -108,8 +114,8 @@ a {
 .card-button-edit, .card-button-delete {
     display: flex;
     justify-content: center;
-    padding: 10px 0;
     width: 50%;
+    height: 30px;
     color: #fff;
     margin: 3px;
     border-radius: 4px;
@@ -170,8 +176,8 @@ a {
 }
 
 .card-body-prod{
-    width: 350px;
-    height: 600px;
+    width: 230px;
+    height: 200px;
 }
 
 .card-home-com {
@@ -180,51 +186,144 @@ a {
     overflow: hidden;
     display: flex;
     padding: 10px;
-  }
-  
-  .card-content {
+}
+
+.card-content {
     display: flex;
-  }
-  
-  .card-img-com {
+}
+
+.card-img-com {
     flex: 0 0 auto;
     margin-right: 20px;
-  }
-  
-  .card-img {
+}
+
+.card-img {
     width: 100px;
     height: 100px;
     object-fit: cover;
     border-radius: 5px;
     margin-top: 12px;
-  }
-  
-  .card-info {
+}
+
+.card-info {
     margin: 0px;
     margin-top: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
-  
-  .header {
+}
+
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-  }
+}
 
-  .header h4 {
+.header h4 {
     margin-right: 10px;
-  }
-  
-  .card-text-com{
+}
+
+.card-text-com{
     color: #6c7274;
     margin: 0;
-  }
+}
 
-  .card-text{
+.card-text{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
+}
+
+.btn-asign{
+    height: 30px;
+    width: 100px;
+    margin-top: 90px;
+    margin-left: 700px;
+}
+
+.card-home-com-link {
+    display: flex;
+    text-decoration: none; 
+    color: inherit; 
+}
+
+
+  
+/* Estilos para el header */
+.card-header-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+  
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.img-comercio {
+    width: 100px; /* Ajusta el tamaño de la imagen del comercio según tus necesidades */
+    height: auto;
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+}
+  
+  
+.info-prod {
+    padding: 20px;
+}
+  
+.product-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 20px; 
+}
+  
+.img-prod img {
+    width: 70px; 
+    height: auto;
+    border-radius: 5px; 
+}
+  
+.name-prod, .price-prod {
+    flex: 1; 
+}
+  
+.product-separator {
+    border: 0;
+    border-top: 1px solid #ccc; 
+    margin: 20px 0; 
+}
+  
+.linea {
+    height: 2px;
+    background-color: #ccc;
+    width: 100%; 
+    margin: 20px 0; 
+}
+
+.container-total {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 10px 0; 
+}
+  
+.total {
+    margin: 0; 
+}
+  
+.total-price{
+    margin-right: 2%;
+}
+.total-price h5 {
+    margin: 0;
+}
+  
+.price-prod{
+    margin-left: 75%;
+}
