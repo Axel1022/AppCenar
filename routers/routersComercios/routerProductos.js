@@ -8,6 +8,7 @@ router.get("/comercios/EditarProducto/:id", productosController.GetEditProducts)
 router.get("/comercios/EliminarProducto/:id", productosController.GetDeleteProducts);
 router.post("/comercios/AgregarProducto", productosController.PostAddProducts);
 router.post("/comercios/EditarProducto", productosController.PostEditProducts);
+router.post("/comercios/EliminarProducto/:id", productosController.GetDeleteProducts);
 router.post("/comercios/EliminarProducto", productosController.PostDeleteProducts);
 
 module.exports = router;

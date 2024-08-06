@@ -19,6 +19,11 @@ const PedidoProducto = sequelize.define("PedidoProducto", {
       key: "id",
     },
   },
+  quantity:{
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    defaultValue: 0, 
+ },
 });
 
 
