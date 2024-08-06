@@ -35,6 +35,7 @@ router.post(
   clienteController.DeleteFavoritosPost
 );
 router.post("/cliente/confirmarpedido", clienteController.confirmarPedido);
+router.post("/buscarComercio", clienteController.postBuscarComercio);
 
 router.get("/cliente/pedidos", clienteController.getPedidos);
 router.get("/cliente/pedidos/detalle/:id", clienteController.getDetallePedidos); //TODO: Hay que cambiar esto porque necesita el id
