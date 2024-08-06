@@ -247,7 +247,10 @@ exports.getPedidos = async (req, res, next) => {
     const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
       where: { clientId: idCliente },
-      order: [["date", "DESC"], ["hour", "DESC"]],
+      order: [
+        ["date", "DESC"],
+        ["hour", "DESC"],
+      ],
     });
 
     if (resultPedidos.length === 0) {
@@ -278,7 +281,6 @@ exports.getPedidos = async (req, res, next) => {
             return producto.dataValues;
           })
         );
-
 
         return {
           ...pedido.dataValues,
@@ -339,7 +341,7 @@ exports.getDetallePedidos = async (req, res, next) => {
       Pedido: resultPedido.dataValues,
       Productos: productos,
       Comercio: resultComercio.dataValues,
-      test: total.total,
+      // test: total.total,
       //? Ya esto es monte y culebra, xd
     });
   } catch (error) {
