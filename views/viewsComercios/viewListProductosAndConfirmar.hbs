@@ -45,7 +45,7 @@
                     <form method="post" action="/eliminarProducto/orden" class="ml-3">
                       <input type="hidden" value="{{this.id}}" name="idProducto" />
                       <input type="hidden" value="{{../Comercio.id}}" name="idComercio" />
-                      <button type="submit" class="btn btn-danger btn-sm btn-del-order">
+                      <button type="submit" class="btn btn-delete btn-sm btn-del-order">
                         Eliminar
                       </button>
                     </form>
@@ -56,7 +56,7 @@
                   <strong>Subtotal:</strong>
                   <span>${{test}}</span>
                 </li>
-                <a href="/cliente/completar/pedido/{{Comercio.id}}" class="btn btn-primary d-flex justify-content-between align-items-center btn-cont">
+                <a href="/cliente/completar/pedido/{{Comercio.id}}" class="btn btn-edit d-flex justify-content-between align-items-center btn-cont">
                   Continuar
                 </a>
             {{else}}
@@ -68,6 +68,6 @@
     </div>
   {{else}}
     <h3 class="text-center">Lo siento, no tenemos productos disponibles</h3>
-<a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-primary">Volver</a>
+<a href="javascript:void(0);" onclick="window.history.back();" class="btn btn-back">Volver</a>
   {{/if}}
 </div>

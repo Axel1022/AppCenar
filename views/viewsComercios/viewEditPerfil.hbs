@@ -10,6 +10,7 @@
       novalidate
     >
       <div class="card-body">
+        <!-- Name input field -->
         <div class="form-group mb-3">
           <label for="nombre">Nombre</label>
           <input
@@ -20,7 +21,10 @@
             value="{{comercio.name}}"
             required
           />
+          <div class="invalid-feedback">Please enter the name.</div>
         </div>
+
+        <!-- Phone input field -->
         <div class="form-group mb-3">
           <label for="telefono">Teléfono</label>
           <input
@@ -33,8 +37,11 @@
             title="Debe contener 10 dígitos numéricos"
             required
           />
+          <div class="invalid-feedback">Please enter a valid phone number with 10 digits.</div>
         </div>
-          <div class="form-group mb-3">
+
+        <!-- Email input field -->
+        <div class="form-group mb-3">
           <label for="email">Email</label>
           <input
             type="email"
@@ -44,7 +51,10 @@
             value="{{comercio.email}}"
             required
           />
+          <div class="invalid-feedback">Please enter a valid email address.</div>
         </div>
+
+        <!-- Logo input field -->
         <div class="form-group mb-3">
           <label for="image">Logo</label>
           <input
@@ -53,7 +63,10 @@
             class="form-control"
             id="image"
           />
+          <div class="invalid-feedback">Please upload a logo image.</div>
         </div>
+
+        <!-- Opening time input field -->
         <div class="form-group mb-3">
           <label for="openTime">Horario de apertura</label>
           <input
@@ -64,8 +77,11 @@
             value="{{comercio.openTime}}"
             required
           />
+          <div class="invalid-feedback">Please enter the opening time.</div>
         </div>
-           <div class="form-group mb-3">
+
+        <!-- Closing time input field -->
+        <div class="form-group mb-3">
           <label for="closeTime">Horario de cierre</label>
           <input
             type="text"
@@ -75,24 +91,27 @@
             value="{{comercio.closeTime}}"
             required
           />
+          <div class="invalid-feedback">Please enter the closing time.</div>
         </div>
 
-       <div class="form-group mb-3">
+        <!-- Category select field -->
+        <div class="form-group mb-3">
           <label for="category">Categoria</label>
           <select class="form-control" id="category" name="typeTrade" required>
-              <option value="">Selecciona tu categoria</option>
-              <option value="Restaurante" {{#if (compare comercio.typeTrade "Restaurante")}}selected{{/if}}>Restaurante</option>
-              <option value="Mercado" {{#if (compare comercio.typeTrade "Mercado")}}selected{{/if}}>Mercado</option>
-              <option value="Drink" {{#if (compare comercio.typeTrade "Drink")}}selected{{/if}}>Drink</option>
-              <option value="Cafeteria" {{#if (compare comercio.typeTrade "Cafeteria")}}selected{{/if}}>Cafeteria</option>
-              <option value="Tienda" {{#if (compare comercio.typeTrade "Tienda")}}selected{{/if}}>Tienda</option>
-              <option value="Salud" {{#if (compare comercio.typeTrade "Salud")}}selected{{/if}}>Salud</option>
+            <option value="">Selecciona tu categoria</option>
+            <option value="Restaurante" {{#if (compare comercio.typeTrade "Restaurante")}}selected{{/if}}>Restaurante</option>
+            <option value="Mercado" {{#if (compare comercio.typeTrade "Mercado")}}selected{{/if}}>Mercado</option>
+            <option value="Drink" {{#if (compare comercio.typeTrade "Drink")}}selected{{/if}}>Drink</option>
+            <option value="Cafeteria" {{#if (compare comercio.typeTrade "Cafeteria")}}selected{{/if}}>Cafeteria</option>
+            <option value="Tienda" {{#if (compare comercio.typeTrade "Tienda")}}selected{{/if}}>Tienda</option>
+            <option value="Salud" {{#if (compare comercio.typeTrade "Salud")}}selected{{/if}}>Salud</option>
           </select>
           <div class="valid-feedback">Good!</div>
           <div class="invalid-feedback">Please select a category.</div>
-      </div>
+        </div>
 
-           <div class="form-group mb-3">
+        <!-- Role input field -->
+        <div class="form-group mb-3">
           <label for="role">Rol</label>
           <input
             type="text"
@@ -102,15 +121,16 @@
             value="{{comercio.role}}"
             required
           />
+          <div class="invalid-feedback">Please enter the role.</div>
         </div>
       </div>
       <div class="card-footer d-flex justify-content-between">
         <a
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-back"
           onclick="window.history.back();"
         >Volver</a>
-        <button type="submit" class="btn btn-primary">Enviar</button>
+        <button type="submit" class="btn btn-add">Enviar</button>
       </div>
     </form>
   </div>

@@ -1,53 +1,100 @@
 <div class="col-12 col-sm-6 offset-3 d-flex align-items-center justify-content-center">
-
-    <form action="/comercios/{{#if editMode}}EditarProducto{{else}}AgregarProducto{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
-      
-      {{#if editMode}}
-       <h3>Editar Producto</h3>
-      {{else}}
-       <h3>Agregar Producto</h3>
-      {{/if}}
-      
-       {{#if editMode}}
-         <input type="hidden" value="{{productos.id}}" name="id">
-       {{/if}}
-       
-      <div class="form-add-prod">
-            <div class="form-group mt-3">
-                <label for="name">Nombre:</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="{{#if editMode}}{{productos.name}}{{/if}}" required>
-            </div>
-            <div class="form-group mt-3">
-                <label for="image">Imagen del producto:</label>
-                <input type="file" class="form-control" id="image" name="image" value="{{#if editMode}}{{productos.image}}{{/if}}" required>
-            </div>
-            <div class="form-group mt-3">
-                <label for="description">Descripcion:</label><br>
-                <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{productos.description}}{{/if}}</textarea>
-            </div>
-            <div class="mt-3">
-                <select class="form-select" name="categoryId" aria-label="Default select example" id="categoryId" required>
-                   <option value="" disabled selected>Categorias</option>
-                    {{#each categorias}}
-                    {{#if (compare this.id ../productos.categoryId)}}
-                        <option value="{{this.id}}" selected>{{this.name}}</option>
-                    {{else}}
-                        <option value="{{this.id}}">{{this.name}}</option>
-                    {{/if}}
-                    {{/each}}
-                </select>
-                <div class="invalid-feedback">Please select a category or check if a category exists in the system.</div>
-            </div>
-            <div class="form-group mt-3">
-                <label for="name">Precio:</label>
-                <input type="number" class="form-control" id="price" name="price" placeholder="$200 " value="{{#if editMode}}{{productos.price}}{{/if}}" required>
-                <div class="invalid-feedback">Please select a price</div>
-            </div>
-        
-            <button type="submit" class="btn btn-primary float-end mt-3 btn-save">Guardar</button>
-            <a href="#" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
+  <form action="/comercios/{{#if editMode}}EditarProducto{{else}}AgregarProducto{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate> 
+    {{#if editMode}}
+      <h3>Edit Product</h3>
+    {{else}}
+      <h3>Add Product</h3>
+    {{/if}}
+    
+    {{#if editMode}}
+      <input type="hidden" value="{{productos.id}}" name="id">
+    {{/if}}
+    
+    <div class="form-add-prod">
+      <div class="form-group mt-3">
+        <label for="name">Nombre:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          placeholder="Enter name"
+          value="{{#if editMode}}{{productos.name}}{{/if}}"
+          required
+        />
+        <div class="invalid-feedback">
+          Please enter a product name.
+        </div>
       </div>
-   </form>
-</div>
 
-  
+      <div class="form-group mt-3">
+        <label for="image">Imagen del producto:</label>
+        <input
+          type="file"
+          class="form-control"
+          id="image"
+          name="image"
+          required
+        />
+        <div class="invalid-feedback">
+          Please select an image for the product.
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="description">Descripcion:</label><br>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          cols="55"
+          required
+        >{{#if editMode}}{{productos.description}}{{/if}}</textarea>
+        <div class="invalid-feedback">
+          Please enter a description for the product.
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <select
+          class="form-select"
+          name="categoryId"
+          aria-label="Default select example"
+          id="categoryId"
+          required
+        >
+          <option value="" disabled selected>Categorias</option>
+          {{#each categorias}}
+          {{#if (compare this.id ../productos.categoryId)}}
+            <option value="{{this.id}}" selected>{{this.name}}</option>
+          {{else}}
+            <option value="{{this.id}}">{{this.name}}</option>
+          {{/if}}
+          {{/each}}
+        </select>
+        <div class="invalid-feedback">
+          Please select a category or check if a category exists in the system.
+        </div>
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="price">Precio:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="price"
+          name="price"
+          placeholder="$200"
+          value="{{#if editMode}}{{productos.price}}{{/if}}"
+          required
+        />
+        <div class="invalid-feedback">
+          Please enter a price for the product.
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary float-end mt-3 btn-add">Save</button>
+      <a href="#" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
+    </div>
+  </form>
+</div>
