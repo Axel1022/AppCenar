@@ -1,1 +1,44 @@
-<h1>Este es el listado de Comercio</h1>
+{{#if has}}
+  <h1 class="text-center my-4">Listado de Comercios</h1>
+  <div class="container">
+    <ul class="list-group">
+      {{#each Comercios}}
+        <li
+          class="list-group-item d-flex justify-content-between mb-4 align-items-start shadow-sm p-3"
+        >
+          <div class="ms-2 me-auto">
+            <div class="d-flex align-items-center mb-2">
+              <img
+                src="{{this.logo}}"
+                alt="logo de {{this.name}}"
+                class="rounded-circle me-3"
+                height="50px"
+                width="50px"
+              />
+              <h5 class="fw-bold mb-0">{{this.name}}</h5>
+            </div>
+            <div class="h6"><strong>Hora de apertura:</strong>
+              {{this.openTime}}</div>
+            <div class="h6"><strong>Hora de cierre:</strong>
+              {{this.closeTime}}</div>
+            <div class="h6"><strong>Teléfono:</strong> {{this.phone}}</div>
+            <div class="h6"><strong>Email:</strong> {{this.email}}</div>
+            <div class="h6"><strong>Cantidad de pedidos:</strong>
+              {{this.cantidad}}</div>
+          </div>
+          <div class="d-flex flex-column align-items-end">
+            {{#if this.isActivo}}
+              <button class="btn btn-success btn-sm mb-2">Activar</button>
+            {{else}}
+              <button class="btn btn-danger btn-sm">Desactivar</button>
+            {{/if}}
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <div class="container text-center my-4">
+    <p class="text-muted">No hay comercios disponibles.</p>
+  </div>
+{{/if}}

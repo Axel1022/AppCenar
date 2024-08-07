@@ -1,1 +1,25 @@
-<h1>Este es el listado de Delivery</h1>
+{{#if has}}
+<h1 class="text-center my-4">Listado de Deliveries</h1>
+<div class="container">
+    <ul class="list-group">
+        {{#each Deliveries}}
+        <li class="list-group-item d-flex justify-content-between align-items-start mb-4">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold  h5">{{this.name}} {{this.lastName}}</div>
+                <div class="h6"><strong>Teléfono:</strong> {{this.phone}}</div>
+                <div class="h6"><strong>Email:</strong> {{this.email}}</div>
+                <div class="h6"><strong>Pedidos entregados:</strong> {{this.cantidad}}</div>
+            </div>
+            <div class="d-flex flex-column">
+                <button class="btn btn-success btn-sm mb-2">Activar</button>
+                <button class="btn btn-danger btn-sm">Desactivar</button>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+{{else}}
+<div class="container text-center my-4">
+    <p class="text-muted">No hay clientes disponibles.</p>
+</div>
+{{/if}}

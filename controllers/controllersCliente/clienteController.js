@@ -9,6 +9,7 @@ const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
 const calcularTotal = require("../../utils/calcularTotal");
 const { Op } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
   try {
@@ -30,21 +31,33 @@ exports.confirmarPedido = async (req, res, next) => {
     const idComercio = req.body.comercioID;
 
     const temProducts = await temProductos.findAll();
+    await modelCliente.update(
+      { cantidad: Sequelize.literal(`cantidad + ${1}`) },
+      { where: { id: idCliente } }
+    );
+    await modelComercio.update(
+      { cantidad: Sequelize.literal(`cantidad + ${1}`) },
+      { where: { id: idComercio } }
+    );
+    // await Pedidos.update(
+    //   { deliverId: deliveryId, status: "En Proceso" },
+    //   { where: { id: pedidoId } }
+    // );
 
     const productData = await Promise.all(
       temProducts.map(async (element) => {
-     const producto = await modelProductos.findByPk(element.id);
+        const producto = await modelProductos.findByPk(element.id);
 
-     if (!producto) {
-      throw new Error(`Producto con ID ${element.id} no encontrado.`);
-    }
+        if (!producto) {
+          throw new Error(`Producto con ID ${element.id} no encontrado.`);
+        }
 
-    console.log("Producto recuperado:", producto);
-    console.log("Precios:", producto.price);
+        console.log("Producto recuperado:", producto);
+        console.log("Precios:", producto.price);
 
     return {
       id: producto.id,
-      quantity: element.quantity || 1, 
+      quantity: element.quantity || 1,
       price: producto.price
     };
     })
@@ -56,13 +69,13 @@ exports.confirmarPedido = async (req, res, next) => {
     const total = calcularTotal(productosFind, itbs);
 
 
-  const now = new Date();
-  now.setDate(now.getDate() - 1);
-  const formattedDate = now.toISOString().split("T")[0];
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const seconds = now.getSeconds().toString().padStart(2, "0");
-  const formattedTime = `${hours}:${minutes}:${seconds}`;
+    const now = new Date();
+    now.setDate(now.getDate() - 1);
+    const formattedDate = now.toISOString().split("T")[0];
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
 
     const newPedido = await modelPedidos.create({
       clientId: idCliente,
@@ -83,9 +96,9 @@ exports.confirmarPedido = async (req, res, next) => {
       temProducts.map(async (element) => {
         await modelPedidoProducto.create({
           pedidoId: idPedido,
-          productId: element.id,
-          producto_id: element.id,
-          quantity: totalProducts
+          productId: element.productId,
+          producto_id: element.productId,
+          quantity: totalProducts,
         });
       })
     );
@@ -131,7 +144,7 @@ exports.getCompletarPedido = async (req, res, next) => {
       Comercio: itemsComercio.dataValues,
       hasDire: direccionesFind.length > 0,
       test: total.subTotal,
-      testTotal: total.total
+      testTotal: total.total,
     });
   } catch (error) {
     console.log("El problema está en getCompletarPedido >>> ", error);
