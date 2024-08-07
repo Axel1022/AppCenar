@@ -1,27 +1,23 @@
 {{#if has}}
   <div class="container mt-5">
-    <h1 class="text-center mb-">Mis Favoritos</h1>
+    <h1 class="text-center mb-4">Mis Favoritos</h1>
     <ul class="list-group p-3">
       {{#each Comercios as |comercio|}}
-        <a  href="/comercios/pedido/realizar/{{this.id}}">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <div class="d-flex align-items-center">
-              <img
-                src="{{comercio.logo}}"
-                class="img-thumbnail mr-3"
-                alt="imagen de {{comercio.name}}"
-                style="width: 50px; height: 50px;"
-              />
-              <span>{{comercio.name}}</span>
-            </div>
-            <form method="post" action="/cliente/comercios/eliminar">
-              <input type="hidden" name="id" value="{{comercio.idfavorito}}" />
-              <button type="submit" class="btn btn-danger">Remover</button>
-            </form>
-          </li>
-        </a>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <img
+              src="{{comercio.logo}}"
+              class="img-thumbnail m-2"
+              alt="imagen de {{comercio.name}}"
+              style="width: 50px; height: 50px;"
+            />
+            <span class="mr-2">{{comercio.name}}</span>
+          </div>
+          <form method="post" action="/cliente/comercios/eliminar" class="mb-0">
+            <input type="hidden" name="id" value="{{comercio.idfavorito}}" />
+            <button type="submit" class="btn btn-delete">Remover</button>
+          </form>
+        </li>
       {{/each}}
     </ul>
   </div>
