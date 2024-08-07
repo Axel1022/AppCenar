@@ -57,12 +57,11 @@ exports.getHome = async (req, res, next) => {
       hour: p.hour,
       total: p.total,
       status: p.status,
-      totalProductos: p.pedidoProductos.reduce(
-        (sum, pp) => sum + pp.quantity,
-        0
-      ),
+      Productos: p.pedidoProductos.map(pp => ({
+        quantity: pp.quantity
+      }))
     }));
-
+    
     console.log("Pedidos:", pedidosData);
     console.log("Comercio", comercio);
 
