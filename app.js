@@ -152,6 +152,7 @@ Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
 Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
 
+Itbis.belongsTo(Admin, { foreignKey: "adminId", as: "itbs" });
 
 Pedido.belongsToMany(Producto, {
   through: PedidoProducto,
@@ -182,12 +183,8 @@ PedidoProducto.belongsTo(Producto, {
 
 PedidoProducto.belongsTo(Pedido, { foreignKey: "pedidoId", as: "pedido" });
 
-Pedido.belongsTo(Delivey, {foreingKey: "deliverId", as: "delivery"});
-Delivey.hasMany(Pedido, {foreignKey: "deliverId", as: "pedido"});
-
-Itbis.belongsTo(Admin, {foreignKey: "adminId", as: "itbs"});
-
-
+Pedido.belongsTo(Delivey, { foreingKey: "deliverId", as: "delivery" });
+Delivey.hasMany(Pedido, { foreignKey: "deliverId", as: "pedido" });
 //? --------------------------- Homepages ---------------------------
 app.use(loginController);
 app.use(registrarController);

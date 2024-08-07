@@ -4,7 +4,7 @@ const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const Pedidos = require("../../models/modelCliente/pedido");
 const PedidosProducto = require("../../models/modelPedidoProducto/pedidoProducto");
 const Delivery = require("../../models/modelDelivery/delivery");
-const Itbis = require("../../models/modelAdmin/itbis");
+const Itbis = require("../../models/modelAdmin/itebis");
 const verificUseer = require("../../utils/verificUserLog");
 const jsonFileHandler = require("../../utils/jsonFileHandler");
 const isFavorito = require("../../utils/isFavorito");
@@ -57,11 +57,12 @@ exports.getHome = async (req, res, next) => {
       hour: p.hour,
       total: p.total,
       status: p.status,
-      Productos: p.pedidoProductos.map(pp => ({
-        quantity: pp.quantity
-      }))
+      totalProductos: p.pedidoProductos.reduce(
+        (sum, pp) => sum + pp.quantity,
+        0
+      ),
     }));
-    
+
     console.log("Pedidos:", pedidosData);
     console.log("Comercio", comercio);
 
@@ -278,10 +279,13 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
     const itemsProduct = await temProductos.findAll();
     const productosFind = itemsProduct.map((producto) => producto.dataValues);
 
-    const itbisVal = await Itbis.findOne();
-    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
+    // console.log("productos mapeados", productosFind);
 
-    const total = calcularTotal(productosFind, itbs);
+    const itemItbis = await Itbis.findOne({ where: { id: 1 } });
+    const total = calcularTotal(productosFind, itemItbis.itbis);
+
+    // console.log("subtotal", total.subTotal);
+    // console.log("total", total.total);
 
     res.render("viewsComercios/viewListProductosAndConfirmar", {
       pageTitle: "Food Rush | Realizar pedido",

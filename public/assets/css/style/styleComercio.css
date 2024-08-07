@@ -327,13 +327,3 @@ a {
 .price-prod{
     margin-left: 75%;
 }
-
-.totales {
-    display: flex;
-    align-items: center; /* Alinea los elementos verticalmente al centro */
-    gap: 10px; /* Espacio entre los elementos */
-  }
-
-  .card-text-com {
-    margin: 0; /* Elimina márgenes para evitar espacios extra */
-  }

@@ -7,7 +7,6 @@
       class="needs-validation"
       method="POST"
       action="/delivery/perfil/editar/post"
-      novalidate
     >
       <div class="card-body">
         <div class="form-group mb-3">
@@ -20,9 +19,7 @@
             value="{{Cliente.name}}"
             required
           />
-          <div class="invalid-feedback">Please enter your first name.</div>
         </div>
-
         <div class="form-group mb-3">
           <label for="lastName">Apellido</label>
           <input
@@ -33,9 +30,7 @@
             value="{{Cliente.lastName}}"
             required
           />
-          <div class="invalid-feedback">Please enter your last name.</div>
         </div>
-
         <div class="form-group mb-3">
           <label for="phone">Teléfono</label>
           <input
@@ -45,12 +40,10 @@
             id="phone"
             value="{{Cliente.phone}}"
             pattern="[0-9]{10}"
-            title="Must contain 10 numeric digits"
+            title="Debe contener 10 dígitos numéricos"
             required
           />
-          <div class="invalid-feedback">Please enter a valid phone number with 10 digits.</div>
         </div>
-
         <div class="form-group mb-3">
           <label for="imageProfile">Foto de Perfil</label>
           <input
@@ -59,7 +52,6 @@
             class="form-control"
             id="imageProfile"
           />
-          <div class="invalid-feedback">Please upload a profile picture (optional).</div>
         </div>
       </div>
       <div class="card-footer d-flex justify-content-between">
@@ -67,8 +59,8 @@
           type="button"
           class="btn btn-secondary"
           href="/delivery/perfil"
-        >Back</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        >Volver</a>
+        <button type="submit" class="btn btn-primary">Enviar</button>
       </div>
     </form>
   </div>
