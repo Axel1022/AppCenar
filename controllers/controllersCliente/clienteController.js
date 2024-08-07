@@ -13,6 +13,12 @@ const { Op } = require("sequelize");
 const { Sequelize } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
   try {
     verificUseer(req, res, next);
     res.render("viewsCliente/home", {
@@ -26,6 +32,11 @@ exports.getHome = async (req, res, next) => {
 };
 
 exports.confirmarPedido = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     const idCliente = verificUseer(req, res, next);
     const idDireccion = req.body.radioDire;
@@ -119,6 +130,11 @@ exports.confirmarPedido = async (req, res, next) => {
 };
 
 exports.getCompletarPedido = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     const idCliente = verificUseer(req, res, next);
     const idComercio = req.params.idComercio;
@@ -158,6 +174,11 @@ exports.getCompletarPedido = async (req, res, next) => {
 exports.getDirecciones = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en direcciones, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
 
   try {
     const idCliente = verificUseer(req, res, next);
@@ -180,6 +201,11 @@ exports.getDirecciones = async (req, res, next) => {
   }
 };
 exports.getDireccionesAdd = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   verificUseer(req, res, next);
   res.render("viewsCliente/viewDireccionesAdd", {
     pageTitle: "Food Rush | Direcciones ",
@@ -187,6 +213,11 @@ exports.getDireccionesAdd = (req, res, next) => {
   });
 };
 exports.postDireccionesAdd = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
   const idCliente = verificUseer(req, res, next);
@@ -202,6 +233,11 @@ exports.postDireccionesAdd = (req, res, next) => {
     });
 };
 exports.getFavoritos = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await modelFavoritos.findAll({
     where: { clientId: idCliente },
@@ -224,6 +260,11 @@ exports.getFavoritos = async (req, res, next) => {
   });
 };
 exports.DeleteFavoritosPost = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   verificUseer(req, res, next);
   const idFavorito = req.body.id;
   modelFavoritos
@@ -248,6 +289,11 @@ exports.DeleteFavoritosPost = async (req, res, next) => {
 exports.getPerfil = async (req, res, next) => {
   //TODO: Necesito saber el id del usuario que llego al home, esto para poder obtener los datos que voy a colocar en el perfil, etc...
   //! Esto esta funcionando porque estoy accediendo al user con id 1, de debe cambiar!!
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
 
   const idCliente = verificUseer(req, res, next);
 
@@ -262,6 +308,11 @@ exports.getPerfil = async (req, res, next) => {
 };
 
 exports.getPedidos = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     const idCliente = verificUseer(req, res, next);
     const resultPedidos = await modelPedidos.findAll({
@@ -324,6 +375,11 @@ exports.getPedidos = async (req, res, next) => {
 
 exports.getDetallePedidos = async (req, res, next) => {
   //****************************** Bueno, laálogica ******************************\\
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const pedidoId = req.params.id;
   const idCliente = verificUseer(req, res, next);
 
@@ -370,6 +426,11 @@ exports.getDetallePedidos = async (req, res, next) => {
 };
 
 exports.getEditPerfil = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
 
   const cliente = await modelCliente.findOne({ where: { id: idCliente } });
@@ -380,6 +441,11 @@ exports.getEditPerfil = async (req, res, next) => {
   });
 };
 exports.postEditPerfil = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const name = req.body.name;
   const lastName = req.body.lastName;
   const phone = req.body.telefono;
@@ -399,6 +465,11 @@ exports.postEditPerfil = (req, res, next) => {
     });
 };
 exports.postEliminarDirrecion = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idElemt = req.body.elemetnId;
   const idCliente = verificUseer(req, res, next);
 
@@ -422,6 +493,11 @@ exports.postEliminarDirrecion = (req, res, next) => {
     });
 };
 exports.getEditarDirrecion = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const elemetnID = req.params.elemetnId;
   modelDirecciones
     .findOne({ where: { id: elemetnID } })
@@ -442,6 +518,11 @@ exports.getEditarDirrecion = (req, res, next) => {
     });
 };
 exports.postEditarDirrecion = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const lugar = req.body.lugar;
   const direccion = req.body.direccion;
   const idCliente = verificUseer(req, res, next);
@@ -464,6 +545,11 @@ exports.postEditarDirrecion = (req, res, next) => {
     });
 };
 exports.postBuscarComercio = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const buscar = req.body.buscar;
   verificUseer(req, res, next);
   if (buscar === "" || buscar === undefined || buscar === null) {
@@ -488,6 +574,11 @@ exports.postBuscarComercio = async (req, res, next) => {
   }
 };
 exports.addFavorito = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const idComercio = req.body.idComercio;
 

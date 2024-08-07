@@ -36,7 +36,7 @@ exports.PostLogin = (req, res, next) => {
       const role = user.role;
       console.log(role);
 
-      if (role != "administrador" && !user.active) {
+      if (!user.active) {
         req.flash(
           "errors",
           "Your account is not activate. Please check your email for activate your account. "

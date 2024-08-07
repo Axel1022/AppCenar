@@ -26,13 +26,17 @@
             <div class="h6"><strong>Cantidad de pedidos:</strong>
               {{this.cantidad}}</div>
           </div>
-          <div class="d-flex flex-column align-items-end">
-            {{#if this.isActivo}}
-              <button class="btn btn-success btn-sm mb-2">Activar</button>
-            {{else}}
-              <button class="btn btn-danger btn-sm">Desactivar</button>
-            {{/if}}
-          </div>
+          <form action="/admin/activarDesactivar" method="post">
+            <input type="hidden" name="id" value="{{this.id}}" />
+            <input type="hidden" name="rol" value="{{this.role}}" />
+            <div class="d-flex flex-column align-items-end">
+              {{#if this.isActivo}}
+                <button class="btn btn-danger btn-sm">Desactivar</button>
+              {{else}}
+                <button class="btn btn-success btn-sm mb-2">Activar</button>
+              {{/if}}
+            </div>
+          </form>
         </li>
       {{/each}}
     </ul>

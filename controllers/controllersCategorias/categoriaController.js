@@ -6,6 +6,11 @@ const verificUseer = require("../../utils/verificUserLog");
 
 
 exports.GetCategoria = async (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
 
     const comercioId = verificUseer(req, res, next);
 
@@ -32,7 +37,12 @@ exports.GetCategoria = async (req, res, next) => {
     });
 }
 
-exports.GetAddCategoria = async  (req, res, next) => {
+exports.GetAddCategoria = async (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
    const comercioId = req.session.user.id;
    const usuario= req.session.user.role;
 
@@ -156,6 +166,11 @@ exports.GetAddCategoria = async  (req, res, next) => {
 };
 
 exports.GetEditCategoria = async (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
     const comercioId = req.session.user.id;
     const usuario = req.session.user.role;
     const id = req.params.id;
@@ -289,6 +304,11 @@ exports.GetEditCategoria = async (req, res, next) => {
 }
 
 exports.GetDeleteCategoria = (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
     const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
@@ -322,6 +342,11 @@ exports.GetDeleteCategoria = (req, res, next) => {
 };
 
 exports.PostAddCategorias = (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
     const comercioId = verificUseer(req, res, next);
     const usuario = req.session.user.role;
 
@@ -347,6 +372,11 @@ exports.PostAddCategorias = (req, res, next) => {
 };
 
 exports.PostEditCategoria = (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
  const comercioId = verificUseer(req, res, next);
  const usuario = req.session.user.role;
 
@@ -392,6 +422,11 @@ exports.PostEditCategoria = (req, res, next) => {
 };
 
 exports.PostDeleteCategoria = async (req, res, next) => {
+     const role = req.session.user.role;
+     if (role != "comercio") {
+       req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+       return res.redirect("/login");
+     }
   const comercioId = verificUseer(req, res, next);
   const usuario = req.session.user.role;
 

@@ -3,7 +3,11 @@
     <div class="info-comercio">
       <div class="card-header-detail">
         <div class="header-content">
-          <img src="{{Comercio.logo}}" alt="Logo de {{Comercio.name}}"  class="img-comercio" />
+          <img
+            src="{{Comercio.logo}}"
+            alt="Logo de {{Comercio.name}}"
+            class="img-comercio"
+          />
           <div class="header-text">
             <div class="card-title-det">{{Comercio.name}}</div>
             <div class="card-text-det">{{Pedido.status}}</div>
@@ -13,10 +17,10 @@
       </div>
 
       <div class="info-prod">
-       {{#each Productos}}
+        {{#each Productos}}
           <div class="product-container">
             <div class="img-prod">
-              <img src="{{image}}" alt="{{name}}">
+              <img src="{{image}}" alt="{{name}}" />
             </div>
 
             <div class="name-prod">
@@ -28,29 +32,52 @@
             </div>
           </div>
 
-         <div class="linea"></div>
+          <div class="linea"></div>
 
         {{/each}}
-        <h6 class="" >Dirección</h6>
-        <div class="name-prod d-flex ">
-          <img class="p-2" src="/assets/img/ubicacion.png" alt="icono de ubicacion" height="30px" width="30px">
+        {{#if (compare Pedido.status "En Proceso")}}
+        <h6 class="">Dirección</h6>
+        <div class="name-prod d-flex">
+          <img
+            class="p-2"
+            src="/assets/img/ubicacion.png"
+            alt="icono de ubicacion"
+            height="30px"
+            width="30px"
+          />
 
-              <h6 class="mt-2" >{{Direccion.direction}}</h6>
-            </div>
-
-          <div class="container-total">
-            <div class="total">
-              <h5>Total</h5>
-            </div>
-            <div class="total-price">
-              <h5>RD$ {{Pedido.total}}</h5>
-             </div>
-          </div>
-
-        {{#if (compare pedido.status "Pendiente")}}
-        <a href="/comercios/asignarDelivery/{{pedido.id}}" class="btn btn-success float-end">Asignar a delivery</a>
+          <h6 class="mt-2">{{Direccion.direction}}</h6>
+        </div>
         {{/if}}
-      </div>
+
+        <div class="container-total">
+          <div class="total">
+            <h5>Total</h5>
+          </div>
+          <div class="total-price">
+            <h5>RD$ {{Pedido.total}}</h5>
+          </div>
+        </div>
+        {{#if (compare Pedido.status "En Proceso")}}
+          <form action="/delivery/confirmarEntega" method="post">
+            {{!-- <input type="hidden" value="{{deliverId}}" name="deliveryId" /> --}}
+            <input type="hidden" value="{{Pedido.id}}" name="pedidoId" />
+            <button class="btn btn-success w-100">Confirmar entrega</button>
+
+
+        {{/if}}
+        <a href="/delivery/home" class="btn btn-primary w-100 mt-2">Volver Atras</a>
+        {{#if (compare pedido.status "Pendiente")}}
+          <a
+            href="/comercios/asignarDelivery/{{pedido.id}}"
+            class="btn btn-success float-end"
+          >Asignar a delivery</a>
+
+        {{/if}}
+
     </div>
+     </div>
+
   </div>
+
 </div>

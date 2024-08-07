@@ -1,26 +1,71 @@
 {{#if has}}
-<h1 class="text-center my-4">Listado de Administradores</h1>
-<div class="container">
-            <a  href="/registroAdmin" class="btn btn-primary m-3 float-end">+ Admin</a><br><br><br>
+  <h1 class="text-center my-4">Listado de Administradores</h1>
+  <div class="container">
+    <a href="/registroAdmin" class="btn btn-primary m-3 float-end">+ Admin</a><br
+    /><br /><br />
     <ul class="list-group">
-        {{#each Admins}}
-        <li class="list-group-item d-flex justify-content-between align-items-start mb-4">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold  h5">{{this.name}} {{this.lastName}}</div>
-                <div class="h6"><strong>Nombre de usuario:</strong> {{this.user}}</div>
-                <div class="h6"><strong>Cedula:</strong> {{this.identification}}</div>
-                <div class="h6"><strong>Email:</strong> {{this.email}}</div>
+      {{#each Admins}}
+        <li
+          class="list-group-item d-flex justify-content-between align-items-start mb-4"
+        >
+          <div class="ms-2 me-auto">
+            <div class="fw-bold h5">{{this.name}} {{this.lastName}}</div>
+            <div class="h6"><strong>Nombre de usuario:</strong>
+              {{this.user}}</div>
+            <div class="h6"><strong>Cedula:</strong>
+              {{this.identification}}</div>
+            <div class="h6"><strong>Email:</strong> {{this.email}}</div>
+          </div>
+          <form action="/admin/activarDesactivar" method="post">
+            <input type="hidden" name="id" value="{{this.id}}" />
+            <input type="hidden" name="rol" value="{{this.role}}" />
+            <div class="d-flex flex-column align-items-end">
+              {{#if this.isActivo}}
+                {{#if this.im}}
+                  <button
+                    disabled
+                    class="btn btn-danger btn-sm"
+                  >Desactivar</button>
+                  <a
+                    href="/admin/editar/{{this.id}}"
+                    class="btn btn-primary btn-sm mt-2 disabled"
+                  >Editar</a>
+
+                {{else}}
+                  <button class="btn btn-danger btn-sm">Desactivar</button>
+                  <a
+                    href="/admin/editar/{{this.id}}"
+                    disabled
+                    class="btn btn-primary btn-sm mt-2"
+                  >Editar</a>
+                {{/if}}
+              {{else}}
+                {{#if this.im}}
+                  <button
+                    disabled
+                    class="btn btn-success btn-sm"
+                  >Activar</button>
+                  <a
+                    href="/admin/editar{{this.id}}"
+                    class="btn btn-primary btn-sm mt-2 disabled"
+                  >Editar</a>
+                {{else}}
+                  <button class="btn btn-success btn-sm">Activar</button>
+                  <a
+                    href="/admin/editar/{{this.id}}"
+                    disabled
+                    class="btn btn-primary btn-sm mt-2"
+                  >Editar</a>
+                {{/if}}
+              {{/if}}
             </div>
-            <div class="d-flex flex-column">
-                <button class="btn btn-success btn-sm mb-2">Activar</button>
-                <button class="btn btn-danger btn-sm">Desactivar</button>
-            </div>
+          </form>
         </li>
-        {{/each}}
+      {{/each}}
     </ul>
-</div>
+  </div>
 {{else}}
-<div class="container text-center my-4">
+  <div class="container text-center my-4">
     <p class="text-muted">No hay clientes disponibles.</p>
-</div>
+  </div>
 {{/if}}

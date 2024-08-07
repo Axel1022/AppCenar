@@ -80,6 +80,11 @@ exports.getHome = async (req, res, next) => {
 };
 
 exports.getViewBebidas = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "drink" },
@@ -101,6 +106,11 @@ exports.getViewBebidas = async (req, res, next) => {
 };
 
 exports.getViewMercados = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "mercado" },
@@ -122,6 +132,11 @@ exports.getViewMercados = async (req, res, next) => {
 };
 
 exports.getViewPostres_Cafe = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "cafeteria" },
@@ -142,6 +157,11 @@ exports.getViewPostres_Cafe = async (req, res, next) => {
 };
 
 exports.getViewRestaurantes = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "restaurante" },
@@ -164,6 +184,11 @@ exports.getViewRestaurantes = async (req, res, next) => {
 };
 
 exports.getViewSalud = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "salud" },
@@ -188,6 +213,11 @@ exports.getViewSalud = async (req, res, next) => {
 };
 
 exports.getViewTiendas = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const idCliente = verificUseer(req, res, next);
   const items = await Comercios.findAll({
     where: { typeTrade: "tienda" },
@@ -209,6 +239,11 @@ exports.getViewTiendas = async (req, res, next) => {
 };
 
 exports.AddProductPost = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   verificUseer(req, res, next);
   const idProducto = req.body.idProducto;
   const idComercio = req.body.idComercio;
@@ -241,6 +276,11 @@ exports.AddProductPost = async (req, res, next) => {
 };
 
 exports.deleteProductPost = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   verificUseer(req, res, next);
   const idProducto = req.body.idProducto;
   const idComercio = req.body.idComercio;
@@ -264,6 +304,11 @@ exports.deleteProductPost = async (req, res, next) => {
 };
 
 exports.getViewListProductsAndConfirmar = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "cliente") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     verificUseer(req, res, next);
     const comercioID = req.params.id;
@@ -296,16 +341,6 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
       hasOrden: productosFind.length > 0,
       test: total.subTotal,
     });
-  } catch (error) {
-    console.error("Error en getViewListProductsAndConfirmar: ", error);
-    next(error);
-  }
-};
-
-exports.getIdProductos = async (req, res, next) => {
-  try {
-    verificUseer(req, res, next);
-    const comercioID = req.params.id;
   } catch (error) {
     console.error("Error en getViewListProductsAndConfirmar: ", error);
     next(error);
@@ -408,6 +443,11 @@ exports.getDetails = async (req, res, next) => {
 };
 
 exports.getPerfil = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const comercioId = req.session.user.id;
 
   const comercio = await Comercios.findOne({ where: { id: comercioId } });
@@ -421,6 +461,11 @@ exports.getPerfil = async (req, res, next) => {
 };
 
 exports.getEditPerfil = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const comercioId = req.session.user.id;
 
   const comercio = await Comercios.findOne({ where: { id: comercioId } });
@@ -439,6 +484,11 @@ exports.getEditPerfil = async (req, res, next) => {
 };
 
 exports.PostEditPerfil = (req, res, next) => {
+  const roleeeee = req.session.user.role;
+  if (roleeeee != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const name = req.body.name;
   const phone = req.body.phone;
   const email = req.body.email;
@@ -470,8 +520,14 @@ exports.PostEditPerfil = (req, res, next) => {
     });
 };
 exports.GetAsignarDelivery = async (req, res, next) => {
-  const pedidoId = req.params.id;
 
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
+  const pedidoId = req.params.id;
 
   try {
     const pedido = await Pedidos.findByPk(pedidoId, {
@@ -504,6 +560,13 @@ exports.GetAsignarDelivery = async (req, res, next) => {
 };
 
 exports.postAsignarDelivery = async (req, res, next) => {
+
+  const role = req.session.user.role;
+  if (role != "comercio") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+  
   verificUseer(req, res, next);
   const deliveryId = req.body.deliveryId;
   const pedidoId = req.body.pedidoId;

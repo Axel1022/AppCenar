@@ -7,6 +7,12 @@ const ModelPedido = require("../../models/modelCliente/pedido");
 const verific = require("../../utils/verificUserLog");
 
 exports.getHome = async (req, res, next) => {
+  const role = req.session.user.role;
+  console.log("El rol del admin: " + role);
+  if (role != "administrador") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   verific(req, res, next);
   const clientes = await ModelCliente.findAll();
   const comercios = await ModelComercio.findAll();

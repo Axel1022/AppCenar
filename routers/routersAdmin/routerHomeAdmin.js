@@ -11,9 +11,10 @@ router.post(
   "/admin/mantenimientoAdmin/crearAdmin",
   adminController.createAdministrador
 );
-router.put("/administradores/:id", adminController.updateAdministrador);
-router.delete("/administradores/:id", adminController.deleteAdministrador);
+router.get("/admin/editar/:adminId", adminController.adminEditar);
 router.get("/admin/itbis", adminController.getViewItebis);
 router.post("/admin/editItbis", adminController.postEdidtViewItebis);
+router.post("/admin/activarDesactivar", adminController.postActDes);
+router.post("/editarAdminPost", adminController.editarAdminPost);
 router.post("/logout", adminController.logout);
 module.exports = router;

@@ -6,8 +6,14 @@ const Delivery = require("../../models/modelDelivery/delivery");
 const PedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
 const verificUser = require("../../utils/verificUserLog");
 const { Op } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   const deliverId = req.session.user.id;
 
   try {
@@ -56,6 +62,11 @@ exports.getHome = async (req, res, next) => {
 
 // Obtener detalles del pedido
 exports.getPedidoDetail = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     const deliverId = req.session.user.id;
     const pedidoId = req.params.idPedido;
@@ -104,6 +115,7 @@ exports.getPedidoDetail = async (req, res, next) => {
       Comercio: comercioFund.dataValues,
       Pedido: pedido.dataValues,
       Direccion: direccionFund.dataValues,
+      deliverId,
     });
   } catch (err) {
     console.log(err);
@@ -113,17 +125,21 @@ exports.getPedidoDetail = async (req, res, next) => {
 
 // Completar el pedido
 exports.completePedido = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
   try {
     const deliveryId = req.session.user.id;
-    const pedidoId = req.params.id;
-    await Pedido.update(
-      { status: "completado" },
-      { where: { id: pedidoId, deliveryId } }
-    );
+    const pedidoId = req.body.pedidoId;
+
+    await Pedido.update({ status: "Completado" }, { where: { id: pedidoId } });
 
     // Cambiar estado del delivery a disponible
     await Delivery.update(
-      { status: "disponible" },
+      { status: "Desocupado", cantidad: Sequelize.literal(`cantidad + ${1}`) },
       { where: { id: deliveryId } }
     );
 
@@ -136,6 +152,11 @@ exports.completePedido = async (req, res, next) => {
 
 // Obtener datos del delivery
 exports.getDeliveryProfile = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
   try {
     const deliveryId = req.session.user.id;
     const delivery = await Delivery.findByPk(deliveryId);
@@ -153,6 +174,12 @@ exports.getDeliveryProfile = async (req, res, next) => {
 
 // Actualizar datos del perfil del delivery
 exports.postDeliveryProfile = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
   try {
     const deliveryId = req.session.user.id;
     const { name, phone, email } = req.body;
@@ -171,6 +198,12 @@ exports.postDeliveryProfile = async (req, res, next) => {
 
 // Obtener el perfil del delivery
 exports.getEditPerfil = async (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
   const idDelivery = req.session.user.id;
 
   const delivery = await Delivery.findOne({ where: { id: idDelivery } });
@@ -181,6 +214,12 @@ exports.getEditPerfil = async (req, res, next) => {
   });
 };
 exports.postEditPerfil = (req, res, next) => {
+  const role = req.session.user.role;
+  if (role != "delivery") {
+    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
+    return res.redirect("/login");
+  }
+
   const name = req.body.name;
   const lastName = req.body.lastName;
   const phone = req.body.telefono;
