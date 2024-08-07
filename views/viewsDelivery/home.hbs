@@ -1,32 +1,35 @@
-<h1 class="mb-4">Pedidos Asignados</h1>
-{{#if pedidos.length}}
+<!-- viewsDelivery/home.hbs -->
 <div class="row">
-    {{#each pedidos}}
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h4>Pedido #{{this.id}}</h4>
+  <div class="col-12">
+    <h4>Pedidos Asignados</h4>
+    {{#if hasPedidos}}
+      {{#each pedidos}}
+        <a href="/delivery/pedido/{{id}}" class="card-home-com-link">
+          <div class="card-home-com mt-4">
+            <div class="card-content">
+              <div class="card-img-com">
+                <img src="{{this.comercio.logo}}" class="card-img" alt="Logo Comercio">
+              </div>
+
+              <div class="text">
+                <div class="card-info">
+                  <div class="header">
+                    <h4 class="card-title">{{status}}</h4>
+                    <p class="card-text-com">{{date}} - {{hour}}</p>
+                  </div>
+                </div>
+
+                <div class="card-details">
+                  <h6>{{this.comercio.name}}</h6>
+                  <p class="card-text-com">Total: ${{total}}</p>
+                </div>
+              </div>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Comercio: {{this.comercio.name}}</h5>
-                <p class="card-text">Logo:
-                    <img src="{{this.comercio.logo}}" width="50" height="50" alt="Logo Comercio" />
-                </p>
-                <h6>Productos:</h6>
-                <ul>
-                    {{#each this.productos}}
-                    <li>{{this.name}} - {{this.price}}</li>
-                    {{/each}}
-                </ul>
-                <a href="/delivery/pedido/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
-                <form action="/delivery/pedido/{{this.id}}/completar" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-success">Completar Pedido</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    {{/each}}
+          </div>
+        </a>
+      {{/each}}
+    {{else}}
+      <p>No hay pedidos asignados.</p>
+    {{/if}}
+  </div>
 </div>
-{{else}}
-<p>No hay pedidos asignados.</p>
-{{/if}}

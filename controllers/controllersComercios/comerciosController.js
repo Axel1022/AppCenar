@@ -513,7 +513,7 @@ exports.postAsignarDelivery = async (req, res, next) => {
     }
 
     await Pedidos.update(
-      { id: pedidoId, status: "En Proceso" },
+      { deliverId: deliveryId, status: "En Proceso" },
       { where: { id: pedidoId } }
     );
 
