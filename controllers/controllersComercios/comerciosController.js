@@ -4,6 +4,7 @@ const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const Pedidos = require("../../models/modelCliente/pedido");
 const PedidosProducto = require("../../models/modelPedidoProducto/pedidoProducto");
 const Delivery = require("../../models/modelDelivery/delivery");
+const Itbis = require("../../models/modelAdmin/itbis");
 const verificUseer = require("../../utils/verificUserLog");
 const jsonFileHandler = require("../../utils/jsonFileHandler");
 const isFavorito = require("../../utils/isFavorito");
@@ -278,12 +279,11 @@ exports.getViewListProductsAndConfirmar = async (req, res, next) => {
     const itemsProduct = await temProductos.findAll();
     const productosFind = itemsProduct.map((producto) => producto.dataValues);
 
-    console.log("productos mapeados", productosFind);
+    const itbisVal = await Itbis.findOne();
+    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
 
-    const total = calcularTotal(productosFind);
-    console.log("subtotal", total.subTotal);
+    const total = calcularTotal(productosFind, itbs);
 
-    console.log("subtotal", total.subTotal);
     res.render("viewsComercios/viewListProductosAndConfirmar", {
       pageTitle: "Food Rush | Realizar pedido",
       has: rsultRest.length > 0,
@@ -513,7 +513,7 @@ exports.postAsignarDelivery = async (req, res, next) => {
     }
 
     await Pedidos.update(
-      { id: pedidoId, status: "En Proceso" },
+      { deliverId: deliveryId, status: "En Proceso" },
       { where: { id: pedidoId } }
     );
 

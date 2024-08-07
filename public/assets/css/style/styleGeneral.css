@@ -1,0 +1,36 @@
+/* ------- HELLOOOO --------*/
+
+/*COLORES POR BOTONES Y COMO DEBEN IR LAS CLASES EN EL HTML*/
+
+/* 
+  #F27F0C agregar ---- btn-add ----
+
+  #F7AD19 editar ---- btn-edit ----
+
+  #053F5C eliminar ---- btn-delete ----
+
+  #AE8052 home ---- btn-home ---- (color por determinar)
+
+*/
+
+.btn-add{
+    background-color: #F27F0C ;
+}
+
+.btn-edit{
+    background-color: #F7AD19;
+}
+
+.btn-delete{
+    background-color:  #053F5C;
+}
+
+.btn-home{
+    background-color: #AE8052;
+}
+
+.btn-add, .btn-edit, .btn-delete{
+    border-radius: 1px;
+    width: auto;
+    height: auto;
+}
