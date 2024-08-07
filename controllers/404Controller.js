@@ -6,7 +6,7 @@ exports.get404 = (req, res, next) => {
 
     switch (role) {
       case "cliente":
-        redirectUrl = "/clientes/home";
+        redirectUrl = "/cliente/home";
         break;
       case "delivery":
         redirectUrl = "/delivery/home";
