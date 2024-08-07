@@ -4,6 +4,21 @@ const Producto = require('../../models/modelComercios/producto');
 const Delivery = require('../../models/modelDelivery/delivery');
 const verificUser = require("../../utils/verificUserLog")
 const { Op } = require('sequelize');
+const fs = require('fs'); 
+const path = require('path');
+const multer = require('multer');
+// Configuración de almacenamiento de Multer
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'public/images');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Renombrar el archivo para evitar colisiones
+  }
+});
+
+// Configurar Multer
+const upload = multer({ storage: storage });
 
 
 exports.getHome = async (req, res, next) => {
@@ -146,34 +161,64 @@ exports.postDeliveryProfile = async (req, res, next) => {
   }
 };
 
-// Obtener el perfil del delivery
 exports.getEditPerfil = async (req, res, next) => {
   const idDelivery = req.session.user.id;
 
-  const delivery = await Delivery.findOne({ where: { id: idDelivery } });
-  res.render("viewsDelivery/editPerfil", {
-    pageTitle: "Food Rush | perfil",
-    layout: "layoutDelivery",
-    Cliente: delivery.dataValues,
-  });
+  try {
+    const delivery = await Delivery.findOne({ where: { id: idDelivery } });
+    res.render("viewsDelivery/editPerfil", {
+      pageTitle: "Food Rush | Perfil",
+      layout: "layoutDelivery",
+      Cliente: delivery.dataValues,
+    });
+  } catch (error) {
+    console.error("Error al obtener el perfil del delivery:", error);
+    res.status(500).send("Error al obtener el perfil del delivery");
+  }
 };
-exports.postEditPerfil = (req, res, next) => {
+
+exports.postEditPerfil = async (req, res, next) => {
   const name = req.body.name;
   const lastName = req.body.lastName;
-  const phone = req.body.telefono;
+  const phone = req.body.phone;
   const imageProfile = req.file;
   const idDelivery = req.session.user.id;
 
-  Delivery
-    .update(
-      { name, lastName, phone, imageProfile },
-      { where: { id: idDelivery } }
-    )
-    .then(() => {
-      return res.redirect("/delivery/perfil");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+  try {
+    // Obtener el perfil del delivery actual
+    const delivery = await Delivery.findOne({ where: { id: idDelivery } });
 
+    // Ruta de la imagen antigua
+    const oldImagePath = delivery.imageProfile;
+
+    // Si se ha subido una nueva imagen, reemplazar la imagen antigua
+    if (imageProfile) {
+      // Actualizar el perfil con la nueva imagen
+      await Delivery.update(
+        { name, lastName, phone, imageProfile: imageProfile.filename },
+        { where: { id: idDelivery } }
+      );
+
+      // Eliminar la imagen antigua si existe
+      if (oldImagePath) {
+        const oldImageFullPath = path.join(__dirname, '../../images', oldImagePath);
+        fs.unlink(oldImageFullPath, (err) => {
+          if (err) {
+            console.error("Error al eliminar la imagen antigua:", err);
+          }
+        });
+      }
+    } else {
+      // Actualizar el perfil sin cambiar la imagen
+      await Delivery.update(
+        { name, lastName, phone },
+        { where: { id: idDelivery } }
+      );
+    }
+
+    res.redirect("/delivery/perfil");
+  } catch (error) {
+    console.error("Error al actualizar el perfil del delivery:", error);
+    res.status(500).send("Error al actualizar el perfil del delivery");
+  }
+};
