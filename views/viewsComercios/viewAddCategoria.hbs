@@ -26,12 +26,14 @@
 
             {{/each}}
           </select>
-          <div class="invalid-feedback">Por favor selecciona una categoría.</div>
+          <div class="invalid-feedback">Please select a category.</div>
        </div>
 
         <div class="form-group mt-3">
           <label for="description">Descripcion:</label><br>
-          <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}}</textarea>
+          <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}} required</textarea>
+          <div class="invalid-feedback">Please write a description.</div>
+
         </div>
         <button type="submit" class="btn btn-primary float-end mt-3 btn-save">Guardar</button>
         <a href="/comercios/Categorias" class="btn btn-primary float-end me-3 mt-3 btn-home">Home</a>
