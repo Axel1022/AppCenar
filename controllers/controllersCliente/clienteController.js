@@ -56,13 +56,13 @@ exports.confirmarPedido = async (req, res, next) => {
     const total = calcularTotal(productosFind, itbs);
 
 
-  const now = new Date();
-  now.setDate(now.getDate() - 1);
-  const formattedDate = now.toISOString().split("T")[0];
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const seconds = now.getSeconds().toString().padStart(2, "0");
-  const formattedTime = `${hours}:${minutes}:${seconds}`;
+    const now = new Date();
+    now.setDate(now.getDate() - 1);
+    const formattedDate = now.toISOString().split("T")[0];
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const seconds = now.getSeconds().toString().padStart(2, "0");
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
 
     const newPedido = await modelPedidos.create({
       clientId: idCliente,
