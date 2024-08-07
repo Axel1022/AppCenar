@@ -501,6 +501,7 @@ exports.GetAsignarDelivery = async (req, res, next) => {
 };
 
 exports.postAsignarDelivery = async (req, res, next) => {
+  verificUseer(req, res, next);
   const deliveryId = req.body.deliveryId;
   const pedidoId = req.body.pedidoId;
   console.log("El id del pedido", pedidoId);
