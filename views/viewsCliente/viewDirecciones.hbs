@@ -1,7 +1,7 @@
 {{#if hasDireccions}}
   <div class="container">
     <h1 class="mb-4 display-4 text-muted">Mis direcciones</h1>
-    <a class="btn btn-primary mb-3" href="/cliente/direcciones/add">+ Dirección</a>
+    <a class="btn btn-add mb-3" href="/cliente/direcciones/add">+ Dirección</a>
     <div class="list-group">
       {{#each Direcciones as |direccion|}}
         <div class="list-group-item mb-1 shadow mt-3">
@@ -17,25 +17,25 @@
           >
             <a
               href="/cliente/direcciones/edit/{{direccion.id}}"
-              class="btn btn-primary me-2"
+              class="btn btn-edit me-2"
             >
               Editar
             </a>
             <input type="hidden" value="{{direccion.id}}" name="elemetnId" />
-            <button type="submit" class="btn btn-danger delete">Borrar </button>
+            <button type="submit" class="btn btn-delete delete">Borrar </button>
           </form>
 
         </div>
       {{/each}}
     </div>
-    <a class="btn btn-secondary mt-3" onclick="history.back()">Volver atrás</a>
+    <a class="btn btn-back mt-3" onclick="history.back()">Volver atrás</a>
   </div>
 {{else}}
   <div class="text-center mt-5">
     <h1 class="display-4 text-muted">No tienes direcciones guardadas.</h1>
     <p class="lead text-secondary">Parece que aún no has agregado ninguna
       dirección a tu cuenta.</p>
-    <a class="btn btn-primary btn-lg mt-4" href="/cliente/direcciones/add">+
+    <a class="btn btn-add btn-lg mt-4" href="/cliente/direcciones/add">+
       Añadir Dirección</a>
   </div>
 {{/if}}

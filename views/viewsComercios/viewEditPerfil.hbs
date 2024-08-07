@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header text-center">
-      <h2>Business Form</h2>
+      <h2>Formulario de Comercio</h2>
     </div>
     <form
       class="needs-validation"
@@ -10,6 +10,7 @@
       novalidate
     >
       <div class="card-body">
+        <!-- Name input field -->
         <div class="form-group mb-3">
           <label for="nombre">Nombre</label>
           <input
@@ -20,11 +21,12 @@
             value="{{comercio.name}}"
             required
           />
-          <div class="invalid-feedback">Please enter a name.</div>
+          <div class="invalid-feedback">Please enter the name.</div>
         </div>
 
+        <!-- Phone input field -->
         <div class="form-group mb-3">
-          <label for="telefono">Telefono</label>
+          <label for="telefono">Teléfono</label>
           <input
             type="tel"
             class="form-control"
@@ -32,14 +34,15 @@
             id="telefono"
             value="{{comercio.phone}}"
             pattern="[0-9]{10}"
-            title="Must contain 10 numeric digits"
+            title="Debe contener 10 dígitos numéricos"
             required
           />
           <div class="invalid-feedback">Please enter a valid phone number with 10 digits.</div>
         </div>
 
+        <!-- Email input field -->
         <div class="form-group mb-3">
-          <label for="email">Correo Electronico</label>
+          <label for="email">Email</label>
           <input
             type="email"
             class="form-control"
@@ -51,6 +54,7 @@
           <div class="invalid-feedback">Please enter a valid email address.</div>
         </div>
 
+        <!-- Logo input field -->
         <div class="form-group mb-3">
           <label for="image">Logo</label>
           <input
@@ -58,13 +62,13 @@
             name="image"
             class="form-control"
             id="image"
-            required
           />
-          <div class="invalid-feedback">Please upload a logo (optional).</div>
+          <div class="invalid-feedback">Please upload a logo image.</div>
         </div>
 
+        <!-- Opening time input field -->
         <div class="form-group mb-3">
-          <label for="openTime">Horario de Apertura</label>
+          <label for="openTime">Horario de apertura</label>
           <input
             type="text"
             class="form-control"
@@ -73,11 +77,12 @@
             value="{{comercio.openTime}}"
             required
           />
-          <div class="invalid-feedback">Please enter the opening hours.</div>
+          <div class="invalid-feedback">Please enter the opening time.</div>
         </div>
 
+        <!-- Closing time input field -->
         <div class="form-group mb-3">
-          <label for="closeTime">Horario de Cierre</label>
+          <label for="closeTime">Horario de cierre</label>
           <input
             type="text"
             class="form-control"
@@ -86,23 +91,26 @@
             value="{{comercio.closeTime}}"
             required
           />
-          <div class="invalid-feedback">Please enter the closing hours.</div>
+          <div class="invalid-feedback">Please enter the closing time.</div>
         </div>
 
+        <!-- Category select field -->
         <div class="form-group mb-3">
-          <label for="category">Categorias</label>
+          <label for="category">Categoria</label>
           <select class="form-control" id="category" name="typeTrade" required>
-            <option value="">Select your category</option>
-            <option value="Restaurante" {{#if (compare comercio.typeTrade "Restaurante")}}selected{{/if}}>Restaurant</option>
-            <option value="Mercado" {{#if (compare comercio.typeTrade "Mercado")}}selected{{/if}}>Market</option>
+            <option value="">Selecciona tu categoria</option>
+            <option value="Restaurante" {{#if (compare comercio.typeTrade "Restaurante")}}selected{{/if}}>Restaurante</option>
+            <option value="Mercado" {{#if (compare comercio.typeTrade "Mercado")}}selected{{/if}}>Mercado</option>
             <option value="Drink" {{#if (compare comercio.typeTrade "Drink")}}selected{{/if}}>Drink</option>
             <option value="Cafeteria" {{#if (compare comercio.typeTrade "Cafeteria")}}selected{{/if}}>Cafeteria</option>
-            <option value="Tienda" {{#if (compare comercio.typeTrade "Tienda")}}selected{{/if}}>Store</option>
-            <option value="Salud" {{#if (compare comercio.typeTrade "Salud")}}selected{{/if}}>Health</option>
+            <option value="Tienda" {{#if (compare comercio.typeTrade "Tienda")}}selected{{/if}}>Tienda</option>
+            <option value="Salud" {{#if (compare comercio.typeTrade "Salud")}}selected{{/if}}>Salud</option>
           </select>
+          <div class="valid-feedback">Good!</div>
           <div class="invalid-feedback">Please select a category.</div>
         </div>
 
+        <!-- Role input field -->
         <div class="form-group mb-3">
           <label for="role">Rol</label>
           <input
@@ -116,14 +124,13 @@
           <div class="invalid-feedback">Please enter the role.</div>
         </div>
       </div>
-
       <div class="card-footer d-flex justify-content-between">
         <a
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-back"
           onclick="window.history.back();"
-        >Back</a>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        >Volver</a>
+        <button type="submit" class="btn btn-add">Enviar</button>
       </div>
     </form>
   </div>

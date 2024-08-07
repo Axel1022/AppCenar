@@ -7,7 +7,7 @@
   />
   <h1 class="h3 mb-3 font-weight-normal">Registrarse</h1>
 </div>
-<form enctype="multipart/form-data" class="needs-validation"   method="POST" action="/registroComercioPost" novalidate>
+<form enctype="multipart/form-data"  class="needs-validation"  method="POST" action="/registroAdminPost" novalidate>
 
   <div class="form-group mb-3">
     <label for="nombre">Nombre</label>
@@ -24,17 +24,31 @@
   </div>
 
   <div class="form-group mb-3">
-    <label for="nombre">Telefono</label>
+    <label for="nombre">Apellido</label>
     <input
       type="text"
       class="form-control"
-      name="phone"
+      name="lastName"
       id="nombre"
-      placeholder="Ingresa tu numero de telefono"
+      placeholder="Ingresa tu apellido"
       required
     />
     <div class="valid-feedback">Good!</div>
-    <div class="invalid-feedback">Please enter a phone.</div>
+    <div class="invalid-feedback">Please enter a last name.</div>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="nombre">Cedula</label>
+    <input
+      type="text"
+      class="form-control"
+      name="identification"
+      id="nombre"
+      placeholder="Ingresa tu cedula de identidad"
+      required
+    />
+    <div class="valid-feedback">Good!</div>
+    <div class="invalid-feedback">Please enter your ID.</div>
   </div>
 
   <div class="form-group mb-3">
@@ -51,70 +65,25 @@
     <div class="invalid-feedback">Please enter an email.</div>
   </div>
 
- <div class="form-group mb-3">
-    <label for="nombre">Logo</label>
-    <input
-      type="file"
-      name="image"
-      class="form-control"
-      id="nombre"
-      placeholder="Ingresa tu foto de perfil"
-      required
-    />
-    <div class="valid-feedback">Good!</div>
-    <div class="invalid-feedback">Please enter a file.</div>
-  </div>
-
-
   <div class="form-group mb-3">
-    <label for="nombre">Horario de apertura</label>
+    <label for="nombre">Nombre de Usuario</label>
     <input
       type="text"
       class="form-control"
-      name="openTime"
+      name="user"
       id="nombre"
-      placeholder="Ingresa el horario de apertura"
+      placeholder="Ingresa tu nombre de usuario"
       required
     />
     <div class="valid-feedback">Good!</div>
-    <div class="invalid-feedback">Please enter a opening time.</div>
+    <div class="invalid-feedback">Please enter a user.</div>
   </div>
-
-
-  <div class="form-group mb-3">
-    <label for="nombre">Horario de cierre</label>
-    <input
-      type="text"
-      class="form-control"
-      name="closeTime"
-      id="nombre"
-      placeholder="Ingresa el horario de cierre"
-      required
-    />
-    <div class="valid-feedback">Good!</div>
-    <div class="invalid-feedback">Please enter a closing time.</div>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="category">Categoria</label>
-    <select class="form-control" id="category" name="typeTrade" required>
-      <option value="">Selecciona tu categoria</option>
-      <option value="restaurante">Restaurante</option>
-      <option value="mercado">Mercado</option>
-      <option value="drink">Drink</option>
-      <option value="cafeteria">Cafeteria</option>
-      <option value="tienda">Tienda</option>
-      <option value="salud">Salud</option>
-    </select>
-    <div class="valid-feedback">Good!</div>
-    <div class="invalid-feedback">Please select a role.</div>
- </div>
 
  <div class="form-group mb-3">
     <label for="rol">Rol</label>
     <select class="form-control" id="rol" name="role" required>
       <option value="">Selecciona tu rol</option>
-      <option value="comercio">Comercio</option>
+      <option value="administrador">Administrador</option>
     </select>
     <div class="valid-feedback">Good!</div>
     <div class="invalid-feedback">Please select a role.</div>

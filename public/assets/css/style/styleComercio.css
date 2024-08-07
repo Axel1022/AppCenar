@@ -34,15 +34,6 @@
     width: 30px;
 }
 
-.btn-save{
-    background-color: #053F5C;
-    border-color: #053F5C;
-}
-
-.btn-home{
-    background-color: #F27F0C;
-    border-color: #F27F0C;
-}
 
 a {
     text-decoration: none;
@@ -130,16 +121,12 @@ a {
 }
 
 .btn-add-prod{
-    background-color: #429EBD;
     text-decoration: none;    
     border-radius: 3px;
     width: 200px;
     height: 40px;
 }
 
-.btn-add{
-    color: #fff;
-}
 
 .card-button-edit:hover {
     text-decoration: none;
@@ -157,22 +144,6 @@ a {
     width: 90%;
     height: 400px;
     
-}
-
-.btn-edit,
-.btn-delete {
-    background-color: #1F487E;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-.btn-edit:hover,
-.btn-delete:hover {
-    background-color: #16345d;
 }
 
 .card-body-prod{
@@ -328,12 +299,101 @@ a {
     margin-left: 75%;
 }
 
-.totales {
-    display: flex;
-    align-items: center; /* Alinea los elementos verticalmente al centro */
-    gap: 10px; /* Espacio entre los elementos */
+.btn-add {
+    background-color: #F27F0C;
+    border-color: #F27F0C;
+    color: white; /* Color de fuente blanco */
+    width: auto;
   }
-
-  .card-text-com {
-    margin: 0; /* Elimina márgenes para evitar espacios extra */
+  
+  .btn-add:hover {
+    background-color: #e06500; /* Color más oscuro para hover */
+    border-color: #e06500;
+    color: white; /* Color de fuente blanco en hover */
   }
+  
+  .btn-edit {
+    background-color: #F7AD19;
+    border-color: #F7AD19;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-edit:hover {
+    background-color: #d89a0c; /* Color más oscuro para hover */
+    border-color: #d89a0c;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-delete {
+    background-color: #053F5C;
+    border-color: #053F5C;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-delete:hover {
+    background-color: #042d45; /* Color más oscuro para hover */
+    border-color: #042d45;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-home {
+    background-color: #d8a775;
+    border-color: #d8a775;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-home:hover {
+    background-color: #b78a61; /* Color más oscuro para hover */
+    border-color: #b78a61;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-search {
+    background-color: #429EBD;
+    border-color: #429EBD;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-search:hover {
+    background-color: #2f7a9c; /* Color más oscuro para hover */
+    border-color: #2f7a9c;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-back {
+    background-color: #1691cf;
+    border-color: #1691cf;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-back:hover {
+    background-color: #1179b8; /* Color más oscuro para hover */
+    border-color: #1179b8;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-cancel {
+    background-color: #818684;
+    border-color: #818684;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-cancel:hover {
+    background-color: #6f7477; /* Color más oscuro para hover */
+    border-color: #6f7477;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  .btn-pedir {
+    background-color: #ea9d71;
+    border-color: #ea9d71;
+    color: white; /* Color de fuente blanco */
+  }
+  
+  .btn-pedir:hover {
+    background-color: #d88a5c; /* Color más oscuro para hover */
+    border-color: #d88a5c;
+    color: white; /* Color de fuente blanco en hover */
+  }
+  
+  

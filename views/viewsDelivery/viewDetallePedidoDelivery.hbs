@@ -23,7 +23,7 @@
               <h6>{{name}}</h6>
             </div>
 
-            <div class="price-prod">
+            <div class="price-prod" style="margin-left: 70%;">
               <h6>RD$ {{price}}</h6>
             </div>
           </div>
@@ -42,13 +42,13 @@
             <div class="total">
               <h5>Total</h5>
             </div>
-            <div class="total-price">
+            <div class="total-price" style="margin-right: 30px;">
               <h5>RD$ {{Pedido.total}}</h5>
              </div>
           </div>
 
         {{#if (compare pedido.status "Pendiente")}}
-        <a href="/comercios/asignarDelivery/{{pedido.id}}" class="btn btn-success float-end">Asignar a delivery</a>
+        <a href="/comercios/asignarDelivery/{{pedido.id}}" class="btn btn-add float-end">Asignar a delivery</a>
         {{/if}}
       </div>
     </div>

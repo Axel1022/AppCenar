@@ -5,6 +5,7 @@ const modelPedidos = require("../../models/modelCliente/pedido");
 const modelProductos = require("../../models/modelComercios/producto");
 const modelPedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
 const modelFavoritos = require("../../models/modelCliente/favoritos");
+const Itbis = require("../../models/modelAdmin/itebis");
 const temProductos = require("../../models/modelCliente/pedidoTemporal");
 const verificUseer = require("../../utils/verificUserLog");
 const calcularTotal = require("../../utils/calcularTotal");
@@ -52,22 +53,23 @@ exports.confirmarPedido = async (req, res, next) => {
           throw new Error(`Producto con ID ${element.id} no encontrado.`);
         }
 
-        console.log("Producto recuperado:", producto);
-        console.log("Precios:", producto.price);
+        // console.log("Producto recuperado:", producto);
+        // console.log("Precios:", producto.price);
 
-    return {
-      id: producto.id,
-      quantity: element.quantity || 1,
-      price: producto.price
-    };
-    })
+        return {
+          id: producto.id,
+          quantity: element.quantity || 1, // Asumiendo que quantity es un campo en temProductos
+          price: producto.price,
+        };
+      })
     );
 
-    const itbisVal = await Itbis.findOne();
-    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
+    const itemItbis = await Itbis.findOne({ where: { id: 1 } });
 
-    const total = calcularTotal(productosFind, itbs);
+    const total = calcularTotal(productData, itemItbis.itbis);
 
+    console.log("sub total:", total.subTotal);
+    console.log("total:", total.total);
 
     const now = new Date();
     now.setDate(now.getDate() - 1);
@@ -106,6 +108,9 @@ exports.confirmarPedido = async (req, res, next) => {
       where: {},
     });
 
+    // console.log("Pedido creado correctamente");
+
+    // Redirigir al usuario
     res.redirect("/cliente/home");
   } catch (error) {
     console.log("El problema está en confirmarPedido >>> ", error);
@@ -130,10 +135,9 @@ exports.getCompletarPedido = async (req, res, next) => {
       where: { id: idComercio },
     });
 
-    const itbisVal = await Itbis.findOne();
-    const itbs = itbisVal ? itbisVal.itbis /100: 0.18;
+    const itemItbis = await Itbis.findOne({ where: { id: 1 } });
 
-    const total = calcularTotal(productosFind, itbs);
+    const total = calcularTotal(productosFind, itemItbis.itbis);
 
     res.render("viewsCliente/viewCompletarPedido", {
       pageTitle: "Food Rush | Cliente",
@@ -144,6 +148,7 @@ exports.getCompletarPedido = async (req, res, next) => {
       Comercio: itemsComercio.dataValues,
       hasDire: direccionesFind.length > 0,
       test: total.subTotal,
+      Itbis: itemItbis.itbis * 100,
       testTotal: total.total,
     });
   } catch (error) {

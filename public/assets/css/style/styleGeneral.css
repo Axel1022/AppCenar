@@ -1,36 +1,97 @@
-/* ------- HELLOOOO --------*/
-
-/*COLORES POR BOTONES Y COMO DEBEN IR LAS CLASES EN EL HTML*/
-
-/* 
-  #F27F0C agregar ---- btn-add ----
-
-  #F7AD19 editar ---- btn-edit ----
-
-  #053F5C eliminar ---- btn-delete ----
-
-  #AE8052 home ---- btn-home ---- (color por determinar)
-
-*/
-
-.btn-add{
-    background-color: #F27F0C ;
+.btn-add {
+  background-color: #F27F0C;
+  border-color: #F27F0C;
+  color: white; /* Color de fuente blanco */
+  width: auto;
 }
 
-.btn-edit{
-    background-color: #F7AD19;
+.btn-add:hover {
+  background-color: #e06500; /* Color más oscuro para hover */
+  border-color: #e06500;
+  color: white; /* Color de fuente blanco en hover */
 }
 
-.btn-delete{
-    background-color:  #053F5C;
+.btn-edit {
+  background-color: #F7AD19;
+  border-color: #F7AD19;
+  color: white; /* Color de fuente blanco */
 }
 
-.btn-home{
-    background-color: #AE8052;
+.btn-edit:hover {
+  background-color: #d89a0c; /* Color más oscuro para hover */
+  border-color: #d89a0c;
+  color: white; /* Color de fuente blanco en hover */
 }
 
-.btn-add, .btn-edit, .btn-delete{
-    border-radius: 1px;
-    width: auto;
-    height: auto;
+.btn-delete {
+  background-color: #053F5C;
+  border-color: #053F5C;
+  color: white; /* Color de fuente blanco */
 }
+
+.btn-delete:hover {
+  background-color: #042d45; /* Color más oscuro para hover */
+  border-color: #042d45;
+  color: white; /* Color de fuente blanco en hover */
+}
+
+.btn-home {
+  background-color: #d8a775;
+  border-color: #d8a775;
+  color: white; /* Color de fuente blanco */
+}
+
+.btn-home:hover {
+  background-color: #b78a61; /* Color más oscuro para hover */
+  border-color: #b78a61;
+  color: white; /* Color de fuente blanco en hover */
+}
+
+.btn-search {
+  background-color: #429EBD;
+  border-color: #429EBD;
+  color: white; /* Color de fuente blanco */
+}
+
+.btn-search:hover {
+  background-color: #2f7a9c; /* Color más oscuro para hover */
+  border-color: #2f7a9c;
+  color: white; /* Color de fuente blanco en hover */
+}
+
+.btn-back {
+  background-color: #1691cf;
+  border-color: #1691cf;
+  color: white; /* Color de fuente blanco */
+}
+
+.btn-back:hover {
+  background-color: #1179b8; /* Color más oscuro para hover */
+  border-color: #1179b8;
+  color: white; /* Color de fuente blanco en hover */
+}
+
+.btn-cancel {
+  background-color: #818684;
+  border-color: #818684;
+  color: white; /* Color de fuente blanco */
+}
+
+.btn-cancel:hover {
+  background-color: #6f7477; /* Color más oscuro para hover */
+  border-color: #6f7477;
+  color: white; /* Color de fuente blanco en hover */
+}
+
+.btn-pedir {
+  background-color: #ea9d71;
+  border-color: #ea9d71;
+  color: white; /* Color de fuente blanco */
+}
+
+.btn-pedir:hover {
+  background-color: #d88a5c; /* Color más oscuro para hover */
+  border-color: #d88a5c;
+  color: white; /* Color de fuente blanco en hover */
+}
+
