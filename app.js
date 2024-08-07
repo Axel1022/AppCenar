@@ -123,6 +123,7 @@ const Categoria = require("./models/modelComercios/categoria");
 const Admin = require("./models/modelAdmin/administrador");
 const Delivey = require("./models/modelDelivery/delivery");
 const PedidoProducto = require("./models/modelPedidoProducto/pedidoProducto");
+const Itbis = require("./models/modelAdmin/itebis");
 
 Cliente.hasMany(Direccion, { foreignKey: "clientId", as: "direccion" });
 Direccion.belongsTo(Cliente, { foreignKey: "clientId", as: "cliente" });
@@ -150,6 +151,8 @@ Categoria.belongsTo(Comercio, { foreignKey: "tradeId", as: "comercio" });
 
 Producto.belongsTo(Categoria, { foreignKey: "categoryId", as: "categoria" });
 Categoria.hasMany(Producto, { foreignKey: "categoryId", as: "producto" });
+
+Itbis.belongsTo(Admin, { foreignKey: "adminId", as: "itbs" });
 
 Pedido.belongsToMany(Producto, {
   through: PedidoProducto,

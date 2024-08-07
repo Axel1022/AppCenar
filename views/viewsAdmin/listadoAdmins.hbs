@@ -1,14 +1,15 @@
 {{#if has}}
-<h1 class="text-center my-4">Listado de Clientes</h1>
+<h1 class="text-center my-4">Listado de Administradores</h1>
 <div class="container">
+            <a  href="/registroAdmin" class="btn btn-primary m-3 float-end">+ Admin</a><br><br><br>
     <ul class="list-group">
-        {{#each Clientes}}
+        {{#each Admins}}
         <li class="list-group-item d-flex justify-content-between align-items-start mb-4">
             <div class="ms-2 me-auto">
                 <div class="fw-bold  h5">{{this.name}} {{this.lastName}}</div>
-                <div class="h6"><strong>Teléfono:</strong> {{this.phone}}</div>
+                <div class="h6"><strong>Nombre de usuario:</strong> {{this.user}}</div>
+                <div class="h6"><strong>Cedula:</strong> {{this.identification}}</div>
                 <div class="h6"><strong>Email:</strong> {{this.email}}</div>
-                <div class="h6"><strong>Cantidad de pedidos:</strong> {{this.cantidad}}</div>
             </div>
             <div class="d-flex flex-column">
                 <button class="btn btn-success btn-sm mb-2">Activar</button>

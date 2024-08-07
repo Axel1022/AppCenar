@@ -1,0 +1,108 @@
+
+.card-info {
+    margin: 0px;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.header h4 {
+    margin-right: 10px;
+}
+
+.card-text-com{
+    color: #6c7274;
+    margin: 0;
+}
+
+.card-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-asign{
+    height: 30px;
+    width: 100px;
+    margin-top: 90px;
+    margin-left: 700px;
+}
+
+.card-home-com-link {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+
+/* Estilos para el header */
+.card-header-detail {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-comercio {
+    width: 100px; /* Ajusta el tamaño de la imagen del comercio según tus necesidades */
+    height: auto;
+    margin-right: 20px; /* Espacio entre la imagen y el texto */
+}
+
+
+.info-prod {
+    padding: 20px;
+}
+
+.product-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+
+.img-prod img {
+    width: 70px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.name-prod, .price-prod {
+    flex: 1;
+}
+
+.product-separator {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.linea {
+    height: 2px;
+    background-color: #ccc;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.container-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}

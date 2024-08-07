@@ -1,32 +1,68 @@
-<h1 class="mb-4">Pedidos Asignados</h1>
-{{#if pedidos.length}}
-<div class="row">
-    {{#each pedidos}}
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <h4>Pedido #{{this.id}}</h4>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Comercio: {{this.comercio.name}}</h5>
-                <p class="card-text">Logo:
-                    <img src="{{this.comercio.logo}}" width="50" height="50" alt="Logo Comercio" />
-                </p>
-                <h6>Productos:</h6>
-                <ul>
-                    {{#each this.productos}}
-                    <li>{{this.name}} - {{this.price}}</li>
-                    {{/each}}
-                </ul>
-                <a href="/delivery/pedido/{{this.id}}" class="btn btn-primary">Ver Detalle</a>
-                <form action="/delivery/pedido/{{this.id}}/completar" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-success">Completar Pedido</button>
-                </form>
-            </div>
-        </div>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="mb-4 text-center">Pedidos Asignados</h4>
+      {{#if hasPedidos}}
+        <ul class="list-group">
+          {{#each pedidos}}
+            <li class="list-group-item mb-3 p-4 shadow-sm rounded">
+              <a
+                href="/delivery/pedido/{{this.id}}"
+                class="text-decoration-none text-dark"
+              >
+                {{#if this.isIncompleto}}
+                  <div
+                    class="alert alert-warning text-center mb-3"
+                    role="alert"
+                  >
+                    <h3 class="mb-0">Entrega Pendiente</h3>
+                  </div>
+                {{else}}
+                  <div
+                    class="alert alert-success text-center mb-3"
+                    role="alert"
+                  >
+                    <h3 class="mb-0">Completado</h3>
+                  </div>
+                  {{!-- <img src="{{this.comercio.logo}}"
+                    alt="Logo Comercio"
+                    class="me-3 rounded-circle"
+                    style="width: 50px; height: 50px; object-fit: cover;"> --}}
+
+                {{/if}}
+                <div class="d-flex align-items-center">
+                  <div class="d-flex flex-column flex-grow-1">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <h6 class="mb-1">Estatus:</h6>
+                        <h5 class="mb-1">{{status}}</h5>
+                      </div>
+                      <div>
+                        <h6 class="mb-1">Comercio:</h6>
+                        <h5 class="mb-1">{{this.comercio.name}}</h5>
+                      </div>
+                      <div>
+                        <h6 class="mb-1">Productos:</h6>
+                        <h5 class="mb-1">{{this.cantidad}}</h5>
+                      </div>
+                      <div>
+                        <p class="mb-1 text-muted">Fecha y hora:</p>
+                        <p class="mb-1 text-muted">{{date}} - {{hour}}</p>
+                      </div>
+                      <div>
+                        <p class="mb-1">Total:</p>
+                        <h5 class="mb-0">RD$ {{total}}</h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <p class="text-muted text-center">No hay pedidos asignados.</p>
+      {{/if}}
     </div>
-    {{/each}}
+  </div>
 </div>
-{{else}}
-<p>No hay pedidos asignados.</p>
-{{/if}}

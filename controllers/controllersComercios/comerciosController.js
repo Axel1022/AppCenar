@@ -225,7 +225,7 @@ exports.AddProductPost = async (req, res, next) => {
         image: producto.dataValues.image,
         description: producto.dataValues.description,
         price: producto.dataValues.price,
-        price: producto.dataValues.price,
+        productId: producto.dataValues.id,
         tradeId: producto.dataValues.tradeId,
         categoryId: producto.dataValues.categoryId,
       });

@@ -3,6 +3,7 @@ const sequelize = require("../../contexts/appContext");
 
 const Comercio = require("../modelComercios/comercio");
 const Categoria = require("../modelComercios/categoria");
+const Producto = require("../modelComercios/producto");
 
 const temProducto = sequelize.define("temProducto", {
   id: {
@@ -30,6 +31,14 @@ const temProducto = sequelize.define("temProducto", {
     type: Sequelize.INTEGER,
     references: {
       model: Comercio,
+      key: "id",
+    },
+    allowNull: false,
+  },
+  productId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: Producto,
       key: "id",
     },
     allowNull: false,

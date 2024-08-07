@@ -285,7 +285,7 @@ exports.PostComercioSingUp = async (req, res, next) => {
 
 // Registro para el administrador
 exports.getAdminSingUp = (req, res, next) => {
-  res.render("viewsLoginRegisto/registroAdmin", {
+  res.render("viewsAdmin/registroAdmin", {
     pageTitle: "Food Rush | Registrar",
     layout: "layoutRegistroLogin",
     singUpActive: true,
@@ -343,7 +343,7 @@ exports.PostAdminSingUp = async (req, res, next) => {
     });
 
     console.log("Registro correcto");
-    return res.redirect("/login");
+    return res.redirect("/Admin/mantenimientoAdmin");
   } catch (err) {
     console.log(err);
     req.flash("errors", "Something went wrong, please try again later");

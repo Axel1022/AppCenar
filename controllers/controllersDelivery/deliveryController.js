@@ -1,66 +1,113 @@
+const Pedido = require("../../models/modelCliente/pedido");
+const Comercio = require("../../models/modelComercios/comercio");
+const modelDireccion = require("../../models/modelCliente/direccion");
+const modelProducto = require("../../models/modelComercios/producto");
+const Delivery = require("../../models/modelDelivery/delivery");
+const PedidoProducto = require("../../models/modelPedidoProducto/pedidoProducto");
+const verificUser = require("../../utils/verificUserLog");
+const { Op } = require("sequelize");
 
 exports.getHome = async (req, res, next) => {
-  res.render("viewsDelivery/home", {
-    pageTitle: "Food Rush | Delivery",
-    layout: "layoutDelivery",
-  });
-};
+  const deliverId = req.session.user.id;
 
-const Pedido = require('../../models/modelCliente/pedido');
-const Comercio = require('../../models/modelComercios/comercio');
-const Producto = require('../../models/modelComercios/producto');
-const Delivery = require('../../models/modelDelivery/delivery');
-const { Op } = require('sequelize');
-
-// Obtener pedidos asignados al delivery logueado
-exports.getDeliveryHome = async (req, res, next) => {
   try {
-    const deliveryId = req.session.user.id;
-    const pedidos = await Pedido.findAll({
-      where: { deliveryId, status: { [Op.ne]: 'completado' } },
-      include: [
-        { model: Comercio, attributes: ['logo', 'name'] },
-        { model: Producto }
-      ],
-      order: [['createdAt', 'DESC']]
-    });
+    const delivery = await Delivery.findByPk(deliverId);
 
-    res.render('viewsDelivery/home', {
-      pageTitle: 'Home del Delivery',
-      layout: 'layoutDelivery',
-      pedidos
+    if (!delivery) {
+      throw new Error("Delivery no encontrado");
+    }
+
+    const pedidos = await Pedido.findAll({ where: { deliverId: deliverId } });
+
+    const pedidosData = await Promise.all(
+      pedidos.map(async (pedido) => {
+        const data = pedido.dataValues;
+        const comercio = await Comercio.findOne({
+          where: { id: data.tradeId },
+        });
+        if (comercio) {
+          data.comercio = comercio.dataValues;
+          data.isIncompleto = data.status == "En Proceso";
+        }
+        const pedidoProducto = await PedidoProducto.findAll({
+          where: { pedidoId: data.id },
+        });
+        const cantidadProducto = pedidoProducto.map(
+          (producto) => producto.dataValues.productoId
+        );
+        data.cantidad = cantidadProducto.length;
+        return data;
+      })
+    );
+
+    res.render("viewsDelivery/home", {
+      pageTitle: "Food Rush | Delivery",
+      layout: "layoutDelivery",
+      delivery: delivery.dataValues,
+      pedidos: pedidosData,
+      hasPedidos: pedidosData.length > 0,
     });
-  } catch (err) {
-    console.log(err);
-    res.redirect('/error');
+  } catch (error) {
+    console.error("Error al obtener los pedidos:", error);
+    req.flash("errors", "Error al obtener los pedidos.");
+    res.redirect("/login");
   }
 };
 
 // Obtener detalles del pedido
 exports.getPedidoDetail = async (req, res, next) => {
   try {
-    const deliveryId = req.session.user.id;
-    const pedidoId = req.params.id;
-    const pedido = await Pedido.findOne({
-      where: { id: pedidoId, deliveryId },
-      include: [
-        { model: Comercio, attributes: ['name'] },
-        { model: Producto }
-      ]
-    });
+    const deliverId = req.session.user.id;
+    const pedidoId = req.params.idPedido;
+    const delivery = await Delivery.findOne({ where: { id: deliverId } });
 
-    if (!pedido) {
-      return res.redirect('/delivery/home');
+    if (!delivery) {
+      throw new Error("Delivery no encontrado");
     }
 
-    res.render('viewsDelivery/pedidoDetail', {
-      pageTitle: `Detalle del Pedido ${pedido.id}`,
-      layout: 'layoutDelivery',
-      pedido
+    const pedido = await Pedido.findOne({
+      where: { id: pedidoId },
+    });
+
+    const idComercio = pedido.dataValues.tradeId;
+    const idDireccion = pedido.dataValues.directionId;
+
+    const comercioFund = await Comercio.findOne({
+      where: { id: idComercio },
+    });
+    const direccionFund = await modelDireccion.findOne({
+      where: { id: idDireccion },
+    });
+
+    const idProductos = await PedidoProducto.findAll({
+      where: { pedidoId: pedidoId },
+    });
+
+    // idProductos.forEach((element) => {
+    //   console.log(element);
+    // });
+
+    const itemsProdctos = await Promise.all(
+      idProductos.map(async (producto) => {
+        const item = producto.dataValues;
+        const productoBusc = await modelProducto.findOne({
+          where: { id: item.productId },
+        });
+        return productoBusc.dataValues;
+      })
+    );
+
+    res.render("viewsDelivery/viewDetallePedidoDelivery", {
+      pageTitle: "Food Rush | Delivery",
+      layout: "layoutDelivery",
+      Productos: itemsProdctos,
+      Comercio: comercioFund.dataValues,
+      Pedido: pedido.dataValues,
+      Direccion: direccionFund.dataValues,
     });
   } catch (err) {
     console.log(err);
-    res.redirect('/error');
+    res.redirect("/error");
   }
 };
 
@@ -70,20 +117,20 @@ exports.completePedido = async (req, res, next) => {
     const deliveryId = req.session.user.id;
     const pedidoId = req.params.id;
     await Pedido.update(
-      { status: 'completado' },
+      { status: "completado" },
       { where: { id: pedidoId, deliveryId } }
     );
 
     // Cambiar estado del delivery a disponible
     await Delivery.update(
-      { status: 'disponible' },
+      { status: "disponible" },
       { where: { id: deliveryId } }
     );
 
-    res.redirect('/delivery/home');
+    res.redirect("/delivery/home");
   } catch (err) {
     console.log(err);
-    res.redirect('/error');
+    res.redirect("/error");
   }
 };
 
@@ -93,14 +140,14 @@ exports.getDeliveryProfile = async (req, res, next) => {
     const deliveryId = req.session.user.id;
     const delivery = await Delivery.findByPk(deliveryId);
 
-    res.render('viewsDelivery/perfil', {
-      pageTitle: 'Mi Perfil',
-      layout: 'layoutDelivery',
-      Delivery: delivery.dataValues
+    res.render("viewsDelivery/perfil", {
+      pageTitle: "Mi Perfil",
+      layout: "layoutDelivery",
+      Delivery: delivery.dataValues,
     });
   } catch (err) {
     console.log(err);
-    res.redirect('/error');
+    res.redirect("/error");
   }
 };
 
@@ -115,10 +162,10 @@ exports.postDeliveryProfile = async (req, res, next) => {
       { where: { id: deliveryId } }
     );
 
-    res.redirect('/delivery/perfil');
+    res.redirect("/delivery/perfil");
   } catch (err) {
     console.log(err);
-    res.redirect('/error');
+    res.redirect("/error");
   }
 };
 
@@ -140,11 +187,10 @@ exports.postEditPerfil = (req, res, next) => {
   const imageProfile = req.file;
   const idDelivery = req.session.user.id;
 
-  Delivery
-    .update(
-      { name, lastName, phone, imageProfile },
-      { where: { id: idDelivery } }
-    )
+  Delivery.update(
+    { name, lastName, phone, imageProfile },
+    { where: { id: idDelivery } }
+  )
     .then(() => {
       return res.redirect("/delivery/perfil");
     })
@@ -152,4 +198,3 @@ exports.postEditPerfil = (req, res, next) => {
       console.log(error);
     });
 };
-
