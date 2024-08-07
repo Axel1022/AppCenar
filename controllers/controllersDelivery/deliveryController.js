@@ -1,40 +1,64 @@
-
-exports.getHome = async (req, res, next) => {
-  res.render("viewsDelivery/home", {
-    pageTitle: "Food Rush | Delivery",
-    layout: "layoutDelivery",
-  });
-};
-
 const Pedido = require('../../models/modelCliente/pedido');
 const Comercio = require('../../models/modelComercios/comercio');
 const Producto = require('../../models/modelComercios/producto');
 const Delivery = require('../../models/modelDelivery/delivery');
+const verificUser = require("../../utils/verificUserLog")
 const { Op } = require('sequelize');
 
-// Obtener pedidos asignados al delivery logueado
-exports.getDeliveryHome = async (req, res, next) => {
-  try {
-    const deliveryId = req.session.user.id;
-    const pedidos = await Pedido.findAll({
-      where: { deliveryId, status: { [Op.ne]: 'completado' } },
-      include: [
-        { model: Comercio, attributes: ['logo', 'name'] },
-        { model: Producto }
-      ],
-      order: [['createdAt', 'DESC']]
-    });
 
-    res.render('viewsDelivery/home', {
-      pageTitle: 'Home del Delivery',
-      layout: 'layoutDelivery',
-      pedidos
-    });
-  } catch (err) {
-    console.log(err);
-    res.redirect('/error');
-  }
-};
+exports.getHome = async (req, res, next) => {
+  const deliverId = req.session.user.id;
+
+    try {
+      const delivery = await Delivery.findByPk(deliverId);
+  
+      if (!delivery) {
+        throw new Error("Delivery no encontrado");
+      }
+      console.log(delivery);
+
+  
+      const pedidos = await Pedido.findAll({
+        where: { deliverId: deliverId, status: { [Op.ne]: 'En Proceso' } },
+        include: [
+          { model: Comercio, as: "comercio", attributes: ['logo', 'name'] },
+          { model: Producto, as: "producto"}
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      const pedidosData = pedidos.map((p) => ({
+        id: p.id,
+        date: p.date,
+        hour: p.hour,
+        total: p.total,
+        status: p.status,
+        comercio: {
+          name: p.comercio.name,
+          logo: p.comercio.logo,
+        },
+        productos: p.productos.map((prod) => ({
+          name: prod.name,
+          image: prod.image,
+          price: prod.price
+        })),
+      }));
+  
+      console.log("Pedidos:", pedidosData);  
+      
+      res.render("viewsDelivery/home", {
+        pageTitle: "Food Rush | Delivery",
+        layout: "layoutDelivery",
+        delivery: delivery.dataValues,
+        pedidos: pedidosData,
+        hasPedidos: pedidosData.length > 0,
+      });
+    } catch (error) {
+      console.error("Error al obtener los pedidos:", error);
+      req.flash("errors", "Error al obtener los pedidos.");
+      res.redirect("/login");
+    }
+  };
 
 // Obtener detalles del pedido
 exports.getPedidoDetail = async (req, res, next) => {
