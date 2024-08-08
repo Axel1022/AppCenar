@@ -12,7 +12,7 @@ const Itbis = sequelize.define("itbis", {
   },
   itbis: {
     type: Sequelize.FLOAT,
-    allowNull: false,
+    defaultValue: 0.0,
   },
   adminId: {
     type: Sequelize.INTEGER,

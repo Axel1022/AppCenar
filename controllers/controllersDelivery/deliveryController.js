@@ -23,7 +23,13 @@ exports.getHome = async (req, res, next) => {
       throw new Error("Delivery no encontrado");
     }
 
-    const pedidos = await Pedido.findAll({ where: { deliverId: deliverId } });
+    const pedidos = await Pedido.findAll({
+      where: { deliverId: deliverId },
+      order: [
+        ["date", "DESC"],
+        ["hour", "DESC"],
+      ],
+    });
 
     const pedidosData = await Promise.all(
       pedidos.map(async (pedido) => {

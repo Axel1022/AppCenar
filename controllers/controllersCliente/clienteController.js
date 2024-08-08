@@ -130,11 +130,7 @@ exports.confirmarPedido = async (req, res, next) => {
 };
 
 exports.getCompletarPedido = async (req, res, next) => {
-  const role = req.session.user.role;
-  if (role != "cliente") {
-    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
-    return res.redirect("/login");
-  }
+  
   try {
     const idCliente = verificUseer(req, res, next);
     const idComercio = req.params.idComercio;

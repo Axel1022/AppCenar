@@ -1,41 +1,37 @@
 <div class="col-12 col-sm-6 offset-3 d-flex align-items-center justify-content-center">
-    
-    <form action="/comercios/{{#if editMode}}EditarCategoria{{else}}AgregarCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+  <form action="/comercios/{{#if editMode}}EditarCategoria{{else}}AgregarCategoria{{/if}}" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
+    {{#if editMode}}
+      <h3>Editar Categoria</h3>
+    {{else}}
+      <h3>Agregar Categoria</h3>
+    {{/if}}
 
-     {{#if editMode}}
-       <h3>Editar Categoria</h3>
-      {{else}}
-       <h3>Agregar Categoria</h3>
-      {{/if}}
+    {{#if editMode}}
+      <input type="hidden" value="{{categorias.id}}" name="id">
+    {{/if}}
 
-       {{#if editMode}}
-         <input type="hidden" value="{{categorias.id}}" name="id">
-       {{/if}}
+    <div class="form-group mt-3">
+      <label for="name">Categoría:</label>
+      <select class="form-select" name="name" id="name" required>
+        <option value="" disabled selected>Selecciona una categoría</option>
+        {{#each opcionesCategoria}}
+          {{#if (compare this.value ../categorias.name)}}
+            <option value="{{this.value}}" selected>{{this.text}}</option>
+          {{else}}
+            <option value="{{this.value}}">{{this.text}}</option>
+          {{/if}}
+        {{/each}}
+      </select>
+      <div class="invalid-feedback">Por favor, selecciona una categoría.</div>
+    </div>
 
-        <div class="form-group mt-3">
-          <label for="name">Categoría:</label>
-          <select class="form-select" name="name" id="name" required>
-            <option value="" disabled selected>Selecciona una categoría</option>
-            {{#each opcionesCategoria}}
+    <div class="form-group mt-3">
+      <label for="description">Descripción:</label><br>
+      <textarea id="description" name="description" rows="4" cols="55" required>{{#if editMode}}{{categorias.description}}{{/if}}</textarea>
+      <div class="invalid-feedback">Por favor, escribe una descripción.</div>
+    </div>
 
-              {{#if (compare this.value ../categorias.name )}}
-               <option value="{{this.value}}" selected>{{this.text}}</option>
-              {{else}}
-                <option value="{{this.value}}">{{this.text}}</option>
-              {{/if}}
-
-            {{/each}}
-          </select>
-          <div class="invalid-feedback">Please select a category.</div>
-       </div>
-
-        <div class="form-group mt-3">
-          <label for="description">Descripcion:</label><br>
-          <textarea id="description" name="description" rows="4" cols="55">{{#if editMode}}{{categorias.description}}{{/if}} required</textarea>
-          <div class="invalid-feedback">Please write a description.</div>
-        </div>
-        <button type="submit" class="btn btn-primary float-end mt-3 btn-add">Guardar</button>
-        <a href="/comercios/Categorias" class="btn btn-home float-end me-3 mt-3 btn-home">Home</a>
-   </form>
+    <button type="submit" class="btn btn-primary float-end mt-3 btn-add">Guardar</button>
+    <a href="/comercios/Categorias" class="btn btn-home float-end me-3 mt-3 btn-home">Home</a>
+  </form>
 </div>
-

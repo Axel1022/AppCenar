@@ -240,7 +240,7 @@ exports.getViewTiendas = async (req, res, next) => {
 
 exports.AddProductPost = async (req, res, next) => {
   const role = req.session.user.role;
-  if (role != "comercio") {
+  if (role != "cliente") {
     req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
     return res.redirect("/login");
   }
@@ -276,11 +276,7 @@ exports.AddProductPost = async (req, res, next) => {
 };
 
 exports.deleteProductPost = async (req, res, next) => {
-  const role = req.session.user.role;
-  if (role != "comercio") {
-    req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
-    return res.redirect("/login");
-  }
+  
   verificUseer(req, res, next);
   const idProducto = req.body.idProducto;
   const idComercio = req.body.idComercio;
@@ -520,7 +516,6 @@ exports.PostEditPerfil = (req, res, next) => {
     });
 };
 exports.GetAsignarDelivery = async (req, res, next) => {
-
   const role = req.session.user.role;
   if (role != "comercio") {
     req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
@@ -560,13 +555,12 @@ exports.GetAsignarDelivery = async (req, res, next) => {
 };
 
 exports.postAsignarDelivery = async (req, res, next) => {
-
   const role = req.session.user.role;
   if (role != "comercio") {
     req.flash("errors", "Usted no tiene acceso a esta area, buen loco.");
     return res.redirect("/login");
   }
-  
+
   verificUseer(req, res, next);
   const deliveryId = req.body.deliveryId;
   const pedidoId = req.body.pedidoId;
