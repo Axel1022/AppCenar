@@ -4,8 +4,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   port: 587,
   auth: {
-    user: "foodrushya@gmail.com", //Coloca aquí tu correo
-    pass: `yekpvlthllvoqkls`, //Coloca aquí tu contraseña
+    user: "", //Coloca aquí tu correo
+    pass: ``, //Coloca aquí tu contraseña
 
     //! Visita este video para que sepas como buscar la contraceña:
     //TODO: https://www.youtube.com/watch?v=wI_3Hfry5uw&ab_channel=LeonardoTav%C3%A1rez
